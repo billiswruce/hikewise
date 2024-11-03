@@ -1,5 +1,5 @@
 import express from "express";
-import PackingList from "@models/PackingList.js";
+import PackingList from "../models/PackingList.js";
 
 const router = express.Router();
 

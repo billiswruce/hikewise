@@ -3,12 +3,12 @@ import express from "express";
 import dotenv from "dotenv";
 import "colors";
 import cors from "cors";
-import connectDB from "@config/db.js";
-import authRoutes from "@routes/authRoutes.js";
-import Test from "@models/test.js";
-import packingListRoutes from "@routes/PackingListRoutes.js";
-import trailRoutes from "@routes/TrailRoutes.js";
-import userRoutes from "@routes/userRoutes.js";
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import Test from "./models/Test.js";
+import packingListRoutes from "./routes/packingListRoutes.js";
+import trailRoutes from "./routes/trailRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 connectDB();

@@ -1,5 +1,5 @@
 import express from "express";
-import Trail from "/models/Trail.js";
+import Trail from "../models/Trail.js";
 
 const router = express.Router();
 

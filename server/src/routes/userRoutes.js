@@ -1,6 +1,6 @@
 import express from "express";
-import User from "@models/User.js";
-import Trail from "@models/Trail.js";
+import User from "../models/User.js";
+import Trail from "../models/Trail.js";
 
 const router = express.Router();
 
