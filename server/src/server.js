@@ -1,10 +1,14 @@
+import "module-alias/register.js";
 import express from "express";
 import dotenv from "dotenv";
 import "colors";
 import cors from "cors";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-import Test from "./models/test.js";
+import connectDB from "@config/db.js";
+import authRoutes from "@routes/authRoutes.js";
+import Test from "@models/test.js";
+import packingListRoutes from "@routes/PackingListRoutes.js";
+import trailRoutes from "@routes/TrailRoutes.js";
+import userRoutes from "@routes/userRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -15,6 +19,9 @@ const PORT = process.env.PORT || 6000;
 app.use(express.json());
 app.use(cors());
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/trails", trailRoutes);
+app.use("/api/packing-list", packingListRoutes);
 
 // Route för att skapa en testpost i databasen
 app.post("/api/test", async (req, res) => {
