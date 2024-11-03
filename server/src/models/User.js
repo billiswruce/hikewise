@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   subscriptionStatus: { type: String, default: "free" },
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Trail" }],
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  packingList: { type: mongoose.Schema.Types.ObjectId, ref: "PackingList" },
 });
 
 export default mongoose.model("User", userSchema);

@@ -9,6 +9,7 @@ import Test from "./models/Test.js";
 import packingListRoutes from "./routes/packingListRoutes.js";
 import trailRoutes from "./routes/trailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import recommendedPackingList from "./routes/recommendedPackingListRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -22,6 +23,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trails", trailRoutes);
 app.use("/api/packing-list", packingListRoutes);
+app.use("/api/recommended-packing-list", recommendedPackingList);
 
 // Route för att skapa en testpost i databasen
 app.post("/api/test", async (req, res) => {

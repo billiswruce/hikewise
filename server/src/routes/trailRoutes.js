@@ -22,4 +22,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:trailId", async (req, res) => {
+  try {
+    const trail = await Trail.findById(req.params.trailId).populate({
+      path: "recommendedPackingList",
+      populate: {
+        path: "items",
+        select: "name quantity",
+      },
+    });
+
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    res.status(200).json(trail);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;
