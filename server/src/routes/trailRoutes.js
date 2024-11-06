@@ -1,11 +1,44 @@
 import express from "express";
+import axios from "axios"; // För att hämta väderdata från OpenWeatherMap
 import Trail from "../models/Trail.js";
 
 const router = express.Router();
 
+// Skapa en ny rutt med väderdata
 router.post("/", async (req, res) => {
+  const { name, location, latitude, longitude, length, difficulty } = req.body;
+
   try {
-    const newTrail = new Trail(req.body);
+    // Hämta väderdata för angivna koordinater
+    const weatherResponse = await axios.get(
+      `https://api.openweathermap.org/data/2.5/weather`,
+      {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          appid: process.env.OPENWEATHER_API_KEY,
+          units: "metric",
+        },
+      }
+    );
+
+    const weatherData = weatherResponse.data;
+
+    // Skapa och spara en ny rutt i databasen
+    const newTrail = new Trail({
+      name,
+      location,
+      latitude,
+      longitude,
+      difficulty,
+      length,
+      weather: {
+        temperature: weatherData.main.temp,
+        description: weatherData.weather[0].description,
+        icon: weatherData.weather[0].icon,
+      },
+    });
+
     const savedTrail = await newTrail.save();
     res.status(201).json(savedTrail);
   } catch (error) {
@@ -13,6 +46,7 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Hämta alla rutter
 router.get("/", async (req, res) => {
   try {
     const trails = await Trail.find();
@@ -22,6 +56,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Hämta en specifik rutt
 router.get("/:trailId", async (req, res) => {
   try {
     const trail = await Trail.findById(req.params.trailId).populate({
