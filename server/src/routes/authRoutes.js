@@ -50,4 +50,36 @@ router.post("/login", async (req, res) => {
   }
 });
 
+import express from "express";
+import passport from "passport";
+import "../passport.js"; // Importera passport-konfigurationen
+
+// Google OAuth routes
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.status(200).json({ message: "Logged in successfully", user: req.user });
+  }
+);
+
+// GitHub OAuth routes
+router.get(
+  "/auth/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.status(200).json({ message: "Logged in successfully", user: req.user });
+  }
+);
+
 export default router;

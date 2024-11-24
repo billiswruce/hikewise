@@ -1,74 +1,44 @@
 import express from "express";
-import PackingList from "../models/PackingList.js";
+import PackingList from "../models/PackingList.js"; // Importera den nya PackingList-modellen
+import Trail from "../models/Trail.js"; // Om du behöver Trail-modellen
 
 const router = express.Router();
 
-// Skapa en ny packlista för en användare
+// Skapa en ny packlista och koppla den till en trail
 router.post("/", async (req, res) => {
-  const { userId, items } = req.body;
+  const { trailId, items } = req.body;
 
   try {
-    const newPackingList = new PackingList({ userId, items });
-    const savedPackingList = await newPackingList.save();
+    // Först, skapa den faktiska packlistan
+    const packingList = new PackingList({
+      trailId,
+      items,
+    });
+
+    // Spara packlistan
+    const savedPackingList = await packingList.save();
+
     res.status(201).json(savedPackingList);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-// Hämta en användares packlista
-router.get("/:userId", async (req, res) => {
-  const { userId } = req.params;
-
+// Hämta en packlista för en viss trail
+router.get("/:trailId", async (req, res) => {
   try {
-    const packingList = await PackingList.findOne({ userId });
+    // Hämta packlistan baserat på trailId
+    const packingList = await PackingList.findOne({
+      trailId: req.params.trailId,
+    });
+
     if (!packingList) {
-      return res.status(404).json({ message: "Packing list not found" });
+      return res
+        .status(404)
+        .json({ message: "Packing list not found for the given trail" });
     }
+
     res.status(200).json(packingList);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Lägg till ett objekt i en befintlig packlista
-router.post("/:userId/item", async (req, res) => {
-  const { userId } = req.params;
-  const { name, quantity } = req.body;
-
-  try {
-    const packingList = await PackingList.findOne({ userId });
-    if (!packingList) {
-      return res.status(404).json({ message: "Packing list not found" });
-    }
-
-    packingList.items.push({ name, quantity, packed: false });
-    const updatedPackingList = await packingList.save();
-    res.status(200).json(updatedPackingList);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Uppdatera statusen för ett objekt (packat/ej packat)
-router.patch("/:userId/item/:itemId", async (req, res) => {
-  const { userId, itemId } = req.params;
-  const { packed } = req.body;
-
-  try {
-    const packingList = await PackingList.findOne({ userId });
-    if (!packingList) {
-      return res.status(404).json({ message: "Packing list not found" });
-    }
-
-    const item = packingList.items.id(itemId);
-    if (!item) {
-      return res.status(404).json({ message: "Item not found" });
-    }
-
-    item.packed = packed;
-    const updatedPackingList = await packingList.save();
-    res.status(200).json(updatedPackingList);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

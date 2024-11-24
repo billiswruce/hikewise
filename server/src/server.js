@@ -12,6 +12,9 @@ import userRoutes from "./routes/userRoutes.js";
 import recommendedPackingList from "./routes/recommendedPackingListRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import mapsRoutes from "./routes/mapsRoutes.js"; // Korrigerad import
+import session from "express-session";
+import passport from "passport";
+import "./config/passport.js"; // Importera din Passport-konfiguration
 
 dotenv.config();
 connectDB();
@@ -19,8 +22,22 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 6000;
 
+// Middleware för att parsa JSON och hantera CORS
 app.use(express.json());
 app.use(cors());
+
+// Lägg till session och passport
+app.use(
+  session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trails", trailRoutes);
@@ -29,7 +46,7 @@ app.use("/api/recommended-packing-list", recommendedPackingList);
 app.use("/api/weather", weatherRoutes);
 app.use("/api/maps", mapsRoutes); // Korrigerad route
 
-// Route för att skapa en testpost i databasen
+// Testroute för att skapa en post
 app.post("/api/test", async (req, res) => {
   try {
     const newTest = new Test({ name: req.body.name });
@@ -40,7 +57,7 @@ app.post("/api/test", async (req, res) => {
   }
 });
 
-// Route för att hämta alla testposter från databasen
+// Route för att hämta alla poster
 app.get("/api/test", async (req, res) => {
   try {
     const tests = await Test.find();
@@ -50,13 +67,16 @@ app.get("/api/test", async (req, res) => {
   }
 });
 
+// Root route
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
+// Error-handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: err.message });
 });
 
+// Starta servern
 app.listen(PORT, () => console.log("Server is blooming".rainbow.bold));
