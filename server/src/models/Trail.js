@@ -23,7 +23,7 @@ const trailSchema = new mongoose.Schema(
     },
     usedGear: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "RecommendedPackingList",
+      ref: "PackingList",
     },
     hikeDate: { type: Date, required: true },
   },
