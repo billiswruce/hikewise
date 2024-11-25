@@ -1,5 +1,5 @@
 import express from "express";
-import axios from "axios"; // För att hämta väderdata från OpenWeatherMap
+import axios from "axios";
 import Trail from "../models/Trail.js";
 
 const router = express.Router();

@@ -1,6 +1,5 @@
 import express from "express";
-import PackingList from "../models/PackingList.js"; // Importera den nya PackingList-modellen
-import Trail from "../models/Trail.js"; // Om du behöver Trail-modellen
+import PackingList from "../models/PackingList.js";
 
 const router = express.Router();
 

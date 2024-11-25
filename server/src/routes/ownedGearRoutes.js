@@ -1,5 +1,5 @@
 import express from "express";
-import OwnedGear from "./models/OwnedGear"; // Your Mongoose model
+import OwnedGear from "../models/ownedGear.js";
 import mongoose from "mongoose";
 
 const router = express.Router();

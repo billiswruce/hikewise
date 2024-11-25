@@ -2,6 +2,8 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import passport from "passport";
+import "../passport.js";
 
 const router = express.Router();
 
@@ -49,10 +51,6 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
-import express from "express";
-import passport from "passport";
-import "../passport.js"; // Importera passport-konfigurationen
 
 // Google OAuth routes
 router.get(

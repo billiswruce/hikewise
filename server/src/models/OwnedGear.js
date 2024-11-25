@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Define the categories for gear and food (can be expanded as needed)
 const categories = [
   "Tent",
   "Sleeping Bag",

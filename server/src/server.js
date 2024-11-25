@@ -6,25 +6,24 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import Test from "./models/Test.js";
-import packingListRoutes from "./routes/packingListRoutes.js";
+import ownedGearRoutes from "./routes/ownedGearRoutes.js";
 import trailRoutes from "./routes/trailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import recommendedPackingList from "./routes/recommendedPackingListRoutes.js";
+import PackingList from "./routes/PackingListRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
-import mapsRoutes from "./routes/mapsRoutes.js"; // Korrigerad import
+import mapsRoutes from "./routes/mapsRoutes.js";
 import session from "express-session";
-import passport from "passport";
-import "./config/passport.js"; // Importera din Passport-konfiguration
+// import passport from "./passport.js";
+import i18next from "./i18n.js";
+import i18nextMiddleware from "i18next-http-middleware";
 
 dotenv.config();
 connectDB();
-
 const app = express();
 const PORT = process.env.PORT || 6000;
-
-// Middleware för att parsa JSON och hantera CORS
 app.use(express.json());
 app.use(cors());
+app.use(i18nextMiddleware.handle(i18next));
 
 // Lägg till session och passport
 app.use(
@@ -34,43 +33,42 @@ app.use(
     saveUninitialized: false,
   })
 );
-app.use(passport.initialize());
-app.use(passport.session());
 
-// Routes
+// app.use(passport.initialize());
+// app.use(passport.session());
+// Middleware för i18next
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trails", trailRoutes);
-app.use("/api/packing-list", packingListRoutes);
-app.use("/api/recommended-packing-list", recommendedPackingList);
+app.use("/api/owned-gear", ownedGearRoutes);
+app.use("/api/packing-list", PackingList);
 app.use("/api/weather", weatherRoutes);
-app.use("/api/maps", mapsRoutes); // Korrigerad route
+app.use("/api/maps", mapsRoutes);
 
-// Testroute för att skapa en post
-app.post("/api/test", async (req, res) => {
-  try {
-    const newTest = new Test({ name: req.body.name });
-    const savedTest = await newTest.save();
-    res.status(201).json(savedTest);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+// Exempelroute för flerspråkighet
+app.get("/welcome", (req, res) => {
+  console.log("Detected language:", req.language);
+  res.json({ message: req.t("welcome") });
 });
 
-// Route för att hämta alla poster
-app.get("/api/test", async (req, res) => {
-  try {
-    const tests = await Test.find();
-    res.status(200).json(tests);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Root route
+// Root route (med översättning)
 app.get("/", (req, res) => {
-  res.send("Server is running");
+  res.send(req.t("Server is running"));
 });
+
+app.get("/debug", (req, res) => {
+  res.json({
+    language: req.language,
+    languages: req.languages,
+    translations: i18next.getDataByLanguage(req.language),
+  });
+});
+
+// // Root route
+// app.get("/", (req, res) => {
+//   res.send("Server is running");
+// });
 
 // Error-handling middleware
 app.use((err, req, res, next) => {
