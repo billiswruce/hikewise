@@ -22,7 +22,11 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 6000;
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 app.use(i18nextMiddleware.handle(i18next));
 
 // Lägg till session och passport
@@ -46,6 +50,20 @@ app.use("/api/packing-list", PackingList);
 app.use("/api/weather", weatherRoutes);
 app.use("/api/maps", mapsRoutes);
 
+// Ny route för att hämta översättningar
+app.get("/api/translations/:lng", (req, res) => {
+  const { lng } = req.params;
+  const resources = i18next.getDataByLanguage(lng);
+
+  if (!resources) {
+    return res
+      .status(404)
+      .json({ message: "Translations not found for language" });
+  }
+
+  res.json(resources);
+});
+
 // Exempelroute för flerspråkighet
 app.get("/welcome", (req, res) => {
   console.log("Detected language:", req.language);
@@ -64,11 +82,6 @@ app.get("/debug", (req, res) => {
     translations: i18next.getDataByLanguage(req.language),
   });
 });
-
-// // Root route
-// app.get("/", (req, res) => {
-//   res.send("Server is running");
-// });
 
 // Error-handling middleware
 app.use((err, req, res, next) => {

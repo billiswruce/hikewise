@@ -10,6 +10,7 @@ import Hiked from "./pages/Hiked";
 import Hiking from "./pages/Hiking";
 import FavoriteTrails from "./pages/FavoriteTrails";
 import NotFound from "./pages/NotFound";
+import TestTranslations from "./pages/TestTranslations";
 import Layout from "./components/Layout";
 
 export const router = createBrowserRouter([
@@ -62,6 +63,10 @@ export const router = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        path: "/test-translations",
+        element: <TestTranslations />,
       },
       {
         path: "*",
