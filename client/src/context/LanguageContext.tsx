@@ -19,7 +19,7 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguage] = useState<Language>("en"); // Default: engelska
+  const [language, setLanguage] = useState<Language>("en");
   const [translations, setTranslations] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +28,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         const response = await fetch(
           `http://localhost:3001/api/translations/${language}`
-        ); // Din API-endpoint
+        );
         if (!response.ok) {
           throw new Error(`Error fetching locale: ${response.statusText}`);
         }
@@ -37,8 +37,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
         setTranslations(data);
       } catch (error) {
         console.error("Failed to fetch locale:", error);
+        setTranslations({});
       } finally {
-        setLoading(false); // Indikera att hämtningen är klar
+        setLoading(false);
       }
     };
 
@@ -46,7 +47,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [language]);
 
   if (loading) {
-    return <p>Loading language...</p>; // Rendera en laddningsindikator medan språk laddas
+    return <p>Loading language...</p>;
   }
 
   return (
@@ -56,7 +57,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Hook för att använda kontexten
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {

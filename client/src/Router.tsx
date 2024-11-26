@@ -1,4 +1,5 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import Home from "./pages/Home";
 import LandingPage from "./pages/LandingPage";
 import CreateTrail from "./pages/CreateTrail";
@@ -12,6 +13,13 @@ import FavoriteTrails from "./pages/FavoriteTrails";
 import NotFound from "./pages/NotFound";
 import TestTranslations from "./pages/TestTranslations";
 import Layout from "./components/Layout";
+
+import { ReactElement } from "react";
+
+const ProtectedRoute = ({ element }: { element: ReactElement }) => {
+  const { isAuthenticated } = useAuth0();
+  return isAuthenticated ? element : <Navigate to="/landing-page" />;
+};
 
 export const router = createBrowserRouter([
   {
@@ -30,35 +38,35 @@ export const router = createBrowserRouter([
       },
       {
         path: "/create-trail",
-        element: <CreateTrail />,
+        element: <ProtectedRoute element={<CreateTrail />} />,
       },
       {
         path: "/map",
-        element: <Map />,
+        element: <ProtectedRoute element={<Map />} />,
       },
       {
         path: "/my-profile",
-        element: <MyProfile />,
+        element: <ProtectedRoute element={<MyProfile />} />,
         children: [
           {
             path: "gear",
-            element: <Gear />,
+            element: <ProtectedRoute element={<Gear />} />,
           },
           {
             path: "trails",
-            element: <Trails />,
+            element: <ProtectedRoute element={<Trails />} />,
             children: [
               {
                 path: "hiked",
-                element: <Hiked />,
+                element: <ProtectedRoute element={<Hiked />} />,
               },
               {
                 path: "hiking",
-                element: <Hiking />,
+                element: <ProtectedRoute element={<Hiking />} />,
               },
               {
                 path: "favorite-trails",
-                element: <FavoriteTrails />,
+                element: <ProtectedRoute element={<FavoriteTrails />} />,
               },
             ],
           },
@@ -66,7 +74,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/test-translations",
-        element: <TestTranslations />,
+        element: <ProtectedRoute element={<TestTranslations />} />,
       },
       {
         path: "*",

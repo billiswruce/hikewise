@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import "colors";
 import cors from "cors";
 import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
+// import authRoutes from "./routes/authRoutes.js";
 import ownedGearRoutes from "./routes/ownedGearRoutes.js";
 import trailRoutes from "./routes/trailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -13,30 +13,55 @@ import weatherRoutes from "./routes/weatherRoutes.js";
 import mapsRoutes from "./routes/mapsRoutes.js";
 import i18next from "./i18n.js";
 import i18nextMiddleware from "i18next-http-middleware";
-import { auth } from "express-openid-connect";
+import pkg from "express-openid-connect";
+import { expressjwt } from "express-jwt";
+import jwksRsa from "jwks-rsa";
+
+const { auth, requiresAuth } = pkg;
 
 dotenv.config();
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+console.log("CLIENT_SECRET:", process.env.CLIENT_SECRET);
+
 connectDB();
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
+    credentials: true,
   })
 );
 app.use(i18nextMiddleware.handle(i18next));
 
-// Auth0-konfiguration för express-openid-connect
 const config = {
-  authRequired: false, // Tillåter att vissa sidor är tillgängliga utan inloggning
-  auth0Logout: true, // Tillåter Auth0 att hantera utloggning
-  secret: process.env.JWT_SECRET, // Lång hemlighet lagrad i .env
-  baseURL: "http://localhost:3001", // Den URL som applikationen körs på
-  clientID: process.env.CLIENT_ID, // Din Auth0 Client ID
-  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`, // Din Auth0 domän
+  authRequired: false, // Tillåter öppna endpoints
+  auth0Logout: true, // Hanterar Auth0:s logout
+  secret: process.env.SESSION_SECRET || "en-superhemlig-sträng", // Hemlighet för sessionshantering
+  baseURL: "http://localhost:3001", // Din applikations bas-URL
+  clientID: process.env.CLIENT_ID, // Client ID från Auth0
+  clientSecret: process.env.CLIENT_SECRET, // Client Secret från Auth0
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`, // Auth0-domän
 };
+
+const checkJwt = expressjwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+  }),
+  audience: "https://hikewise-api.com", // Samma Identifier/audience som ditt Auth0-API
+  issuer: `https://${process.env.AUTH0_DOMAIN}/`, // Ditt Auth0-domännamn
+  algorithms: ["RS256"], // Samma algoritm som du valde i Auth0
+});
+
+// Använd valideringen på dina skyddade API-endpoints
+app.use("/api/protected", checkJwt, (req, res) => {
+  res.json({ message: "This is a protected route", user: req.auth });
+});
 
 // Använd Auth0 middleware för autentisering
 app.use(auth(config));
@@ -46,14 +71,14 @@ app.get("/", (req, res) => {
   res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
 });
 
-// Lägg till dina befintliga routes
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/trails", trailRoutes);
-app.use("/api/owned-gear", ownedGearRoutes);
-app.use("/api/packing-list", PackingList);
-app.use("/api/weather", weatherRoutes);
-app.use("/api/maps", mapsRoutes);
+// Lägg till dina befintliga routes och skydda dem med requiresAuth
+// app.use("/api/auth", authRoutes);
+app.use("/api/users", requiresAuth(), userRoutes);
+app.use("/api/trails", requiresAuth(), trailRoutes);
+app.use("/api/owned-gear", requiresAuth(), ownedGearRoutes);
+app.use("/api/packing-list", requiresAuth(), PackingList);
+app.use("/api/weather", requiresAuth(), weatherRoutes);
+app.use("/api/maps", requiresAuth(), mapsRoutes);
 
 // Ny route för att hämta översättningar
 app.get("/api/translations/:lng", (req, res) => {
@@ -82,6 +107,12 @@ app.get("/debug", (req, res) => {
     languages: req.languages,
     translations: i18next.getDataByLanguage(req.language),
   });
+});
+
+// Ny route för att logga inloggningsstatus och användarinformation
+app.get("/profile", requiresAuth(), (req, res) => {
+  console.log("Access token:", req.oidc.accessToken);
+  res.json(req.oidc.user);
 });
 
 // Error-handling middleware
