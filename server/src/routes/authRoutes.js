@@ -2,8 +2,6 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import passport from "passport";
-import "../passport.js";
 
 const router = express.Router();
 
@@ -52,32 +50,32 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Google OAuth routes
-router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+// // Google OAuth routes
+// router.get(
+//   "/auth/google",
+//   passport.authenticate("google", { scope: ["profile", "email"] })
+// );
 
-router.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  (req, res) => {
-    res.status(200).json({ message: "Logged in successfully", user: req.user });
-  }
-);
+// router.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", { failureRedirect: "/login" }),
+//   (req, res) => {
+//     res.status(200).json({ message: "Logged in successfully", user: req.user });
+//   }
+// );
 
-// GitHub OAuth routes
-router.get(
-  "/auth/github",
-  passport.authenticate("github", { scope: ["user:email"] })
-);
+// // GitHub OAuth routes
+// router.get(
+//   "/auth/github",
+//   passport.authenticate("github", { scope: ["user:email"] })
+// );
 
-router.get(
-  "/auth/github/callback",
-  passport.authenticate("github", { failureRedirect: "/login" }),
-  (req, res) => {
-    res.status(200).json({ message: "Logged in successfully", user: req.user });
-  }
-);
+// router.get(
+//   "/auth/github/callback",
+//   passport.authenticate("github", { failureRedirect: "/login" }),
+//   (req, res) => {
+//     res.status(200).json({ message: "Logged in successfully", user: req.user });
+//   }
+// );
 
 export default router;

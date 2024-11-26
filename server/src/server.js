@@ -11,15 +11,15 @@ import userRoutes from "./routes/userRoutes.js";
 import PackingList from "./routes/packingListRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import mapsRoutes from "./routes/mapsRoutes.js";
-import session from "express-session";
-// import passport from "./passport.js";
 import i18next from "./i18n.js";
 import i18nextMiddleware from "i18next-http-middleware";
+import { auth } from "express-openid-connect";
 
 dotenv.config();
 connectDB();
 const app = express();
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT;
+
 app.use(express.json());
 app.use(
   cors({
@@ -28,19 +28,25 @@ app.use(
 );
 app.use(i18nextMiddleware.handle(i18next));
 
-// Lägg till session och passport
-app.use(
-  session({
-    secret: process.env.JWT_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+// Auth0-konfiguration för express-openid-connect
+const config = {
+  authRequired: false, // Tillåter att vissa sidor är tillgängliga utan inloggning
+  auth0Logout: true, // Tillåter Auth0 att hantera utloggning
+  secret: process.env.JWT_SECRET, // Lång hemlighet lagrad i .env
+  baseURL: "http://localhost:3001", // Den URL som applikationen körs på
+  clientID: process.env.CLIENT_ID, // Din Auth0 Client ID
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`, // Din Auth0 domän
+};
 
-// app.use(passport.initialize());
-// app.use(passport.session());
-// Middleware för i18next
+// Använd Auth0 middleware för autentisering
+app.use(auth(config));
 
+// Exempel på en enkel route som är skyddad
+app.get("/", (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
+});
+
+// Lägg till dina befintliga routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trails", trailRoutes);
@@ -69,11 +75,7 @@ app.get("/welcome", (req, res) => {
   res.json({ message: req.t("welcome") });
 });
 
-// Root route (med översättning)
-app.get("/", (req, res) => {
-  res.send(req.t("Server is running"));
-});
-
+// Debug route för att kontrollera översättningar och språkdetektering
 app.get("/debug", (req, res) => {
   res.json({
     language: req.language,
