@@ -6,10 +6,10 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   googleId: { type: String, unique: true, sparse: true },
   githubId: { type: String, unique: true, sparse: true },
-  favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Trail" }],
-  ownedGear: { type: mongoose.Schema.Types.ObjectId, ref: "Gear" },
+  favoriteTrails: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "FavoriteTrails" },
+  ],
+  ownedGear: { type: mongoose.Schema.Types.ObjectId, ref: "OwnedGear" },
 });
 
 export default mongoose.model("User", userSchema);
-
-//// Users: { id, name, email, authProvider, password, savedTrails[], gear[] }

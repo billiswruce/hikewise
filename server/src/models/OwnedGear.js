@@ -28,10 +28,15 @@ const ownedGearSchema = new mongoose.Schema(
     },
     items: [
       {
-        name: { type: String, required: true },
+        name: { type: String, required: true, minlength: 3 },
         quantity: { type: Number, required: true, min: 1 },
-        categories: { type: [String], enum: categories, required: true },
-        type: { type: String, enum: ["Gear", "Food"], required: true }, // Either "Gear" or "Food"
+        categories: {
+          type: [String],
+          enum: categories,
+          required: true,
+          validate: [(v) => v.length <= 3, "Maximum 3 categories allowed"],
+        },
+        type: { type: String, enum: ["Gear", "Food"], required: true },
         packed: { type: Boolean, default: false },
         condition: {
           type: String,

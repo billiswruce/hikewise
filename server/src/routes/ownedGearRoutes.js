@@ -1,35 +1,126 @@
 import express from "express";
 import OwnedGear from "../models/ownedGear.js";
-import mongoose from "mongoose";
 
 const router = express.Router();
 
-// Endpoint to fetch gear and food items by userId
-router.get("/api/owned-gear", async (req, res) => {
+// Hämta ägd utrustning och mat för en användare
+router.get("/", async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming user authentication is handled (e.g., via JWT or session)
+    const userId = req.user.id;
 
-    // Fetch the owned gear for the specific user
-    const userGear = await OwnedGear.findOne({ userId }).populate("userId"); // .populate('userId') if you want to include user details
+    // Hämta användarens ägda utrustning
+    const ownedGear = await OwnedGear.findOne({ userId }).populate("userId");
 
-    if (!userGear) {
+    if (!ownedGear) {
       return res
         .status(404)
         .json({ message: "No gear found for the specified user." });
     }
 
-    // Separate the items into two categories: Gear and Food
-    const gearItems = userGear.items.filter((item) => item.type === "Gear");
-    const foodItems = userGear.items.filter((item) => item.type === "Food");
+    // Dela upp föremålen i två kategorier: Utrustning och Mat
+    const gearItems = ownedGear.items.filter((item) => item.type === "Gear");
+    const foodItems = ownedGear.items.filter((item) => item.type === "Food");
 
-    // Send back both categories
-    res.json({
+    res.status(200).json({
       gear: gearItems,
       food: foodItems,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error fetching gear and food items" });
+  }
+});
+
+// Lägg till ny utrustning
+router.post("/", async (req, res) => {
+  const { name, quantity, type, condition, categories } = req.body;
+  const userId = req.user.id; // Förutsätter autentisering
+
+  try {
+    // Hämta eller skapa OwnedGear för användaren
+    let ownedGear = await OwnedGear.findOne({ userId });
+    if (!ownedGear) {
+      ownedGear = new OwnedGear({ userId, items: [] });
+    }
+
+    // Lägg till ny utrustning till listan
+    ownedGear.items.push({
+      name,
+      quantity,
+      type,
+      condition,
+      categories,
+      packed: false,
+    });
+
+    await ownedGear.save();
+
+    res.status(201).json({ message: "Gear item added successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error adding gear item" });
+  }
+});
+
+// Uppdatera en specifik utrustningsartikel
+router.put("/:itemId", async (req, res) => {
+  const { name, quantity, condition, packed, type, categories } = req.body;
+  const userId = req.user.id;
+
+  try {
+    const ownedGear = await OwnedGear.findOne({ userId });
+    if (!ownedGear) {
+      return res
+        .status(404)
+        .json({ message: "No gear found for the specified user." });
+    }
+
+    const item = ownedGear.items.id(req.params.itemId);
+    if (!item) {
+      return res.status(404).json({ message: "Gear item not found" });
+    }
+
+    // Uppdatera artikelns fält
+    if (name) item.name = name;
+    if (quantity) item.quantity = quantity;
+    if (condition) item.condition = condition;
+    if (packed !== undefined) item.packed = packed;
+    if (type) item.type = type;
+    if (categories) item.categories = categories;
+
+    await ownedGear.save();
+
+    res.status(200).json({ message: "Gear item updated successfully", item });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating gear item" });
+  }
+});
+
+// Ta bort en specifik utrustningsartikel
+router.delete("/:itemId", async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const ownedGear = await OwnedGear.findOne({ userId });
+    if (!ownedGear) {
+      return res
+        .status(404)
+        .json({ message: "No gear found for the specified user." });
+    }
+
+    const item = ownedGear.items.id(req.params.itemId);
+    if (!item) {
+      return res.status(404).json({ message: "Gear item not found" });
+    }
+
+    item.remove(); // Ta bort artikeln
+    await ownedGear.save();
+
+    res.status(200).json({ message: "Gear item removed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error deleting gear item" });
   }
 });
 

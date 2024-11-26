@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const favoriteTrails = new mongoose.Schema({
+const favoriteTrailsSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   trailId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -9,4 +9,4 @@ const favoriteTrails = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("favoriteTrailsr", favoriteTrailsSchema);
+export default mongoose.model("FavoriteTrails", favoriteTrailsSchema);

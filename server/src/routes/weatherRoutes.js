@@ -21,7 +21,6 @@ router.get("/:lat/:lon", async (req, res) => {
 
     res.status(200).json(response.data);
   } catch (error) {
-    // Logga hela felresponsen om den finns
     if (error.response) {
       console.error("Fel vid hämtning av väderdata:", error.response.data);
     } else {
