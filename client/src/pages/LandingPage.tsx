@@ -1,4 +1,4 @@
-import LoginButton from "../components/LoginButton";
+import Login from "../components/Login";
 import LogoutButton from "../components/LogoutButton";
 
 export const LandingPage = () => {
@@ -6,7 +6,7 @@ export const LandingPage = () => {
     <div>
       <h1>Landing Page</h1>
       <p>Here you register and log in</p>
-      <LoginButton />
+      <Login />
       <LogoutButton />
     </div>
   );

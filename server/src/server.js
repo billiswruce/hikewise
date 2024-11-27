@@ -4,20 +4,40 @@ import dotenv from "dotenv";
 import "colors";
 import cors from "cors";
 import connectDB from "./config/db.js";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import i18next from "./i18n.js";
+import i18nextMiddleware from "i18next-http-middleware";
+import authRoutes from "./routes/authRoutes.js";
 import ownedGearRoutes from "./routes/ownedGearRoutes.js";
 import trailRoutes from "./routes/trailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import PackingList from "./routes/packingListRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import mapsRoutes from "./routes/mapsRoutes.js";
-import i18next from "./i18n.js";
-import i18nextMiddleware from "i18next-http-middleware";
-import morgan from "morgan"; // Importera morgan
 
 dotenv.config();
 connectDB();
+
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Konfigurera sessioner med MongoDB
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      collectionName: "sessions",
+    }),
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
 
 app.use(express.json());
 app.use(
@@ -27,9 +47,9 @@ app.use(
   })
 );
 app.use(i18nextMiddleware.handle(i18next));
-app.use(morgan("combined"));
 
 // Lägg till dina befintliga routes
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trails", trailRoutes);
 app.use("/api/owned-gear", ownedGearRoutes);
@@ -73,4 +93,6 @@ app.use((err, req, res, next) => {
 });
 
 // Starta servern
-app.listen(PORT, () => console.log("Server is blooming".rainbow.bold));
+app.listen(PORT, () =>
+  console.log(`Server is blooming on http://localhost:${PORT}`.rainbow.bold)
+);

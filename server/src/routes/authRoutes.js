@@ -1,53 +1,118 @@
-// import express from "express";
-// import bcrypt from "bcryptjs";
-// import jwt from "jsonwebtoken";
-// import User from "../models/User.js";
+import express from "express";
+import jwt from "jsonwebtoken";
+import jwksClient from "jwks-rsa";
+import User from "../models/User.js";
+import dotenv from "dotenv";
 
-// const router = express.Router();
+dotenv.config();
 
-// router.post("/register", async (req, res) => {
-//   const { username, email, password } = req.body;
+const router = express.Router();
 
-//   try {
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(400).json({ message: "User already exists" });
-//     }
+// Auth0-konfiguration
+const AUTH0_DOMAIN =
+  process.env.AUTH0_DOMAIN || "dev-xd3jckbyc4yzmut8.us.auth0.com";
+const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE || "YOUR_API_IDENTIFIER";
 
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const newUser = new User({ username, email, password: hashedPassword });
-//     await newUser.save();
+// JWT-konfiguration för att verifiera token
+const client = jwksClient({
+  jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
+});
 
-//     res
-//       .status(201)
-//       .json({ message: "User created successfully", userId: newUser._id });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
+const getKey = (header, callback) => {
+  client.getSigningKey(header.kid, (err, key) => {
+    const signingKey = key.getPublicKey();
+    callback(null, signingKey);
+  });
+};
 
-// router.post("/login", async (req, res) => {
-//   const { email, password } = req.body;
+// Funktion för att verifiera en JWT-token
+const verifyToken = (token) =>
+  new Promise((resolve, reject) => {
+    jwt.verify(
+      token,
+      getKey,
+      {
+        audience: AUTH0_AUDIENCE,
+        issuer: `https://${AUTH0_DOMAIN}/`,
+        algorithms: ["RS256"],
+      },
+      (err, decoded) => {
+        if (err) return reject(err);
+        resolve(decoded);
+      }
+    );
+  });
 
-//   try {
-//     const user = await User.findOne({ email });
-//     if (!user) {
-//       return res.status(400).json({ message: "Invalid email or password" });
-//     }
+// Middleware för att verifiera Auth0-token
+const verifyTokenMiddleware = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
 
-//     const isPasswordValid = await bcrypt.compare(password, user.password);
-//     if (!isPasswordValid) {
-//       return res.status(400).json({ message: "Invalid email or password" });
-//     }
+  if (!token) {
+    return res.status(401).json({ message: "Ingen token tillhandahållen" });
+  }
 
-//     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-//       expiresIn: "1h",
-//     });
+  jwt.verify(
+    token,
+    getKey,
+    {
+      audience: AUTH0_AUDIENCE,
+      issuer: `https://${AUTH0_DOMAIN}/`,
+      algorithms: ["RS256"],
+    },
+    (err, decoded) => {
+      if (err) {
+        console.error("Tokenvalidering misslyckades:", err);
+        return res.status(401).json({ message: "Ogiltig token" });
+      }
+      req.user = decoded; // Lagra användarinfo från token i request-objektet
+      next();
+    }
+  );
+};
 
-//     res.status(200).json({ message: "Logged in successfully", token });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
+// Route för att hantera inloggning och spara användaren i databasen
+router.post("/login", async (req, res) => {
+  const { token } = req.body;
 
-// export default router;
+  try {
+    // Validera Auth0-token
+    const decoded = await verifyToken(token);
+
+    // Spara eller uppdatera användaren i databasen
+    const user = await User.findOneAndUpdate(
+      { auth0Id: decoded.sub }, // Matcha Auth0-användar-ID
+      { email: decoded.email, username: decoded.name }, // Uppdatera användarinfo
+      { upsert: true, new: true } // Skapa användare om den inte finns
+    );
+
+    // Spara användardata i sessionen
+    req.session.userId = user._id;
+
+    res.status(200).json({ message: "Användare lagrad och inloggad!", user });
+  } catch (error) {
+    console.error("Fel vid inloggning:", error);
+    res.status(401).json({ message: "Ogiltig token" });
+  }
+});
+
+// Route för att hämta information om den inloggade användaren
+router.get("/me", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Ingen aktiv session" });
+  }
+
+  try {
+    const user = await User.findById(req.session.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Användare hittades inte" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Fel vid hämtning av användare:", error);
+    res.status(500).json({ message: "Något gick fel" });
+  }
+});
+
+export default router;
