@@ -42,7 +42,7 @@ const Login = () => {
     };
 
     loginToBackend();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, navigate]);
 
   return (
     <div>
