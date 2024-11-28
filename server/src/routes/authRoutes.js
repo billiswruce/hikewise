@@ -43,61 +43,66 @@ const verifyToken = (token) =>
     );
   });
 
-// Middleware för att verifiera Auth0-token
-const verifyTokenMiddleware = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+async function generateUniqueUsername(baseName) {
+  let username = baseName;
+  let counter = 1;
 
-  if (!token) {
-    return res.status(401).json({ message: "Ingen token tillhandahållen" });
-  }
-
-  jwt.verify(
-    token,
-    getKey,
-    {
-      audience: AUTH0_AUDIENCE,
-      issuer: `https://${AUTH0_DOMAIN}/`,
-      algorithms: ["RS256"],
-    },
-    (err, decoded) => {
-      if (err) {
-        console.error("Tokenvalidering misslyckades:", err);
-        return res.status(401).json({ message: "Ogiltig token" });
-      }
-      req.user = decoded; // Lagra användarinfo från token i request-objektet
-      next();
+  while (true) {
+    const existingUser = await User.findOne({ username });
+    if (!existingUser) {
+      return username;
     }
-  );
-};
+    username = `${baseName}${counter}`;
+    counter++;
+  }
+}
 
-// Route för att hantera inloggning och spara användaren i databasen
 router.post("/login", async (req, res) => {
   const { auth0Id, email, name } = req.body;
 
-  try {
-    const user = await User.findOneAndUpdate(
-      { auth0Id },
-      {
-        email,
-        username: name,
-        auth0Id,
-      },
-      { upsert: true, new: true }
-    );
+  console.log("Inkommande data från frontend:", { auth0Id, email, name });
 
-    req.session.userId = user._id;
+  try {
+    if (!auth0Id) {
+      return res.status(400).json({ message: "auth0Id är obligatoriskt" });
+    }
+
+    let existingUser = await User.findOne({ auth0Id });
+
+    if (existingUser) {
+      existingUser.email = email || existingUser.email;
+      await existingUser.save();
+
+      req.session.userId = existingUser._id;
+      return res.status(200).json({
+        message: "Användare inloggad!",
+        user: existingUser,
+      });
+    }
+
+    const uniqueUsername = await generateUniqueUsername(name || "user");
+
+    const newUser = await User.create({
+      auth0Id,
+      email: email || "",
+      username: uniqueUsername,
+    });
+
+    req.session.userId = newUser._id;
 
     res.status(200).json({
-      message: "Användare lagrad och inloggad!",
-      user,
+      message: "Ny användare skapad och inloggad!",
+      user: newUser,
     });
   } catch (error) {
-    console.error("Fel vid inloggning:", error);
-    res.status(500).json({ message: "Fel vid inloggning" });
+    console.error("Detaljerat fel vid inloggning:", error);
+    res.status(500).json({
+      message: "Fel vid inloggning",
+      error: error.message,
+    });
   }
 });
 
-// Route för att hämta information om den inloggade användaren
 router.get("/me", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Ingen aktiv session" });
@@ -115,6 +120,16 @@ router.get("/me", async (req, res) => {
     console.error("Fel vid hämtning av användare:", error);
     res.status(500).json({ message: "Något gick fel" });
   }
+});
+
+router.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Could not log out" });
+    }
+    res.clearCookie("connect.sid");
+    res.status(200).json({ message: "Logged out successfully" });
+  });
 });
 
 export default router;

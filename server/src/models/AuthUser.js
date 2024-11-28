@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 
 const userSchema = mongoose.Schema(
   {
-    sub: { type: String, required: true, unique: true }, // Auth0-användar-ID
-    name: { type: String },
-    email: { type: String, unique: true },
+    auth0Id: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: false },
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
+const AuthUser = mongoose.model("AuthUser", userSchema);
 
-export default User;
+export default AuthUser;

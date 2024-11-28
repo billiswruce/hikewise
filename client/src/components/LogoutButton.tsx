@@ -1,17 +1,24 @@
-import React from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const LogoutButton = () => {
+  const { logout } = useAuth0();
+
   const handleLogout = async () => {
     try {
+      // Logga ut från backend först
+      console.log("Attempting to log out from backend...");
       const response = await fetch("http://localhost:3001/api/auth/logout", {
         method: "POST",
         credentials: "include",
       });
 
       if (response.ok) {
-        alert("Logged out successfully");
+        console.log("Backend session successfully ended");
+        // Om backend-utloggningen lyckas, logga ut från Auth0
+        console.log("Logging out from Auth0...");
+        logout({ logoutParams: { returnTo: window.location.origin } });
       } else {
-        alert("Logout failed");
+        console.error("Backend logout failed");
       }
     } catch (error) {
       console.error("Logout error:", error);

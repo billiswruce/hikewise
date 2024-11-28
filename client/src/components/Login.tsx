@@ -8,6 +8,8 @@ const Login = () => {
     const loginToBackend = async () => {
       if (!isAuthenticated || !user) return;
 
+      console.log("Auth0 User data:", user); // Kontrollera vad Auth0 returnerar
+
       try {
         const response = await fetch("http://localhost:3001/api/auth/login", {
           method: "POST",
@@ -25,6 +27,8 @@ const Login = () => {
         if (response.ok) {
           const data = await response.json();
           console.log("Användare sparad på backend:", data);
+        } else {
+          console.error("Server error:", response.statusText);
         }
       } catch (error) {
         console.error("Fel vid inloggning på backend:", error);

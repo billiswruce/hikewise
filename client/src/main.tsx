@@ -15,6 +15,7 @@ createRoot(document.getElementById("root")!).render(
       clientId="SXDEoMwEZgARlsbdGlnxiXiNWqTEkpJI"
       authorizationParams={{
         redirect_uri: window.location.origin,
+        scope: "openid profile email",
       }}>
       <LanguageProvider>
         <App />
