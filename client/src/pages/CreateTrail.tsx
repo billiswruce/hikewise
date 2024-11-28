@@ -1,9 +1,12 @@
 import React from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 const CreateTrail: React.FC = () => {
+  const { translations } = useLanguage();
+
   return (
     <div>
-      <h1>Create a Trail</h1>
+      <h1>{translations["createTrail"] || "Create a Trail"}</h1>
     </div>
   );
 };

@@ -1,7 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
+import { useLanguage } from "../context/LanguageContext";
 
 const LogoutButton = () => {
   const { logout } = useAuth0();
+  const { translations } = useLanguage();
 
   const handleLogout = async () => {
     try {
@@ -25,7 +27,11 @@ const LogoutButton = () => {
     }
   };
 
-  return <button onClick={handleLogout}>Log Out</button>;
+  return (
+    <button onClick={handleLogout}>
+      {translations["logout"] || "Log out"}
+    </button>
+  );
 };
 
 export default LogoutButton;

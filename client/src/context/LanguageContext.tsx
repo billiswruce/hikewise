@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Typ för tillgängliga språk
-type Language = "en" | "sv" | "ja";
+type Language = "en" | "sv" | "ja" | "fr";
 
 // Kontextens värden
 interface LanguageContextProps {
@@ -19,12 +19,24 @@ const LanguageContext = createContext<LanguageContextProps | undefined>(
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [language, setLanguage] = useState<Language>("en");
+  // Hämta sparat språk från localStorage eller använd "en" som default
+  const [language, setLanguage] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem("selectedLanguage");
+    return (savedLanguage as Language) || "en";
+  });
+
   const [translations, setTranslations] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
+  // Spara språkvalet i localStorage när det ändras
+  const handleSetLanguage = (newLanguage: Language) => {
+    localStorage.setItem("selectedLanguage", newLanguage);
+    setLanguage(newLanguage);
+  };
+
   useEffect(() => {
     const fetchLocale = async () => {
+      console.log("Fetching locale for language:", language);
       try {
         const response = await fetch(
           `http://localhost:3001/api/translations/${language}`
@@ -34,7 +46,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
         }
 
         const data = await response.json();
-        setTranslations(data);
+        console.log("Received translations:", data);
+        setTranslations(data.translation || {});
       } catch (error) {
         console.error("Failed to fetch locale:", error);
         setTranslations({});
@@ -47,16 +60,22 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [language]);
 
   if (loading) {
-    return <p>Loading language...</p>;
+    return <div>Loading translations...</div>;
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, translations }}>
+    <LanguageContext.Provider
+      value={{
+        language,
+        setLanguage: handleSetLanguage,
+        translations,
+      }}>
       {children}
     </LanguageContext.Provider>
   );
 };
 
+// Custom hook för att använda språkkontexten
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {

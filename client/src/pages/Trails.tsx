@@ -1,26 +1,29 @@
+import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
-export const Trails = () => {
+const Trails: React.FC = () => {
+  const { translations } = useLanguage();
+
   return (
     <div>
-      <h2>Trails</h2>
+      <h2>{translations["trails"] || "Trails"}</h2>
       <nav>
         <ul>
           <li>
-            <Link to="hiked">Hiked</Link>{" "}
-            {/* Navigerar till /my-profile/trails/hiked */}
+            <Link to="hiked">{translations["hikedTrails"] || "Hiked"}</Link>
           </li>
           <li>
-            <Link to="hiking">Hiking</Link>{" "}
-            {/* Navigerar till /my-profile/trails/hiking */}
+            <Link to="hiking">{translations["hikingTrails"] || "Hiking"}</Link>
           </li>
           <li>
-            <Link to="favorite-trails">Favorite Trails</Link>{" "}
-            {/* Navigerar till /my-profile/trails/favorite-trails */}
+            <Link to="favorite-trails">
+              {translations["favoriteTrails"] || "Favorite Trails"}
+            </Link>
           </li>
         </ul>
       </nav>
-      <Outlet /> {/* Här visas undersidorna */}
+      <Outlet />
     </div>
   );
 };

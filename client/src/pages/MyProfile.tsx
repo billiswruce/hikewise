@@ -1,45 +1,26 @@
+import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
 
-export const MyProfile = () => {
+const MyProfile: React.FC = () => {
+  const { translations } = useLanguage();
+
   return (
     <div>
-      <h1>My Profile</h1>
+      <h1>{translations["myProfile"] || "My Profile"}</h1>
       <nav>
         <ul>
           <li>
-            <Link to="gear">Gear</Link> {/* Navigerar till /my-profile/gear */}
+            <Link to="gear">{translations["gear"] || "Gear"}</Link>
           </li>
           <li>
-            <Link to="trails">Trails</Link>{" "}
-            {/* Navigerar till /my-profile/trails */}
+            <Link to="trails">{translations["trails"] || "Trails"}</Link>
           </li>
         </ul>
       </nav>
-      <Outlet /> {/* Här visas barnrutterna */}
+      <Outlet />
     </div>
   );
 };
 
 export default MyProfile;
-
-// import { useAuth0 } from "@auth0/auth0-react";
-
-// const MyProfile = () => {
-//   const { user, isAuthenticated, isLoading } = useAuth0();
-
-//   if (isLoading) {
-//     return <div>Loading ...</div>;
-//   }
-
-//   return (
-//     isAuthenticated && (
-//       <div>
-//         <img src={user.picture} alt={user.name} />
-//         <h2>{user.name}</h2>
-//         <p>{user.email}</p>
-//       </div>
-//     )
-//   );
-// };
-
-// export default MyProfile;

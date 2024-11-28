@@ -9,6 +9,7 @@ const Header: React.FC = () => {
       <button onClick={() => setLanguage("en")}>English</button>
       <button onClick={() => setLanguage("sv")}>Svenska</button>
       <button onClick={() => setLanguage("ja")}>日本語</button>
+      <button onClick={() => setLanguage("fr")}>Français</button>
     </header>
   );
 };

@@ -60,7 +60,9 @@ app.use("/api/maps", mapsRoutes);
 // Ny route för att hämta översättningar
 app.get("/api/translations/:lng", (req, res) => {
   const { lng } = req.params;
-  const resources = i18next.getDataByLanguage(lng);
+  console.log("Requested language:", lng);
+  const resources = i18next.getResourceBundle(lng, "translation");
+  console.log("Found resources:", resources);
 
   if (!resources) {
     return res
@@ -68,7 +70,7 @@ app.get("/api/translations/:lng", (req, res) => {
       .json({ message: "Translations not found for language" });
   }
 
-  res.json(resources);
+  res.json({ translation: resources });
 });
 
 // Exempelroute för flerspråkighet
