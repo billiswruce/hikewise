@@ -1,8 +1,13 @@
-export const Hiked = () => {
+import React from "react";
+import { useLanguage } from "../context/LanguageContext";
+
+const Hiked: React.FC = () => {
+  const { translations } = useLanguage();
+
   return (
     <div>
-      <h3>Hiked Trails</h3>
-      <p>List of hiked trails...</p>
+      <h3>{translations["hikedTrails"] || "Hiked Trails"}</h3>
+      <p>{translations["listOfHikedTrails"] || "List of hiked trails..."}</p>
     </div>
   );
 };

@@ -1,7 +1,12 @@
-export const NotFound = () => {
+import React from "react";
+import { useLanguage } from "../context/LanguageContext";
+
+const NotFound: React.FC = () => {
+  const { translations } = useLanguage();
+
   return (
     <div>
-      <h1>Not Found</h1>
+      <h1>{translations["notFound"] || "Not Found"}</h1>
     </div>
   );
 };

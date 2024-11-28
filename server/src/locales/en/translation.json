@@ -1,6 +1,23 @@
 {
-    "welcome": "Welcome to the app!",
-    "serverRunning": "Server is running",
-    "error": "An error occurred"
-  }
-  
+  "welcome": "Welcome to the app!",
+  "serverRunning": "Server is running",
+  "error": "An error occurred",
+  "login": "Log in",
+  "logout": "Log out",
+  "welcomeUser": "Welcome",
+  "auth0Id": "Your Auth0 ID is",
+  "createTrail": "Create a Trail",
+  "favoriteTrails": "Favorite Trails",
+  "gear": "Gear",
+  "categories": "Categories etc!",
+  "hikedTrails": "Hiked Trails",
+  "hikingTrails": "Hiking Trails",
+  "homePage": "Home Page - Click this button and create a trail",
+  "landingPage": "Landing Page",
+  "registerLogin": "Here you register and log in",
+  "map": "Map",
+  "myProfile": "My Profile",
+  "notFound": "Not Found",
+  "protectedPage": "Protected Page",
+  "protectedPageDescription": "This page is only accessible to authenticated users."
+}

@@ -1,8 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 const Login = () => {
   const { loginWithRedirect, isAuthenticated, user } = useAuth0();
+  const { translations } = useLanguage();
 
   useEffect(() => {
     const loginToBackend = async () => {
@@ -42,12 +44,19 @@ const Login = () => {
   return (
     <div>
       {!isAuthenticated && (
-        <button onClick={() => loginWithRedirect()}>Logga in</button>
+        <button onClick={() => loginWithRedirect()}>
+          {translations["login"] || "Logga in"}
+        </button>
       )}
       {isAuthenticated && user && (
         <div>
-          <p>Välkommen, {user.name}</p>
-          <p>Ditt Auth0 ID är: {user.sub}</p>
+          <p>{translations["welcome"] || "Loading..."}</p>
+          <p>
+            {translations["welcomeUser"] || "Välkommen"}, {user.name}
+          </p>
+          <p>
+            {translations["auth0Id"] || "Ditt Auth0 ID är"}: {user.sub}
+          </p>
         </div>
       )}
     </div>

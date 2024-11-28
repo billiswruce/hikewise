@@ -1,6 +1,23 @@
 {
-    "welcome": "Välkommen till appen!",
-    "serverRunning": "Servern är igång",
-    "error": "Ett fel inträffade"
-  }
-  
+  "welcome": "Välkommen till applikationen!",
+  "serverRunning": "Servern körs",
+  "error": "Ett fel uppstod",
+  "login": "Logga in",
+  "logout": "Logga ut",
+  "welcomeUser": "Välkommen",
+  "auth0Id": "Ditt Auth0 ID är",
+  "createTrail": "Skapa en led",
+  "favoriteTrails": "Favoritleder",
+  "gear": "Utrustning",
+  "categories": "Kategorier etc!",
+  "hikedTrails": "Gådda leder",
+  "hikingTrails": "Vandringsleder",
+  "homePage": "Startsida - Klicka på den här knappen och skapa en led",
+  "landingPage": "Landningssida",
+  "registerLogin": "Här registrerar du dig och loggar in",
+  "map": "Karta",
+  "myProfile": "Min profil",
+  "notFound": "Hittades inte",
+  "protectedPage": "Skyddad sida",
+  "protectedPageDescription": "Den här sidan är endast tillgänglig för autentiserade användare."
+}

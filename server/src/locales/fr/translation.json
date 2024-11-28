@@ -1,0 +1,23 @@
+{
+    "welcome": "Bienvenue dans l'application!",
+    "serverRunning": "Le serveur est en cours d'exécution",
+    "error": "Une erreur s'est produite",
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
+    "welcomeUser": "Bienvenue",
+    "auth0Id": "Votre ID Auth0 est",
+    "createTrail": "Créer un sentier",
+    "favoriteTrails": "Sentiers favoris",
+    "gear": "Équipement",
+    "categories": "Catégories etc!",
+    "hikedTrails": "Sentiers parcourus",
+    "hikingTrails": "Sentiers de randonnée",
+    "homePage": "Page d'accueil - Cliquez sur ce bouton et créez un sentier",
+    "landingPage": "Page d'accueil",
+    "registerLogin": "Ici, vous vous inscrivez et vous connectez",
+    "map": "Carte",
+    "myProfile": "Mon profil",
+    "notFound": "Non trouvé",
+    "protectedPage": "Page protégée",
+    "protectedPageDescription": "Cette page est uniquement accessible aux utilisateurs authentifiés."
+  }

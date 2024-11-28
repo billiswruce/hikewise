@@ -15,7 +15,7 @@ i18next
       loadPath: path.join(__dirname, "locales/{{lng}}/translation.json"),
     },
     fallbackLng: "en",
-    preload: ["en", "sv", "ja"],
+    preload: ["en", "sv", "ja", "fr"],
     detection: {
       order: ["querystring", "header", "cookie"],
       caches: ["cookie"],
