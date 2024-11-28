@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLanguage } from "../context/LanguageContext";
 
-const LogoutButton = () => {
+const Logout = () => {
   const { logout } = useAuth0();
   const { translations } = useLanguage();
 
@@ -34,4 +34,4 @@ const LogoutButton = () => {
   );
 };
 
-export default LogoutButton;
+export default Logout;

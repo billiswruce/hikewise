@@ -11,14 +11,13 @@ import Hiked from "./pages/Hiked";
 import Hiking from "./pages/Hiking";
 import FavoriteTrails from "./pages/FavoriteTrails";
 import NotFound from "./pages/NotFound";
-import TestTranslations from "./pages/TestTranslations";
 import Layout from "./components/Layout";
 
 import { ReactElement } from "react";
 
 const ProtectedRoute = ({ element }: { element: ReactElement }) => {
   const { isAuthenticated } = useAuth0();
-  return isAuthenticated ? element : <Navigate to="/landing-page" />;
+  return isAuthenticated ? element : <Navigate to="/" />;
 };
 
 export const router = createBrowserRouter([
@@ -34,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/landing-page",
-        element: <LandingPage />,
+        element: <ProtectedRoute element={<LandingPage />} />,
       },
       {
         path: "/create-trail",
@@ -71,10 +70,6 @@ export const router = createBrowserRouter([
             ],
           },
         ],
-      },
-      {
-        path: "/test-translations",
-        element: <ProtectedRoute element={<TestTranslations />} />,
       },
       {
         path: "*",

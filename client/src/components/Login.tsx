@@ -1,16 +1,18 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { loginWithRedirect, isAuthenticated, user } = useAuth0();
   const { translations } = useLanguage();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loginToBackend = async () => {
       if (!isAuthenticated || !user) return;
 
-      console.log("Auth0 User data:", user); // Kontrollera vad Auth0 returnerar
+      console.log("Auth0 User data:", user);
       console.log("Inloggningsförsök till backend");
 
       try {
@@ -30,6 +32,7 @@ const Login = () => {
         if (response.ok) {
           const data = await response.json();
           console.log("Användare sparad på backend:", data);
+          navigate("/landing-page");
         } else {
           console.error("Server error:", response.statusText);
         }

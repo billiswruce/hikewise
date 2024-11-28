@@ -19,9 +19,6 @@ export const Navigation = () => {
         <li>
           <Link to="/my-profile">My Profile</Link>
         </li>
-        <li>
-          <Link to="/test-translations">Test Translations</Link>
-        </li>
       </ul>
     </nav>
   );
