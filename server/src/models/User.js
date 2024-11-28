@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: false, unique: false }, // Username kan vara valfritt
+  username: { type: String, required: false },
   email: { type: String, required: true, unique: true },
-  auth0Id: { type: String, unique: true }, // Auth0 "sub" fält
+  auth0Id: { type: String, required: true, unique: true },
   favoriteTrails: [
     { type: mongoose.Schema.Types.ObjectId, ref: "FavoriteTrails" },
   ],

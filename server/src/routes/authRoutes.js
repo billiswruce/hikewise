@@ -72,26 +72,28 @@ const verifyTokenMiddleware = (req, res, next) => {
 
 // Route för att hantera inloggning och spara användaren i databasen
 router.post("/login", async (req, res) => {
-  const { token } = req.body;
+  const { auth0Id, email, name } = req.body;
 
   try {
-    // Validera Auth0-token
-    const decoded = await verifyToken(token);
-
-    // Spara eller uppdatera användaren i databasen
     const user = await User.findOneAndUpdate(
-      { auth0Id: decoded.sub }, // Matcha Auth0-användar-ID
-      { email: decoded.email, username: decoded.name }, // Uppdatera användarinfo
-      { upsert: true, new: true } // Skapa användare om den inte finns
+      { auth0Id },
+      {
+        email,
+        username: name,
+        auth0Id,
+      },
+      { upsert: true, new: true }
     );
 
-    // Spara användardata i sessionen
     req.session.userId = user._id;
 
-    res.status(200).json({ message: "Användare lagrad och inloggad!", user });
+    res.status(200).json({
+      message: "Användare lagrad och inloggad!",
+      user,
+    });
   } catch (error) {
     console.error("Fel vid inloggning:", error);
-    res.status(401).json({ message: "Ogiltig token" });
+    res.status(500).json({ message: "Fel vid inloggning" });
   }
 });
 

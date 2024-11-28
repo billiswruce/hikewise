@@ -1,40 +1,48 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
-import axios from "axios";
 
 const Login = () => {
-  const { loginWithRedirect, getIdTokenClaims, isAuthenticated, user } =
-    useAuth0();
+  const { loginWithRedirect, isAuthenticated, user } = useAuth0();
 
   useEffect(() => {
     const loginToBackend = async () => {
-      if (!isAuthenticated) return;
+      if (!isAuthenticated || !user) return;
 
       try {
-        const token = await getIdTokenClaims();
-        const response = await axios.post(
-          "http://localhost:3001/api/auth/login",
-          {
-            token: token?.__raw,
-          }
-        );
-        console.log("Användare sparad på backend:", response.data);
+        const response = await fetch("http://localhost:3001/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            auth0Id: user.sub,
+            email: user.email,
+            name: user.name,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Användare sparad på backend:", data);
+        }
       } catch (error) {
         console.error("Fel vid inloggning på backend:", error);
       }
     };
 
     loginToBackend();
-  }, [isAuthenticated, getIdTokenClaims]); // Kör när användaren är autentiserad
+  }, [isAuthenticated, user]);
 
   return (
     <div>
       {!isAuthenticated && (
         <button onClick={() => loginWithRedirect()}>Logga in</button>
       )}
-      {isAuthenticated && (
+      {isAuthenticated && user && (
         <div>
-          <p>Välkommen, {user?.name}</p>
+          <p>Välkommen, {user.name}</p>
+          <p>Ditt Auth0 ID är: {user.sub}</p>
         </div>
       )}
     </div>

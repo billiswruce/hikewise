@@ -22,10 +22,10 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Konfigurera sessioner med MongoDB
+// Configure session middleware
 app.use(
   session({
-    secret: "your-secret-key",
+    secret: process.env.SESSION_SECRET || "your_secret_key",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -33,8 +33,8 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
-      secure: false,
-      maxAge: 1000 * 60 * 60 * 24,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
 );
@@ -91,7 +91,6 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: err.message });
 });
-
 // Starta servern
 app.listen(PORT, () =>
   console.log(`Server is blooming on http://localhost:${PORT}`.rainbow.bold)
