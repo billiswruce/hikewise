@@ -9,6 +9,7 @@ const Login = () => {
       if (!isAuthenticated || !user) return;
 
       console.log("Auth0 User data:", user); // Kontrollera vad Auth0 returnerar
+      console.log("Inloggningsförsök till backend");
 
       try {
         const response = await fetch("http://localhost:3001/api/auth/login", {
