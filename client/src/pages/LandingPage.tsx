@@ -1,17 +1,28 @@
 import React from "react";
 import { useLanguage } from "../context/LanguageContext";
-import Login from "../components/Login";
-import LogoutButton from "../components/LogoutButton";
+import { useNavigate } from "react-router-dom";
+import Logout from "../components/Logout";
 
 const LandingPage: React.FC = () => {
   const { translations } = useLanguage();
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/create-trail");
+  };
 
   return (
     <div>
-      <h1>{translations["landingPage"] || "Landing Page"}</h1>
-      <p>{translations["registerLogin"] || "Here you register and log in"}</p>
-      <Login />
-      <LogoutButton />
+      <p>{translations["homePage"] || "Home Page"}</p>
+      <button onClick={handleNavigate}>
+        {translations["createTrail"] || "Create Trail"}
+      </button>
+
+      <p>
+        {translations["landingAfterLogin"] ||
+          "This is where you land after logging in"}
+      </p>
+      <Logout />
     </div>
   );
 };
