@@ -1,15 +1,18 @@
-import React from "react";
-import { useLanguage } from "../context/LanguageContext";
+import backgroundImage from "../assets/bg.webp";
 import Login from "../components/Login";
+import styles from "../styles/Home.module.scss";
 
-const Home: React.FC = () => {
-  const { translations } = useLanguage();
-
+const Home = () => {
   return (
-    <div>
-      <h1>{translations["landingPage"] || "Landing Page"}</h1>
-      <p>{translations["registerLogin"] || "Here you register and log in"}</p>
-      <Login />
+    <div
+      className={styles.container}
+      style={{ backgroundImage: `url(${backgroundImage})` }}>
+      <div className={styles.hero}>
+        <h1 className={styles.title}>HikeWise</h1>
+        <div className={styles.buttonContainer}>
+          <Login />
+        </div>
+      </div>
     </div>
   );
 };

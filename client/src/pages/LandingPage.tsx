@@ -2,10 +2,12 @@ import React from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import Logout from "../components/Logout";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const LandingPage: React.FC = () => {
   const { translations } = useLanguage();
   const navigate = useNavigate();
+  const { user } = useAuth0();
 
   const handleNavigate = () => {
     navigate("/create-trail");
@@ -13,15 +15,12 @@ const LandingPage: React.FC = () => {
 
   return (
     <div>
-      <p>{translations["homePage"] || "Home Page"}</p>
+      <p>
+        {translations["welcomeUser"] || "Välkommen"}, {user?.name}
+      </p>
       <button onClick={handleNavigate}>
         {translations["createTrail"] || "Create Trail"}
       </button>
-
-      <p>
-        {translations["landingAfterLogin"] ||
-          "This is where you land after logging in"}
-      </p>
       <Logout />
     </div>
   );

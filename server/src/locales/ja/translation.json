@@ -19,5 +19,7 @@
   "myProfile": "マイプロフィール",
   "notFound": "見つかりません",
   "protectedPage": "保護されたページ",
-  "protectedPageDescription": "このページは認証されたユーザーのみがアクセスできます。"
+  "protectedPageDescription": "このページは認証されたユーザーのみがアクセスできます。",
+  "startPlanning": "計画を始める",
+  "landingAfterLogin": "ここはログイン後に到着する場所です"
 }

@@ -19,5 +19,7 @@
   "myProfile": "My Profile",
   "notFound": "Not Found",
   "protectedPage": "Protected Page",
-  "protectedPageDescription": "This page is only accessible to authenticated users."
+  "protectedPageDescription": "This page is only accessible to authenticated users.",
+  "startPlanning": "Start Planning",
+  "landingAfterLogin": "This is where you land after logging in"
 }

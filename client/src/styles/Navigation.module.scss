@@ -3,6 +3,7 @@
 .nav {
   display: flex;
   flex-direction: column;
+  padding: 0 1rem;
 }
 
 .hamburger {
@@ -11,7 +12,7 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  margin-left: auto; /* Flyttar hamburgermenyn till höger */
+  margin-left: auto;
 }
 
 .menu {
@@ -25,8 +26,8 @@
 
 .menu.active {
   display: flex;
-  position: absolute; /* Förhindra att menyn påverkar layouten */
-  top: 3rem; /* Flytta under topBar */
+  position: absolute;
+  top: 3rem;
   right: 0;
   background-color: var(--color-white);
   padding: 1rem;
@@ -52,5 +53,10 @@
     background: none;
     box-shadow: none;
     padding: 0;
+    margin-left: 0;
+  }
+
+  .topBar {
+    justify-content: flex-start;
   }
 }

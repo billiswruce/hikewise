@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import { useNavigate } from "react-router-dom";
+import styles from "../styles/Login.module.scss";
 
 const Login = () => {
   const { loginWithRedirect, isAuthenticated, user } = useAuth0();
@@ -47,20 +48,9 @@ const Login = () => {
   return (
     <div>
       {!isAuthenticated && (
-        <button onClick={() => loginWithRedirect()}>
-          {translations["login"] || "Logga in"}
+        <button onClick={() => loginWithRedirect()} className={styles.button}>
+          {translations["startPlanning"] || "Start Planning"}
         </button>
-      )}
-      {isAuthenticated && user && (
-        <div>
-          <p>{translations["welcome"] || "Loading..."}</p>
-          <p>
-            {translations["welcomeUser"] || "Välkommen"}, {user.name}
-          </p>
-          <p>
-            {translations["auth0Id"] || "Ditt Auth0 ID är"}: {user.sub}
-          </p>
-        </div>
       )}
     </div>
   );

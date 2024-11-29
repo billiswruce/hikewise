@@ -3,16 +3,25 @@
 /* Variabler */
 :root {
   --color-green: #7a9d72;
+  --color-green-dark: #618547;
   --color-white: #ffffff;
   --color-black: #000000;
 }
 
 /* Globala stilar */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 body {
   font-family: "IBM Plex Sans", sans-serif;
   color: var(--color-black);
   background-color: var(--color-white);
-  padding: 0 1rem;
 }
 
 /* breakpoints.scss */

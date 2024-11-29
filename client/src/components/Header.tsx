@@ -1,10 +1,10 @@
 import { useLanguage } from "../context/LanguageContext";
 import Navigation from "./Navigation";
 import type { Language } from "../context/LanguageContext";
-import styles from "./header.module.scss";
+import styles from "../styles/Header.module.scss";
 
 const Header: React.FC = () => {
-  const { translations, setLanguage, language } = useLanguage();
+  const { setLanguage, language } = useLanguage();
 
   const handleLanguageChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -30,7 +30,6 @@ const Header: React.FC = () => {
           <Navigation />
         </div>
       </header>
-      <h3>{translations["welcome"] || "Loading..."}</h3>
     </>
   );
 };

@@ -28,7 +28,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   const [translations, setTranslations] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
-  // Spara språkvalet i localStorage när det ändras
   const handleSetLanguage = (newLanguage: Language) => {
     localStorage.setItem("selectedLanguage", newLanguage);
     setLanguage(newLanguage);
