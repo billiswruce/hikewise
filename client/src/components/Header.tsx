@@ -28,6 +28,7 @@ const Header = () => {
             <option value="sv">Svenska</option>
             <option value="ja">日本語</option>
             <option value="fr">Français</option>
+            <option value="es">Español</option>
           </select>
         </div>
 
