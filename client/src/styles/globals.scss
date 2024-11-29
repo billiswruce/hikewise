@@ -1,5 +1,21 @@
 @import "@fontsource/ibm-plex-sans/index.css";
 
+/* Variabler */
+:root {
+  --color-green: #7a9d72;
+  --color-white: #ffffff;
+  --color-black: #000000;
+}
+
+/* Globala stilar */
 body {
   font-family: "IBM Plex Sans", sans-serif;
+  color: var(--color-black);
+  background-color: var(--color-white);
+  padding: 0 1rem;
 }
+
+/* breakpoints.scss */
+$sm-screen: 576px;
+$md-screen: 768px;
+$lg-screen: 1024px;
