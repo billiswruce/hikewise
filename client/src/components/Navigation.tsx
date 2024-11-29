@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import styles from "./navigation.module.scss";
+import styles from "../styles/Navigation.module.scss";
 
 export const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);

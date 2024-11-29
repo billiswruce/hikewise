@@ -1,7 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import Home from "./pages/Home";
-import LandingPage from "./pages/LandingPage";
 import CreateTrail from "./pages/CreateTrail";
 import Map from "./pages/Map";
 import MyProfile from "./pages/MyProfile";
@@ -32,16 +31,16 @@ export const router = createBrowserRouter([
         index: true,
       },
       {
-        path: "/landing-page",
-        element: <ProtectedRoute element={<LandingPage />} />,
-      },
-      {
         path: "/create-trail",
         element: <ProtectedRoute element={<CreateTrail />} />,
       },
       {
         path: "/map",
         element: <ProtectedRoute element={<Map />} />,
+      },
+      {
+        path: "/gear",
+        element: <ProtectedRoute element={<Gear />} />,
       },
       {
         path: "/my-profile",

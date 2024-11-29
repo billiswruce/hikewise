@@ -3,19 +3,23 @@
 .header {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
 }
 
 .topBar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0.5rem;
+  padding: 1rem 1.5rem;
+}
+
+.logoContainer {
+  flex: 0;
 }
 
 .languageContainer {
   display: flex;
+  align-items: center;
 }
 
 .languageSelect {
@@ -29,4 +33,9 @@
 .languageSelect:hover {
   background-color: var(--color-white);
   color: var(--color-green);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
 }

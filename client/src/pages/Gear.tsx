@@ -1,7 +1,6 @@
-import React from "react";
 import { useLanguage } from "../context/LanguageContext";
 
-const Gear: React.FC = () => {
+const Gear = () => {
   const { translations } = useLanguage();
 
   return (
