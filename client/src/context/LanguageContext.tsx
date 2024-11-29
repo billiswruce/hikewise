@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 // Typ för tillgängliga språk
-type Language = "en" | "sv" | "ja" | "fr";
+export type Language = "en" | "sv" | "ja" | "fr";
 
 // Kontextens värden
 interface LanguageContextProps {
