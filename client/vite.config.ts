@@ -7,10 +7,15 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3001", 
-        changeOrigin: true,            
+        target: "http://localhost:3001",
+        changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+    },
+  },
+  resolve: {
+    alias: {
+      '~': '/src', // Alias fungerar nu korrekt
     },
   },
 });
