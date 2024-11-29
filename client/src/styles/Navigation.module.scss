@@ -1,0 +1,48 @@
+// client/src/styles/Navigation.module.scss
+@use "../styles/globals.scss";
+
+.nav {
+  display: none;
+
+  @media (min-width: globals.$md-screen) {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 0.5rem 3rem !important;
+  }
+}
+
+.hamburger {
+  display: block;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: auto;
+
+  @media (min-width: globals.$md-screen) {
+    display: none;
+  }
+}
+
+.menu {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  gap: 1rem;
+
+  @media (min-width: globals.$md-screen) {
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+.menu li a {
+  text-decoration: none;
+  color: var(--color-black);
+  font-size: 1rem;
+}

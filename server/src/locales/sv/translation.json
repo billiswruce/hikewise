@@ -1,5 +1,5 @@
 {
-  "welcome": "Välkommen till applikationen!",
+  "welcome": "Välkommen",
   "serverRunning": "Servern körs",
   "error": "Ett fel uppstod",
   "login": "Logga in",
@@ -19,5 +19,7 @@
   "myProfile": "Min profil",
   "notFound": "Hittades inte",
   "protectedPage": "Skyddad sida",
-  "protectedPageDescription": "Den här sidan är endast tillgänglig för autentiserade användare."
+  "protectedPageDescription": "Den här sidan är endast tillgänglig för autentiserade användare.",
+  "startPlanning": "Börja planera",
+  "landingAfterLogin": "Detta är där du landar efter att ha loggat in"
 }

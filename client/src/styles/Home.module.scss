@@ -1,0 +1,41 @@
+@use "../styles/globals.scss";
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-white);
+  padding-top: 5rem;
+}
+
+.hero {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  color: var(--color-black);
+}
+
+@media (min-width: globals.$md-screen) {
+  .hero {
+    padding: 2rem;
+    max-width: 50%;
+  }
+
+  .title {
+    font-size: 3rem;
+  }
+
+  .registerButton,
+  .loginButton {
+    font-size: 1.1rem;
+  }
+}

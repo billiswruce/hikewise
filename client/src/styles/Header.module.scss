@@ -1,0 +1,41 @@
+@use "../styles/globals.scss";
+
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.5rem;
+}
+
+.logoContainer {
+  flex: 0;
+}
+
+.languageContainer {
+  display: flex;
+  align-items: center;
+}
+
+.languageSelect {
+  background: none;
+  border: 1px solid var(--color-white);
+  padding: 0.3rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.languageSelect:hover {
+  background-color: var(--color-white);
+  color: var(--color-green);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+}
