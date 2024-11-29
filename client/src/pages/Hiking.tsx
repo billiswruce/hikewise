@@ -1,7 +1,6 @@
-import React from "react";
 import { useLanguage } from "../context/LanguageContext";
 
-const Hiking: React.FC = () => {
+const Hiking = () => {
   const { translations } = useLanguage();
 
   return (

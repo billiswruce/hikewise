@@ -1,7 +1,6 @@
-import React from "react";
 import { useLanguage } from "../context/LanguageContext";
 
-const NotFound: React.FC = () => {
+const NotFound = () => {
   const { translations } = useLanguage();
 
   return (

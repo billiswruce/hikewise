@@ -1,10 +1,10 @@
 import { useLanguage } from "../context/LanguageContext";
 import type { Language } from "../context/LanguageContext";
 import styles from "../styles/Header.module.scss";
-import Navigation from "./Navigation";
+import Navigation from "./TopNavigation";
 import useWindowSize from "../hooks/WindowSize";
 
-const Header: React.FC = () => {
+const Header = () => {
   const { setLanguage, language } = useLanguage();
   const { width } = useWindowSize();
 

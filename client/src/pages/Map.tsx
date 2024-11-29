@@ -1,7 +1,6 @@
-import React from "react";
 import { useLanguage } from "../context/LanguageContext";
 
-const Map: React.FC = () => {
+const Map = () => {
   const { translations } = useLanguage();
 
   return (

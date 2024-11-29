@@ -1,7 +1,6 @@
-import React from "react";
 import { useLanguage } from "../context/LanguageContext";
 
-const ProtectedPage: React.FC = () => {
+const ProtectedPage = () => {
   const { translations } = useLanguage();
 
   return (

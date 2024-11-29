@@ -1,7 +1,6 @@
-import React from "react";
 import { useLanguage } from "../context/LanguageContext";
 
-const CreateTrail: React.FC = () => {
+const CreateTrail = () => {
   const { translations } = useLanguage();
 
   return (

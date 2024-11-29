@@ -1,8 +1,7 @@
-import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 
-const Trails: React.FC = () => {
+const Trails = () => {
   const { translations } = useLanguage();
 
   return (
