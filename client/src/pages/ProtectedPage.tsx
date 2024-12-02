@@ -1,15 +1,12 @@
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const ProtectedPage = () => {
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h1>{translations["protectedPage"] || "Protected Page"}</h1>
-      <p>
-        {translations["protectedPageDescription"] ||
-          "This page is only accessible to authenticated users."}
-      </p>
+      <h1>{t("protectedPage")}</h1>
+      <p>{t("protectedPageDescription")}</p>
     </div>
   );
 };

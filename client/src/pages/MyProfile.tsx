@@ -1,10 +1,10 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 import Logout from "../components/Logout";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const MyProfile = () => {
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth0();
 
@@ -14,23 +14,21 @@ const MyProfile = () => {
 
   return (
     <div>
-      <h1>{translations["myProfile"] || "My Profile"}</h1>
+      <h1>{t("myProfile")}</h1>
       <div>
         <p>
-          {translations["welcomeUser"] || "Välkommen"}, {user?.name}
+          {t("welcomeUser")}, {user?.name}
         </p>
-        <button onClick={handleNavigate}>
-          {translations["createTrail"] || "Create Trail"}
-        </button>
+        <button onClick={handleNavigate}>{t("createTrail")}</button>
         <Logout />
       </div>
       <nav>
         <ul>
           <li>
-            <Link to="gear">{translations["gear"] || "Gear"}</Link>
+            <Link to="gear">{t("gear")}</Link>
           </li>
           <li>
-            <Link to="trails">{translations["trails"] || "Trails"}</Link>
+            <Link to="trails">{t("trails")}</Link>
           </li>
         </ul>
       </nav>

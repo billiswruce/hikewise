@@ -10,6 +10,8 @@ const trailSchema = new mongoose.Schema(
     description: String,
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
+    creatorId: { type: String, required: true },
+    hiked: { type: Boolean, default: false },
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,11 +28,12 @@ const trailSchema = new mongoose.Schema(
       ref: "PackingList",
     },
     hikeDate: { type: Date, required: true },
+    hikeEndDate: { type: Date, required: true },
   },
   { timestamps: true }
 );
 
 export default mongoose.model("Trail", trailSchema);
 
-// vill kunna filtrera på difficulty , simple walk, easy hike, medium, hard, epic
 //Trails: { id, name, image, location, length, difficulty, description, latitude, longitude, weather, creatorId, packingListId, CreatedAt, comment }// Gear: { id, userId, name, category, status }
+//ska koppla packinglist på något sätt här - gå till trail för att skapa din packinglist och skriva kommentarer/tankar???

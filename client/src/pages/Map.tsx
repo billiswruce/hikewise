@@ -1,11 +1,11 @@
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const Map = () => {
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h1>{translations["map"] || "Map"}</h1>
+      <h1>{t("map")}</h1>
     </div>
   );
 };

@@ -1,14 +1,12 @@
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const FavoriteTrails = () => {
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h3>{translations["favoriteTrails"] || "Favorite Trails"}</h3>
-      <p>
-        {translations["listOfFavoriteTrails"] || "List of favorite trails..."}
-      </p>
+      <h3>{t("favoriteTrails")}</h3>
+      <p>{t("listOfFavoriteTrails")}</p>
     </div>
   );
 };

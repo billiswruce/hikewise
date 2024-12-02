@@ -1,1 +1,311 @@
 @use "../styles/globals.scss";
+
+* {
+  box-sizing: border-box;
+}
+
+.banner {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+}
+
+.formContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: var(--color-white);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 25px 25px 0 0;
+  background-color: var(--color-white);
+  margin-top: -50px;
+}
+
+.title {
+  color: var(--color-black);
+  font-weight: bold;
+  align-self: flex-start;
+  font-size: 20px;
+}
+
+.input,
+.select,
+.textarea,
+.submitButton,
+.dateInputContainer,
+.fileInputContainer {
+  width: 100%;
+}
+
+.input,
+.select,
+.textarea {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid var(--color-grey-dark);
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: var(--color-green-dark);
+  }
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 10px;
+  background-size: 10px;
+  font-size: 16px;
+}
+
+.textarea {
+  height: 80px;
+}
+
+.submitButton {
+  padding: 10px 15px;
+  background-color: var(--color-green);
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-green-dark);
+  }
+}
+
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 2px solid var(--color-grey-dark);
+  border-radius: 4px;
+}
+
+.removeButton {
+  background-color: #8d4a42;
+  color: var(--color-white);
+  border: none;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #95554e;
+  }
+}
+
+.fileInputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  label {
+    background: #fff;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.fileInput {
+  &::file-selector-button {
+    visibility: hidden;
+    width: 0;
+    z-index: -1;
+  }
+}
+
+label {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.dateInputContainer {
+  position: relative;
+  padding: 10px;
+  border: 1px solid var(--color-grey-dark);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+
+  &:hover {
+    border-color: var(--color-green-dark);
+  }
+
+  &:focus-within {
+    border-color: var(--color-green-dark);
+  }
+
+  span {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: var(--color-white);
+    font-size: 12px;
+    padding: 0 5px;
+    color: var(--color-grey-dark);
+    z-index: 1;
+  }
+
+  input {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    width: 100%;
+    padding: 5px 0;
+    background: transparent;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.googleMapContainer {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.autocompleteWrapper {
+  top: 10px; /* Anpassa avståndet från kartans topp */
+  left: 10px; /* Justera från vänster */
+  z-index: 1000; /* Säkerställ att dropdownen visas ovanpå */
+  width: calc(100% - 20px); /* Anpassa bredden */
+  max-width: 500px; /* Begränsa bredd för bättre UI */
+}
+
+.pac-container {
+  z-index: 1000 !important; /* Placera ovanpå kartan */
+  position: absolute !important;
+  top: auto !important; /* Hantera position dynamiskt i JavaScript */
+  left: auto !important;
+  width: auto !important; /* Bredd följer inputfältet */
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid var(--color-grey-dark);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Större skärmar */
+@media (min-width: globals.$md-screen) {
+  .form {
+    padding: 30px;
+    margin-top: -100px;
+    gap: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    font-size: 16px;
+  }
+
+  .textarea {
+    height: 100px;
+  }
+
+  .submitButton {
+    font-size: 16px;
+  }
+
+  .image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .removeButton {
+    font-size: 14px;
+  }
+}
+
+.fileInputWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.fileInputContainer {
+  position: relative;
+
+  label {
+    background: #fff;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+  }
+
+  input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.fileStatus {
+  color: var(--color-grey-dark);
+  font-size: 14px;
+}

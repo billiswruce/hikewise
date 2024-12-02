@@ -4,7 +4,6 @@ import Trail from "../models/Trail.js";
 
 const router = express.Router();
 
-// Skapa en ny trail
 router.post("/", async (req, res) => {
   const {
     name,
@@ -14,11 +13,17 @@ router.post("/", async (req, res) => {
     length,
     difficulty,
     hikeDate,
+    hikeEndDate,
     image,
     description,
+    hiked,
+    creatorId,
   } = req.body;
 
+  const placeholderImage = "http://localhost:5173/assets/trailPlaceholder.webp";
+
   try {
+    // Hämta väderdata
     const weatherResponse = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather`,
       {
@@ -32,6 +37,8 @@ router.post("/", async (req, res) => {
     );
 
     const weatherData = weatherResponse.data;
+
+    // Skapa en ny trail
     const newTrail = new Trail({
       name,
       location,
@@ -40,8 +47,11 @@ router.post("/", async (req, res) => {
       length,
       difficulty,
       description,
-      image,
+      image: image || placeholderImage, // Använd placeholder om ingen bild laddas upp
       hikeDate,
+      hikeEndDate,
+      creatorId,
+      hiked,
       weather: {
         temperature: weatherData.main.temp,
         description: weatherData.weather[0].description,
@@ -49,21 +59,11 @@ router.post("/", async (req, res) => {
       },
     });
 
+    // Spara trailen i databasen
     const savedTrail = await newTrail.save();
     res.status(201).json(savedTrail);
   } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Hämta trails med filtrering
-router.get("/", async (req, res) => {
-  try {
-    const { difficulty } = req.query;
-    const filter = difficulty ? { difficulty } : {};
-    const trails = await Trail.find(filter);
-    res.status(200).json(trails);
-  } catch (error) {
+    console.error(error.message);
     res.status(500).json({ message: error.message });
   }
 });

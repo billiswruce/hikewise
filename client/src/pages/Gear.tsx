@@ -1,12 +1,12 @@
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const Gear = () => {
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h1>{translations["gear"] || "Gear"}</h1>
-      <p>{translations["categories"] || "Categories etc!"}</p>
+      <h1>{t("gear")}</h1>
+      <p>{t("categories")}</p>
     </div>
   );
 };
