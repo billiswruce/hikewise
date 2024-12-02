@@ -1,1 +1,136 @@
 @use "../styles/globals.scss";
+
+/* Mobile First - Standardinställningar */
+.banner {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+}
+
+.formContainer {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.form {
+  border-radius: 25px;
+  padding: 20px;
+  background-color: var(--color-white);
+  margin-top: -80px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 90%;
+}
+
+.title {
+  color: var(--color-black);
+  font-weight: bold;
+  align-self: flex-start;
+  font-size: 20px;
+}
+
+.input,
+.select,
+.textarea {
+  width: 95%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid var(--color-grey-dark);
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+
+  &:focus {
+    border-color: var(--color-green-dark);
+  }
+}
+
+.textarea {
+  height: 80px;
+}
+
+.submitButton {
+  padding: 10px 15px;
+  background-color: var(--color-green);
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-green-dark);
+  }
+}
+
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 2px solid var(--color-grey-dark);
+  border-radius: 4px;
+}
+
+.removeButton {
+  background-color: #8d4a42;
+  color: var(--color-white);
+  border: none;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #95554e;
+  }
+}
+
+/* Större skärmar */
+@media (min-width: globals.$md-screen) {
+  .form {
+    padding: 30px;
+    margin-top: -100px;
+    gap: 20px;
+    max-width: 600px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    font-size: 16px;
+  }
+
+  .textarea {
+    height: 100px;
+  }
+
+  .submitButton {
+    font-size: 16px;
+  }
+
+  .image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .removeButton {
+    font-size: 14px;
+  }
+}
