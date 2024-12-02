@@ -1,14 +1,12 @@
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const Hiking = () => {
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h3>{translations["hikingTrails"] || "Hiking Trails"}</h3>
-      <p>
-        {translations["currentlyHikingTrails"] || "Currently hiking trails..."}
-      </p>
+      <h3>{t("hikingTrails")}</h3>
+      <p>{t("currentlyHikingTrails")}</p>
     </div>
   );
 };

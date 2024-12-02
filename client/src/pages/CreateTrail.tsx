@@ -7,11 +7,13 @@ import {
   Autocomplete,
   Libraries,
 } from "@react-google-maps/api";
+import { useTranslation } from "react-i18next";
 import styles from "../styles/CreateTrail.module.scss";
 import placeholderImage from "../assets/trailPlaceholder.webp";
 import backgroundImage from "../assets/bg.webp";
 
 const CreateTrail = () => {
+  const { t, i18n } = useTranslation();
   const { getAccessTokenSilently, user } = useAuth0();
 
   const [formData, setFormData] = useState({
@@ -42,6 +44,32 @@ const CreateTrail = () => {
     }));
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prevData) => ({
+          ...prevData,
+          image: reader.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert(t("uploadImageError"));
+    }
+  };
+
+  const formatDate = (date: string): string => {
+    const dateFormatter = new Intl.DateTimeFormat(i18n.language, {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const parsedDate = new Date(date);
+    return dateFormatter.format(parsedDate);
+  };
+
   const handleMapClick = async (e: google.maps.MapMouseEvent) => {
     if (e.latLng) {
       const lat = e.latLng.lat();
@@ -67,11 +95,10 @@ const CreateTrail = () => {
             location: data.results[0].formatted_address,
           }));
         } else {
-          console.warn("Ingen adress hittades för dessa koordinater.");
-          console.warn("Geocoding API Status:", data.status);
+          console.warn(t("noAddressFound"));
         }
       } catch (error) {
-        console.error("Fel vid hämtning av adress:", error);
+        console.error(t("errorFetchingAddress"), error);
       }
     }
   };
@@ -79,17 +106,21 @@ const CreateTrail = () => {
   const handlePlaceChanged = () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
+
       if (place.geometry && place.geometry.location) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
         const location =
-          place.formatted_address || place.name || "Unknown location";
+          place.formatted_address || place.name || t("unknownLocation");
+
         setFormData((prevData) => ({
           ...prevData,
           latitude: lat,
           longitude: lng,
           location,
         }));
+      } else {
+        console.error(t("noPlaceDataFound"));
       }
     }
   };
@@ -105,7 +136,7 @@ const CreateTrail = () => {
       !formData.hikeDate ||
       !formData.hikeEndDate
     ) {
-      alert("Please fill in all required fields!");
+      alert(t("fillRequiredFields"));
       return;
     }
 
@@ -121,26 +152,27 @@ const CreateTrail = () => {
         body: JSON.stringify({
           ...formData,
           creatorId: user?.sub,
+          formattedHikeDate: formatDate(formData.hikeDate),
+          formattedHikeEndDate: formatDate(formData.hikeEndDate),
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        alert("Trail created successfully!");
+        alert(t("trailCreatedSuccessfully"));
         console.log("Trail saved:", data);
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+        alert(`${t("error")}: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Error submitting trail:", error);
-      alert("Failed to create trail. Please try again later.");
+      console.error(t("errorSubmittingTrail"), error);
+      alert(t("failedToCreateTrail"));
     }
   };
 
   return (
     <div>
-      {/* Banner Section */}
       <div
         className={styles.banner}
         style={{
@@ -149,15 +181,14 @@ const CreateTrail = () => {
           backgroundPosition: "center",
         }}></div>
 
-      {/* Form Section */}
       <div className={styles.formContainer}>
         <form onSubmit={handleSubmit} className={styles.form}>
-          <h1 className={styles.title}>Create Trail</h1>
+          <h1 className={styles.title}>{t("createTrail")}</h1>
           <input
             className={styles.input}
             type="text"
             name="name"
-            placeholder="Trail name"
+            placeholder={t("trailName")}
             value={formData.name}
             onChange={handleChange}
           />
@@ -165,7 +196,7 @@ const CreateTrail = () => {
             className={styles.input}
             type="number"
             name="length"
-            placeholder="Length (km)"
+            placeholder={t("length")}
             value={formData.length}
             onChange={handleChange}
           />
@@ -174,60 +205,58 @@ const CreateTrail = () => {
             name="difficulty"
             value={formData.difficulty}
             onChange={handleChange}>
-            <option value="">Select Difficulty</option>
-            <option value="simple">Simple Walk</option>
-            <option value="easy">Easy Hike</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-            <option value="epic">Epic</option>
+            <option value="">{t("difficulty")}</option>
+            <option value="easy">{t("easy")}</option>
+            <option value="medium">{t("medium")}</option>
+            <option value="hard">{t("hard")}</option>
+            <option value="epic">{t("epic")}</option>
           </select>
           <textarea
             className={styles.textarea}
             name="description"
-            placeholder="Description"
+            placeholder={t("description")}
             value={formData.description}
             onChange={handleChange}
           />
-          <input
-            className={styles.input}
-            type="date"
-            name="hikeDate"
-            placeholder="Hike Date"
-            value={formData.hikeDate}
-            onChange={handleChange}
-          />
-          <input
-            className={styles.input}
-            type="date"
-            name="hikeEndDate"
-            placeholder="Hike End Date"
-            value={formData.hikeEndDate}
-            onChange={handleChange}
-          />
-          <input
-            className={styles.fileInput}
-            type="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                  setFormData((prevData) => ({
-                    ...prevData,
-                    image: reader.result as string,
-                  }));
-                };
-                reader.readAsDataURL(file);
-              }
-            }}
-          />
+          <label className={styles.dateInputContainer}>
+            <input
+              className={styles.dateInput}
+              type="date"
+              name="hikeDate"
+              value={formData.hikeDate}
+              onChange={handleChange}
+            />
+            <span>{t("hikeDate")}</span>
+          </label>
+
+          <label className={styles.dateInputContainer}>
+            <input
+              className={styles.dateInput}
+              type="date"
+              name="hikeEndDate"
+              value={formData.hikeEndDate}
+              onChange={handleChange}
+            />
+            <span>{t("hikeEndDate")}</span>
+          </label>
+
+          <div
+            className={styles.fileInputContainer}
+            data-text={t("chooseFile")}>
+            <input
+              className={styles.fileInput}
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+          </div>
+
           <div className={styles.imageContainer}>
             {formData.image ? (
               <>
                 <img
                   src={formData.image}
-                  alt="Uploaded"
+                  alt={t("uploadedImage")}
                   className={styles.image}
                 />
                 <button
@@ -236,63 +265,67 @@ const CreateTrail = () => {
                   onClick={() =>
                     setFormData((prevData) => ({ ...prevData, image: "" }))
                   }>
-                  Remove Image
+                  {t("removeImage")}
                 </button>
               </>
             ) : (
               <img
                 src={placeholderImage}
-                alt="Placeholder"
+                alt={t("placeholderImage")}
                 className={styles.image}
               />
             )}
           </div>
           <button type="submit" className={styles.submitButton}>
-            Create Trail
+            {t("createTrail")}
           </button>
+          <LoadScript
+            googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}
+            libraries={libraries}>
+            <div className={styles.googleMapContainer}>
+              <Autocomplete
+                onLoad={(autocomplete) => {
+                  autocompleteRef.current = autocomplete;
+                }}
+                onPlaceChanged={handlePlaceChanged}>
+                <input
+                  className={styles.input}
+                  type="text"
+                  placeholder={t("searchLocation")}
+                />
+              </Autocomplete>
+
+              {formData.location && (
+                <p className={styles.location}>
+                  {t("selectedLocation")}: {formData.location}
+                </p>
+              )}
+              <GoogleMap
+                mapContainerClassName={styles.googleMapContainer}
+                zoom={10}
+                center={{
+                  lat: formData.latitude,
+                  lng: formData.longitude,
+                }}
+                options={{
+                  disableDefaultUI: false,
+                  gestureHandling: "greedy",
+                  keyboardShortcuts: true,
+                }}
+                onClick={handleMapClick}>
+                {formData.latitude && formData.longitude && (
+                  <Marker
+                    position={{
+                      lat: formData.latitude,
+                      lng: formData.longitude,
+                    }}
+                  />
+                )}
+              </GoogleMap>
+            </div>
+          </LoadScript>
         </form>
       </div>
-
-      {/* Map Section */}
-      <LoadScript
-        googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}
-        libraries={libraries}>
-        <div>
-          <Autocomplete
-            onLoad={(autocomplete) => (autocompleteRef.current = autocomplete)}
-            onPlaceChanged={handlePlaceChanged}>
-            <input
-              className={styles.input}
-              type="text"
-              placeholder="Search for location"
-            />
-          </Autocomplete>
-          {formData.location && (
-            <p className={styles.location}>
-              Selected Location: {formData.location}
-            </p>
-          )}
-          <GoogleMap
-            mapContainerStyle={{ width: "100%", height: "400px" }}
-            zoom={10}
-            center={{
-              lat: formData.latitude,
-              lng: formData.longitude,
-            }}
-            options={{
-              disableDefaultUI: false,
-              gestureHandling: "greedy",
-              keyboardShortcuts: true,
-            }}
-            onClick={handleMapClick}>
-            {formData.latitude && formData.longitude && (
-              <Marker
-                position={{ lat: formData.latitude, lng: formData.longitude }}
-              />
-            )}
-          </GoogleMap>
-        </div>
-      </LoadScript>
 
       <button
         type="button"
@@ -311,7 +344,7 @@ const CreateTrail = () => {
             image: "",
           })
         }>
-        Reset
+        {t("reset")}
       </button>
     </div>
   );

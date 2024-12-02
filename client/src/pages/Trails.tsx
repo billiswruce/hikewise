@@ -1,24 +1,22 @@
 import { Link, Outlet } from "react-router-dom";
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const Trails = () => {
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h2>{translations["trails"] || "Trails"}</h2>
+      <h2>{t("trails")}</h2>
       <nav>
         <ul>
           <li>
-            <Link to="hiked">{translations["hikedTrails"] || "Hiked"}</Link>
+            <Link to="hiked">{t("hikedTrails")}</Link>
           </li>
           <li>
-            <Link to="hiking">{translations["hikingTrails"] || "Hiking"}</Link>
+            <Link to="hiking">{t("hikingTrails")}</Link>
           </li>
           <li>
-            <Link to="favorite-trails">
-              {translations["favoriteTrails"] || "Favorite Trails"}
-            </Link>
+            <Link to="favorite-trails">{t("favoriteTrails")}</Link>
           </li>
         </ul>
       </nav>

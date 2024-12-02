@@ -1,12 +1,12 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/Login.module.scss";
 
 const Login = () => {
   const { loginWithRedirect, isAuthenticated, user } = useAuth0();
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const Login = () => {
     <div>
       {!isAuthenticated && (
         <button onClick={() => loginWithRedirect()} className={styles.button}>
-          {translations["startPlanning"] || "Start Planning"}
+          {t("startPlanning")}
         </button>
       )}
     </div>

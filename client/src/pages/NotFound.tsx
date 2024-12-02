@@ -1,11 +1,11 @@
-import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 const NotFound = () => {
-  const { translations } = useLanguage();
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h1>{translations["notFound"] || "Not Found"}</h1>
+      <h1>{t("notFound")}</h1>
     </div>
   );
 };
