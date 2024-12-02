@@ -240,15 +240,22 @@ const CreateTrail = () => {
             <span>{t("hikeEndDate")}</span>
           </label>
 
-          <div
-            className={styles.fileInputContainer}
-            data-text={t("chooseFile")}>
-            <input
-              className={styles.fileInput}
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-            />
+          <div className={styles.fileInputWrapper}>
+            <div className={styles.fileInputContainer}>
+              <label htmlFor="fileInput">{t("chooseFile")}</label>
+              <input
+                id="fileInput"
+                className={styles.fileInput}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+              />
+            </div>
+            <span className={styles.fileStatus}>
+              {formData.image
+                ? formData.image.split("/").pop()
+                : t("noFileChosen")}
+            </span>
           </div>
 
           <div className={styles.imageContainer}>
