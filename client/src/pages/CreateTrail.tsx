@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import {
   GoogleMap,
   LoadScript,
@@ -14,7 +13,6 @@ import backgroundImage from "../assets/bg.webp";
 
 const CreateTrail = () => {
   const { t, i18n } = useTranslation();
-  const { getAccessTokenSilently, user } = useAuth0();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -103,10 +101,9 @@ const CreateTrail = () => {
     }
   };
 
-  const handlePlaceChanged = () => {
+  const handlePlaceSelected = () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
-
       if (place.geometry && place.geometry.location) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
@@ -120,7 +117,7 @@ const CreateTrail = () => {
           location,
         }));
       } else {
-        console.error(t("noPlaceDataFound"));
+        alert(t("noPlaceDataFound"));
       }
     }
   };
@@ -141,17 +138,13 @@ const CreateTrail = () => {
     }
 
     try {
-      const token = await getAccessTokenSilently();
-
       const response = await fetch("http://localhost:3001/api/trails", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           ...formData,
-          creatorId: user?.sub,
           formattedHikeDate: formatDate(formData.hikeDate),
           formattedHikeEndDate: formatDate(formData.hikeEndDate),
         }),
@@ -184,6 +177,24 @@ const CreateTrail = () => {
       <div className={styles.formContainer}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <h1 className={styles.title}>{t("createTrail")}</h1>
+
+          {/* Sökruta för plats */}
+          <LoadScript
+            googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}
+            libraries={libraries}>
+            <Autocomplete
+              onLoad={(autocomplete) =>
+                (autocompleteRef.current = autocomplete)
+              }
+              onPlaceChanged={handlePlaceSelected}>
+              <input
+                type="text"
+                placeholder={t("searchLocation")}
+                className={styles.input}
+              />
+            </Autocomplete>
+          </LoadScript>
+
           <input
             className={styles.input}
             type="text"
@@ -290,18 +301,6 @@ const CreateTrail = () => {
             googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}
             libraries={libraries}>
             <div className={styles.googleMapContainer}>
-              <Autocomplete
-                onLoad={(autocomplete) => {
-                  autocompleteRef.current = autocomplete;
-                }}
-                onPlaceChanged={handlePlaceChanged}>
-                <input
-                  className={styles.input}
-                  type="text"
-                  placeholder={t("searchLocation")}
-                />
-              </Autocomplete>
-
               {formData.location && (
                 <p className={styles.location}>
                   {t("selectedLocation")}: {formData.location}
