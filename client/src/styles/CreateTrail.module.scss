@@ -71,8 +71,6 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   padding-right: 10px;
-  //   background: url("data:image/svg+xml;base64,<din-pil-svg>") no-repeat right
-  //     center;
   background-size: 10px;
   font-size: 16px;
 }
@@ -209,10 +207,36 @@ label {
 }
 
 .googleMapContainer {
+  position: relative;
   width: 100%;
   height: 400px;
   margin-top: 20px;
-  margin-bottom: 140px;
+  margin-bottom: 20px;
+}
+
+.autocompleteWrapper {
+  top: 10px; /* Anpassa avståndet från kartans topp */
+  left: 10px; /* Justera från vänster */
+  z-index: 1000; /* Säkerställ att dropdownen visas ovanpå */
+  width: calc(100% - 20px); /* Anpassa bredden */
+  max-width: 500px; /* Begränsa bredd för bättre UI */
+}
+
+.pac-container {
+  z-index: 1000 !important; /* Placera ovanpå kartan */
+  position: absolute !important;
+  top: auto !important; /* Hantera position dynamiskt i JavaScript */
+  left: auto !important;
+  width: auto !important; /* Bredd följer inputfältet */
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid var(--color-grey-dark);
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Större skärmar */
