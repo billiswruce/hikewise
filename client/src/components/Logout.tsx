@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useTranslation } from "react-i18next";
-
+import styles from "../styles/Buttons.module.scss";
 const Logout = () => {
   const { logout } = useAuth0();
   const { t } = useTranslation();
@@ -25,7 +25,11 @@ const Logout = () => {
     }
   };
 
-  return <button onClick={handleLogout}>{t("logout")}</button>;
+  return (
+    <button onClick={handleLogout} className={styles.button}>
+      {t("logout")}
+    </button>
+  );
 };
 
 export default Logout;

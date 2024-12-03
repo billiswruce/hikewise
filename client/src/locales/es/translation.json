@@ -6,7 +6,7 @@
     "logout": "Cerrar sesión",
     "welcomeUser": "¡Bienvenido!",
     "auth0Id": "Tu ID de Auth0 es",
-    "createTrail": "Crear un sendero",
+    "createTrail": "Crear sendero",
     "favoriteTrails": "Senderos favoritos",
     "trails": "Senderos",
     "gear": "Equipamiento",
@@ -49,6 +49,12 @@
     "uploadedImage": "Imagen subida",
     "placeholderImage": "Imagen de la ubicación",
     "chooseFile": "Seleccionar archivo",
-    "noFileChosen": "No se ha seleccionado ningún archivo"
+    "noFileChosen": "No se ha seleccionado ningún archivo",
+    "editProfile": "Editar perfil",
+    "profileDescription": "Aquí encontrarás todos tus senderos creados y tu equipo!",
+    "myTrails": "Senderos creados",
+    "myFavoriteTrails": "Senderos favoritos",
+    "myGear": "Equipamiento",
+    "anonymous": "Anónimo"
   }
   

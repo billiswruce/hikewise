@@ -6,7 +6,7 @@
   "logout": "Logga ut",
   "welcomeUser": "Välkommen",
   "auth0Id": "Ditt Auth0 ID är",
-  "createTrail": "Skapa en led",
+  "createTrail": "Skapa led",
   "favoriteTrails": "Favoritleder",
   "trails": "Leder",
   "gear": "Utrustning",
@@ -49,5 +49,12 @@
   "uploadedImage": "Uppladdad bild",
   "placeholderImage": "Platsbild",
   "chooseFile": "Välj fil",
-  "noFileChosen": "Ingen fil har valts"
+  "noFileChosen": "Ingen fil har valts",
+  "editProfile": "Redigera profil",
+  "profileTitle": "Min profil",
+  "profileDescription": "Här hittar du alla dina skapade leder, favoritleder och utrustning!",
+  "myTrails": "Mina leder",
+  "myFavoriteTrails": "Mina favoritleder",
+  "myGear": "Min utrustning",
+  "anonymous": "Anonym"
 }

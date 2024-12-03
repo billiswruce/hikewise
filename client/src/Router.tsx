@@ -43,32 +43,30 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute element={<Gear />} />,
       },
       {
-        path: "/my-profile",
-        element: <ProtectedRoute element={<MyProfile />} />,
+        path: "/trails",
+        element: <ProtectedRoute element={<Trails />} />,
         children: [
           {
-            path: "gear",
-            element: <ProtectedRoute element={<Gear />} />,
+            path: "hiked",
+            element: <ProtectedRoute element={<Hiked />} />,
           },
           {
-            path: "trails",
-            element: <ProtectedRoute element={<Trails />} />,
-            children: [
-              {
-                path: "hiked",
-                element: <ProtectedRoute element={<Hiked />} />,
-              },
-              {
-                path: "hiking",
-                element: <ProtectedRoute element={<Hiking />} />,
-              },
-              {
-                path: "favorite-trails",
-                element: <ProtectedRoute element={<FavoriteTrails />} />,
-              },
-            ],
+            path: "hiking",
+            element: <ProtectedRoute element={<Hiking />} />,
+          },
+          {
+            path: "favorite-trails",
+            element: <ProtectedRoute element={<FavoriteTrails />} />,
           },
         ],
+      },
+      {
+        path: "/favorites",
+        element: <ProtectedRoute element={<FavoriteTrails />} />,
+      },
+      {
+        path: "/my-profile",
+        element: <ProtectedRoute element={<MyProfile />} />,
       },
       {
         path: "*",

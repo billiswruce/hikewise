@@ -8,9 +8,10 @@ import {
 } from "@react-google-maps/api";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/CreateTrail.module.scss";
-import placeholderImage from "../assets/trailPlaceholder.webp";
+import placeholderImage from "../assets/trailPlaceholdersquare.webp";
 import backgroundImage from "../assets/bg.webp";
 import { useAuth0 } from "@auth0/auth0-react";
+import stylesButton from "../styles/Buttons.module.scss";
 
 const CreateTrail = () => {
   const { t, i18n } = useTranslation();
@@ -315,7 +316,7 @@ const CreateTrail = () => {
                 />
               )}
             </div>
-            <button type="submit" className={styles.submitButton}>
+            <button type="submit" className={stylesButton.button}>
               {t("createTrail")}
             </button>
 
@@ -334,7 +335,6 @@ const CreateTrail = () => {
                   />
                 </Autocomplete>
               </div>
-
               <GoogleMap
                 mapContainerClassName={styles.googleMapContainer}
                 zoom={10}

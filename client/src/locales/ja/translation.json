@@ -17,7 +17,7 @@
   "landingPage": "ランディングページ",
   "registerLogin": "ここで登録してログインします",
   "map": "地図",
-  "myProfile": "マイプロフィール",
+  "myProfile": "アカウント",
   "notFound": "見つかりません",
   "protectedPage": "保護されたページ",
   "protectedPageDescription": "このページは認証されたユーザーのみがアクセスできます。",
@@ -49,5 +49,11 @@
   "uploadedImage": "アップロードした画像",
   "placeholderImage": "場所の画像",
   "chooseFile": "ファイルを選択",
-  "noFileChosen": "ファイルが選択されていません"
+  "noFileChosen": "ファイルが選択されていません",
+  "editProfile": "プロフィールを編集",
+  "profileDescription": "ここでは、作成したトレイルと装備を見つけることができます！",
+  "myTrails": "作成したトレイル",
+  "myFavoriteTrails": "お気に入りのトレイル",
+  "myGear": "装備",
+  "anonymous": "匿名"
 }

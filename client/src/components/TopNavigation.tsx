@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "../styles/Navigation.module.scss";
 
 export const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -19,16 +21,16 @@ export const Navigation = () => {
       </button>
       <ul className={`${styles.menu} ${menuOpen ? styles.active : ""}`}>
         <li>
-          <Link to="/landing-page">Home Page</Link>
+          <Link to="/trails">{t("trails")}</Link>
         </li>
         <li>
-          <Link to="/create-trail">Create Trail</Link>
+          <Link to="/create-trail">{t("createTrail")}</Link>
         </li>
         <li>
-          <Link to="/map">Map</Link>
+          <Link to="/gear">{t("gear")}</Link>
         </li>
         <li>
-          <Link to="/my-profile">My Profile</Link>
+          <Link to="/my-profile">{t("myProfile")}</Link>
         </li>
       </ul>
     </nav>
