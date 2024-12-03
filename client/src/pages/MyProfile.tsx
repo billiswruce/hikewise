@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import Logout from "../components/Logout";
 import { useAuth0 } from "@auth0/auth0-react";
 import styles from "../styles/MyProfile.module.scss";
-import gearPlaceholder from "../assets/gearPlaceholder.webp";
-import trailPlaceholder from "../assets/trailPlaceholder.webp";
-import favoritesPlaceholder from "../assets/favoritesPlaceholder.webp";
+import gearPlaceholder from "../assets/gearPlaceholder.jpg";
+import trailPlaceholder from "../assets/trailPlaceholder.jpg";
+import favoritesPlaceholder from "../assets/favoritesPlaceholder.jpg";
 import profilePlaceholder from "../assets/profilePlaceholder.png";
 import buttonStyles from "../styles/Buttons.module.scss";
 import clsx from "clsx";
@@ -51,40 +51,38 @@ const MyProfile = () => {
         </div>
         <div className={styles.profileInfo}>
           <h1 className={styles.userName}>{user?.name || "Anonymous"}</h1>
-          <p className={styles.description}>
-            Here you will find all your created trails and equipment!
-          </p>
+          <p className={styles.description}>{t("profileDescription")}</p>
         </div>
       </div>
       <div className={styles.sections}>
-        <Link to="/trails" className={styles.section}>
-          <div className={styles.section}>
-            <img
-              src={trailPlaceholder}
-              alt="Trails"
-              className={styles.sectionImage}
-            />
-            <span className={styles.sectionLabel}>Trails</span>
-          </div>
-        </Link>
         <Link to="/favorites" className={styles.section}>
           <div className={styles.section}>
             <img
               src={favoritesPlaceholder}
-              alt="Favorites"
+              alt={t("favoriteTrails")}
               className={styles.sectionImage}
             />
-            <span className={styles.sectionLabel}>Favorite Trails</span>
+            <span className={styles.sectionLabel}>{t("favoriteTrails")}</span>
+          </div>
+        </Link>
+        <Link to="/trails" className={styles.section}>
+          <div className={styles.section}>
+            <img
+              src={trailPlaceholder}
+              alt={t("trails")}
+              className={styles.sectionImage}
+            />
+            <span className={styles.sectionLabel}>{t("trails")}</span>
           </div>
         </Link>
         <Link to="/gear" className={styles.section}>
           <div className={styles.section}>
             <img
               src={gearPlaceholder}
-              alt="Gear"
+              alt={t("gear")}
               className={styles.sectionImage}
             />
-            <span className={styles.sectionLabel}>Gear</span>
+            <span className={styles.sectionLabel}>{t("gear")}</span>
           </div>
         </Link>
       </div>
