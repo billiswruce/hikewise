@@ -1,0 +1,66 @@
+@use "../styles/globals.scss";
+
+.hikingContainer {
+  max-width: 800px;
+  margin: 0 auto;
+
+  .sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 4rem;
+
+    .section {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/ 1;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+
+      .sectionImage {
+        width: 100%;
+        border-radius: 10px;
+        object-fit: cover;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .trailInfo {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        background-color: var(--color-white);
+        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        h3 {
+          margin: 0;
+          font-weight: bold;
+        }
+
+        p {
+          margin: 0.5rem 0;
+          font-size: 0.8rem;
+          color: var(--color-gray-dark);
+        }
+
+        .trailDetails {
+          display: flex;
+          gap: 1rem;
+          font-size: 0.8rem;
+
+          span {
+            background-color: var(--color-gray-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 15px;
+            color: var(--color-text);
+          }
+        }
+      }
+    }
+  }
+}
