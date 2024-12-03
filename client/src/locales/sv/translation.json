@@ -49,5 +49,12 @@
   "uploadedImage": "Uppladdad bild",
   "placeholderImage": "Platsbild",
   "chooseFile": "Välj fil",
-  "noFileChosen": "Ingen fil har valts"
+  "noFileChosen": "Ingen fil har valts",
+  "editProfile": "Redigera profil",
+  "profileTitle": "Min profil",
+  "profileDescription": "Här hittar du alla dina skapade leder och utrustning!",
+  "myTrails": "Mina leder",
+  "myFavoriteTrails": "Mina favoritleder",
+  "myGear": "Min utrustning",
+  "anonymous": "Anonym"
 }
