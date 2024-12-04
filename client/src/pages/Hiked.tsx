@@ -1,20 +1,8 @@
 import { useOutletContext } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/Hiking.module.scss";
-import trailPlaceholder from "../assets/trailPlaceholder.jpg";
-
-interface Trail {
-  id: string;
-  name: string;
-  length: number;
-  difficulty: string;
-  description: string;
-  location: string;
-  hikeDate: string;
-  hikeEndDate: string;
-  image?: string;
-  creatorId: string;
-}
+import hikedPlaceholder from "../assets/hikedPlaceholder.webp";
+import { Trail } from "../models/Trail";
 
 const Hiked = () => {
   const { t } = useTranslation();
@@ -26,13 +14,13 @@ const Hiked = () => {
         {hikedTrails.map((trail) => (
           <div key={trail.id} className={styles.section}>
             <img
-              src={trail.image || trailPlaceholder}
+              src={trail.image || hikedPlaceholder}
               alt={trail.name}
               className={styles.sectionImage}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.onerror = null;
-                target.src = trailPlaceholder;
+                target.src = hikedPlaceholder;
               }}
             />
             <div className={styles.trailInfo}>

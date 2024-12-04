@@ -3,19 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth0 } from "@auth0/auth0-react";
 import styles from "../styles/Trails.module.scss";
-
-interface Trail {
-  id: string;
-  name: string;
-  length: number;
-  difficulty: string;
-  description: string;
-  location: string;
-  hikeDate: string;
-  hikeEndDate: string;
-  image?: string;
-  creatorId: string;
-}
+import { Trail } from "../models/Trail";
 
 const Trails = () => {
   const { t } = useTranslation();
@@ -60,37 +48,39 @@ const Trails = () => {
       {location.pathname === "/trails" && (
         <Navigate to="/trails/hiking" replace />
       )}
-      <h2 className={styles.heading}>{t("trails")}</h2>
-      <nav className={styles.tabNavigation}>
-        <Link
-          to="hiking"
-          className={`${styles.tab} ${
-            isActiveTab("hiking") ? styles.active : ""
-          }`}>
-          {t("hikingTrails")}
-        </Link>
-        <Link
-          to="hiked"
-          className={`${styles.tab} ${
-            isActiveTab("hiked") ? styles.active : ""
-          }`}>
-          {t("hikedTrails")}
-        </Link>
-        <Link
-          to="favorite-trails"
-          className={`${styles.tab} ${
-            isActiveTab("favorite-trails") ? styles.active : ""
-          }`}>
-          {t("favoriteTrails")}
-        </Link>
-      </nav>
-      <div className={styles.tabContent}>
-        <Outlet
-          context={{
-            upcomingTrails,
-            hikedTrails,
-          }}
-        />
+      <div>
+        <h2 className={styles.heading}>{t("trails")}</h2>
+        <nav className={styles.tabNavigation}>
+          <Link
+            to="hiking"
+            className={`${styles.tab} ${
+              isActiveTab("hiking") ? styles.active : ""
+            }`}>
+            {t("hikingTrails")}
+          </Link>
+          <Link
+            to="hiked"
+            className={`${styles.tab} ${
+              isActiveTab("hiked") ? styles.active : ""
+            }`}>
+            {t("hikedTrails")}
+          </Link>
+          <Link
+            to="favorite-trails"
+            className={`${styles.tab} ${
+              isActiveTab("favorite-trails") ? styles.active : ""
+            }`}>
+            {t("favoriteTrails")}
+          </Link>
+        </nav>
+        <div className={styles.tabContent}>
+          <Outlet
+            context={{
+              upcomingTrails,
+              hikedTrails,
+            }}
+          />
+        </div>
       </div>
     </div>
   );

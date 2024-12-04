@@ -1,20 +1,8 @@
 import { useOutletContext } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/Hiking.module.scss";
-import trailPlaceholder from "../assets/trailPlaceholder.jpg";
-
-interface Trail {
-  id: string;
-  name: string;
-  length: number;
-  difficulty: string;
-  description: string;
-  location: string;
-  hikeDate: string;
-  hikeEndDate: string;
-  image?: string;
-  creatorId: string;
-}
+import trailPlaceholder from "../assets/trailPlaceholdersquare.webp";
+import { Trail } from "../models/Trail";
 
 const Hiking = () => {
   const { t } = useTranslation();

@@ -1,8 +1,6 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import CreateTrail from "./pages/CreateTrail";
-import Map from "./pages/Map";
 import MyProfile from "./pages/MyProfile";
 import Gear from "./pages/Gear";
 import Trails from "./pages/Trails";
@@ -11,13 +9,7 @@ import Hiking from "./pages/Hiking";
 import FavoriteTrails from "./pages/FavoriteTrails";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
-
-import { ReactElement } from "react";
-
-const ProtectedRoute = ({ element }: { element: ReactElement }) => {
-  const { isAuthenticated } = useAuth0();
-  return isAuthenticated ? element : <Navigate to="/" />;
-};
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -33,10 +25,6 @@ export const router = createBrowserRouter([
       {
         path: "/create-trail",
         element: <ProtectedRoute element={<CreateTrail />} />,
-      },
-      {
-        path: "/map",
-        element: <ProtectedRoute element={<Map />} />,
       },
       {
         path: "/gear",
