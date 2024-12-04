@@ -53,7 +53,8 @@
 .select,
 .textarea {
   padding: 10px;
-  font-size: 14px;
+  font-size: 16px;
+  font-family: "IBM Plex Sans", sans-serif;
   border: 1px solid var(--color-grey-dark);
   border-radius: 4px;
   outline: none;
@@ -71,11 +72,18 @@
   -moz-appearance: none;
   padding-right: 10px;
   background-size: 10px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .textarea {
   height: 80px;
+  font-size: 16px;
+  font-family: "IBM Plex Sans", sans-serif;
+
+  &::placeholder {
+    font-size: 14px;
+    font-family: "IBM Plex Sans", sans-serif;
+  }
 }
 
 .imageContainer {
@@ -154,6 +162,7 @@ label {
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  font-size: 14px;
 
   &:hover {
     border-color: var(--color-green-dark);
@@ -177,7 +186,7 @@ label {
   input {
     border: none;
     outline: none;
-    font-size: 14px;
+    font-size: 13px;
     width: 100%;
     padding: 5px 0;
     background: transparent;
@@ -210,7 +219,7 @@ label {
   position: relative;
   width: 100%;
   max-width: 500px;
-  margin: 10px;
+  margin: 10px auto;
   z-index: 1000;
 }
 
