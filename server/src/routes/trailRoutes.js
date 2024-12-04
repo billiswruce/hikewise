@@ -68,4 +68,14 @@ router.post("/", async (req, res) => {
   }
 });
 
+// Hämta trails för en specifik användare
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const trails = await Trail.find({ creatorId: req.params.userId });
+    res.json(trails);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

@@ -1,0 +1,35 @@
+.trailsContainer {
+  max-width: 800px;
+}
+
+.heading {
+  font-size: 24px;
+  color: var(--color-primary);
+}
+
+.tabNavigation {
+  display: flex;
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: 20px;
+  gap: 2px;
+}
+
+.tab {
+  padding: 12px 24px;
+  text-decoration: none;
+  color: var(--color-text);
+  background-color: var(--color-grey-light);
+  border: none;
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s ease;
+
+  &.active {
+    background-color: var(--color-grey-dark);
+    color: var(--color-black);
+  }
+}
+
+.tabContent {
+  padding: 20px;
+  border-radius: 0 0 8px 8px;
+}

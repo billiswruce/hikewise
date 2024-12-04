@@ -43,10 +43,7 @@ const CreateTrail = () => {
       ) as HTMLElement;
 
       if (pacContainer && autocompleteWrapper) {
-        // Get the position of the search input
         const rect = autocompleteWrapper.getBoundingClientRect();
-
-        // Move the dropdown to align with the search input
         pacContainer.style.position = "absolute";
         pacContainer.style.top = `${rect.bottom}px`;
         pacContainer.style.left = `${rect.left}px`;
@@ -55,14 +52,9 @@ const CreateTrail = () => {
       }
     };
 
-    // Run on page load and when the dropdown is created
     adjustAutocompleteDropdown();
-
-    // Observe DOM changes that might affect the position
     const observer = new MutationObserver(adjustAutocompleteDropdown);
     observer.observe(document.body, { childList: true, subtree: true });
-
-    // Clean up the observer
     return () => observer.disconnect();
   }, []);
 
@@ -319,8 +311,6 @@ const CreateTrail = () => {
             <button type="submit" className={stylesButton.button}>
               {t("createTrail")}
             </button>
-
-            {/* Karta med sökruta ovanpå */}
             <div className={styles.googleMapContainer}>
               <div className={styles.autocompleteWrapper}>
                 <Autocomplete
