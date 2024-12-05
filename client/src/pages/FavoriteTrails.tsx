@@ -5,8 +5,10 @@ import favoritePlaceholder from "../assets/favoritesPlaceholder.webp";
 import { useFavorites } from "../hooks/useFavorites";
 import Filter from "../components/Filter";
 import { useTrailSort } from "../hooks/useTrailSort";
+import { useTranslation } from "react-i18next";
 
 const FavoriteTrails = () => {
+  const { t } = useTranslation();
   const [favoriteTrails, setFavoriteTrails] = useState<Trail[]>([]);
   const [sortOption, setSortOption] = useState<
     "name-asc" | "name-desc" | "date-asc" | "date-desc"
@@ -40,7 +42,13 @@ const FavoriteTrails = () => {
 
   return (
     <div className={styles.hikingContainer}>
-      <Filter sortOption={sortOption} setSortOption={setSortOption} />
+      <div className={styles.headerSection}>
+        <Filter sortOption={sortOption} setSortOption={setSortOption} />
+        <span className={styles.trailCount}>
+          {sortedTrails.length}{" "}
+          {t(sortedTrails.length === 1 ? "trail" : "trails")}
+        </span>
+      </div>
 
       <div className={styles.sections}>
         {sortedTrails.map((trail) => (

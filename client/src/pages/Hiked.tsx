@@ -6,8 +6,10 @@ import { useFavorites } from "../hooks/useFavorites";
 import { useState } from "react";
 import Filter from "../components/Filter";
 import { useTrailSort } from "../hooks/useTrailSort";
+import { useTranslation } from "react-i18next";
 
 const Hiked = () => {
+  const { t } = useTranslation();
   const { hikedTrails }: { hikedTrails: Trail[] } = useOutletContext();
   const { favorites, toggleFavorite } = useFavorites();
   const [sortOption, setSortOption] = useState<
@@ -19,7 +21,13 @@ const Hiked = () => {
 
   return (
     <div className={styles.hikingContainer}>
-      <Filter sortOption={sortOption} setSortOption={setSortOption} />
+      <div className={styles.headerSection}>
+        <Filter sortOption={sortOption} setSortOption={setSortOption} />
+        <span className={styles.trailCount}>
+          {sortedTrails.length}{" "}
+          {t(sortedTrails.length === 1 ? "trail" : "trails")}
+        </span>
+      </div>
       <div className={styles.sections}>
         {sortedTrails.map((trail) => (
           <div key={trail._id} className={styles.section}>
