@@ -3,6 +3,8 @@ import { Trail } from "../models/Trail";
 import styles from "../styles/Hiking.module.scss";
 import favoritePlaceholder from "../assets/favoritesPlaceholder.webp";
 import { useFavorites } from "../hooks/useFavorites";
+import Filter from "../components/Filter";
+import { useTrailSort } from "../hooks/useTrailSort";
 
 const FavoriteTrails = () => {
   const [favoriteTrails, setFavoriteTrails] = useState<Trail[]>([]);
@@ -10,6 +12,7 @@ const FavoriteTrails = () => {
     "name-asc" | "name-desc" | "date-asc" | "date-desc"
   >("name-asc");
   const { favorites, toggleFavorite } = useFavorites();
+  const sortedTrails = useTrailSort(favoriteTrails, sortOption);
 
   useEffect(() => {
     const fetchFavoriteTrails = async () => {
@@ -35,34 +38,9 @@ const FavoriteTrails = () => {
     fetchFavoriteTrails();
   }, []);
 
-  // Sorteringslogik
-  const sortedTrails = [...favoriteTrails].sort((a, b) => {
-    if (sortOption === "name-asc") {
-      return a.name.localeCompare(b.name);
-    } else if (sortOption === "name-desc") {
-      return b.name.localeCompare(a.name);
-    } else if (sortOption === "date-asc") {
-      return new Date(a.hikeDate).getTime() - new Date(b.hikeDate).getTime();
-    } else if (sortOption === "date-desc") {
-      return new Date(b.hikeDate).getTime() - new Date(a.hikeDate).getTime();
-    }
-    return 0;
-  });
-
   return (
     <div className={styles.hikingContainer}>
-      {/* Filtreringsalternativ */}
-      <div className={styles.filterContainer}>
-        <label>Sortera efter:</label>
-        <select
-          value={sortOption}
-          onChange={(e) => setSortOption(e.target.value as typeof sortOption)}>
-          <option value="name-asc">Namn (A-Ö)</option>
-          <option value="name-desc">Namn (Ö-A)</option>
-          <option value="date-asc">Datum (Äldsta först)</option>
-          <option value="date-desc">Datum (Nyaste först)</option>
-        </select>
-      </div>
+      <Filter sortOption={sortOption} setSortOption={setSortOption} />
 
       <div className={styles.sections}>
         {sortedTrails.map((trail) => (

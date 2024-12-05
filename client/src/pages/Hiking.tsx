@@ -1,21 +1,30 @@
+import React from "react";
 import { useOutletContext } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/Hiking.module.scss";
 import trailPlaceholder from "../assets/trailPlaceholdersquare.webp";
 import { Trail } from "../models/Trail";
 import { useFavorites } from "../hooks/useFavorites";
+import Filter from "../components/Filter";
+import { useTrailSort } from "../hooks/useTrailSort";
+import { useState } from "react";
 
 const Hiking = () => {
   const { t } = useTranslation();
   const { upcomingTrails }: { upcomingTrails: Trail[] } = useOutletContext();
   const { favorites, toggleFavorite } = useFavorites();
+  const [sortOption, setSortOption] = useState<
+    "name-asc" | "name-desc" | "date-asc" | "date-desc"
+  >("name-asc");
+  const sortedTrails = useTrailSort(upcomingTrails, sortOption);
 
   console.log("Trail object:", upcomingTrails);
 
   return (
     <div className={styles.hikingContainer}>
+      <Filter sortOption={sortOption} setSortOption={setSortOption} />
       <div className={styles.sections}>
-        {upcomingTrails.map((trail) => (
+        {sortedTrails.map((trail) => (
           <div key={trail._id} className={styles.section}>
             <img
               src={trail.image || trailPlaceholder}

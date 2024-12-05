@@ -4,18 +4,26 @@ import styles from "../styles/Hiking.module.scss";
 import hikedPlaceholder from "../assets/hikedPlaceholder.webp";
 import { Trail } from "../models/Trail";
 import { useFavorites } from "../hooks/useFavorites";
+import { useState } from "react";
+import Filter from "../components/Filter";
+import { useTrailSort } from "../hooks/useTrailSort";
 
 const Hiked = () => {
   const { t } = useTranslation();
   const { hikedTrails }: { hikedTrails: Trail[] } = useOutletContext();
   const { favorites, toggleFavorite } = useFavorites();
+  const [sortOption, setSortOption] = useState<
+    "name-asc" | "name-desc" | "date-asc" | "date-desc"
+  >("name-asc");
+  const sortedTrails = useTrailSort(hikedTrails, sortOption);
 
   console.log("Trail object:", hikedTrails);
 
   return (
     <div className={styles.hikingContainer}>
+      <Filter sortOption={sortOption} setSortOption={setSortOption} />
       <div className={styles.sections}>
-        {hikedTrails.map((trail) => (
+        {sortedTrails.map((trail) => (
           <div key={trail._id} className={styles.section}>
             <img
               src={trail.image || hikedPlaceholder}
