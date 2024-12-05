@@ -55,7 +55,7 @@ const MyProfile = () => {
         </div>
       </div>
       <div className={styles.sections}>
-        <Link to="/favorites" className={styles.section}>
+        <Link to="trails/favorite-trails" className={styles.section}>
           <div className={styles.section}>
             <img
               src={favoritesPlaceholder}
