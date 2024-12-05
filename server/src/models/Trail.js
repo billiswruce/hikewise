@@ -11,7 +11,6 @@ const trailSchema = new mongoose.Schema(
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
     creatorId: { type: String, required: true },
-    hiked: { type: Boolean, default: false },
     comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
