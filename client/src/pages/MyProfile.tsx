@@ -55,14 +55,14 @@ const MyProfile = () => {
         </div>
       </div>
       <div className={styles.sections}>
-        <Link to="trails/favorite-trails" className={styles.section}>
+        <Link to="/gear" className={styles.section}>
           <div className={styles.section}>
             <img
-              src={favoritesPlaceholder}
-              alt={t("favoriteTrails")}
+              src={gearPlaceholder}
+              alt={t("gear")}
               className={styles.sectionImage}
             />
-            <span className={styles.sectionLabel}>{t("favoriteTrails")}</span>
+            <span className={styles.sectionLabel}>{t("gear")}</span>
           </div>
         </Link>
         <Link to="/trails" className={styles.section}>
@@ -75,14 +75,17 @@ const MyProfile = () => {
             <span className={styles.sectionLabel}>{t("trails")}</span>
           </div>
         </Link>
-        <Link to="/gear" className={styles.section}>
+        <Link
+          to="/trails"
+          className={styles.section}
+          state={{ activeTab: "favorite-trails" }}>
           <div className={styles.section}>
             <img
-              src={gearPlaceholder}
-              alt={t("gear")}
+              src={favoritesPlaceholder}
+              alt={t("favoriteTrails")}
               className={styles.sectionImage}
             />
-            <span className={styles.sectionLabel}>{t("gear")}</span>
+            <span className={styles.sectionLabel}>{t("favoriteTrails")}</span>
           </div>
         </Link>
       </div>

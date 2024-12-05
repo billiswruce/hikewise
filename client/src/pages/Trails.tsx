@@ -11,6 +11,8 @@ const Trails = () => {
   const { user } = useAuth0();
   const [trails, setTrails] = useState<Trail[]>([]);
   const [loading, setLoading] = useState(true);
+  const initialTab = location.state?.activeTab || "default-tab";
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
     const fetchTrails = async () => {
@@ -32,6 +34,19 @@ const Trails = () => {
     fetchTrails();
   }, [user]);
 
+  useEffect(() => {
+    const stateTab = location.state?.activeTab;
+    if (stateTab) {
+      setActiveTab(stateTab);
+    } else if (location.pathname.includes("favorite-trails")) {
+      setActiveTab("favorite-trails");
+    } else if (location.pathname.includes("hiked")) {
+      setActiveTab("hiked");
+    } else {
+      setActiveTab("hiking");
+    }
+  }, [location]);
+
   if (loading) return <div>{t("loading")}</div>;
 
   const upcomingTrails = trails.filter(
@@ -41,12 +56,18 @@ const Trails = () => {
     (trail) => new Date(trail.hikeDate) < new Date()
   );
 
-  const isActiveTab = (path: string) => location.pathname.includes(path);
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    location.state = null;
+  };
 
   return (
     <div className={styles.trailsContainer}>
       {location.pathname === "/trails" && (
-        <Navigate to="/trails/hiking" replace />
+        <Navigate
+          to={`/trails/${location.state?.activeTab || "hiking"}`}
+          replace
+        />
       )}
       <div>
         <h2 className={styles.heading}>{t("trails")}</h2>
@@ -54,22 +75,25 @@ const Trails = () => {
           <Link
             to="hiking"
             className={`${styles.tab} ${
-              isActiveTab("hiking") ? styles.active : ""
-            }`}>
+              activeTab === "hiking" ? styles.active : ""
+            }`}
+            onClick={() => handleTabChange("hiking")}>
             {t("hikingTrails")}
           </Link>
           <Link
             to="hiked"
             className={`${styles.tab} ${
-              isActiveTab("hiked") ? styles.active : ""
-            }`}>
+              activeTab === "hiked" ? styles.active : ""
+            }`}
+            onClick={() => handleTabChange("hiked")}>
             {t("hikedTrails")}
           </Link>
           <Link
             to="favorite-trails"
             className={`${styles.tab} ${
-              isActiveTab("favorite-trails") ? styles.active : ""
-            }`}>
+              activeTab === "favorite-trails" ? styles.active : ""
+            }`}
+            onClick={() => handleTabChange("favorite-trails")}>
             {t("favoriteTrails")}
           </Link>
         </nav>
