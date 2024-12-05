@@ -55,6 +55,15 @@
     "myTrails": "Senderos creados",
     "myFavoriteTrails": "Senderos favoritos",
     "myGear": "Equipamiento",
-    "anonymous": "Anónimo"
+    "anonymous": "Anónimo",
+    "filter": {
+      "sortLabel": "Ordenar por:",
+      "options": {
+        "nameAsc": "Nombre (A-Z)",
+        "nameDesc": "Nombre (Z-A)",
+        "dateAsc": "Fecha (Más antiguo)",
+        "dateDesc": "Fecha (Más reciente)"
+      }
+    }
   }
   

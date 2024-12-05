@@ -11,8 +11,8 @@
   "trails": "Leder",
   "gear": "Utrustning",
   "categories": "Kategorier etc!",
-  "hikedTrails": "Gådda leder",
-  "hikingTrails": "Vandringsleder",
+  "hikedTrails": "Vandrade leder",
+  "hikingTrails": "Planerade leder",
   "homePage": "Startsida",
   "landingPage": "Landningssida",
   "registerLogin": "Här registrerar du dig och loggar in",
@@ -56,5 +56,14 @@
   "myTrails": "Mina leder",
   "myFavoriteTrails": "Mina favoritleder",
   "myGear": "Min utrustning",
-  "anonymous": "Anonym"
+  "anonymous": "Anonym",
+  "filter": {
+    "sortLabel": "Sortera efter:",
+    "options": {
+      "nameAsc": "Namn (A-Ö)",
+      "nameDesc": "Namn (Ö-A)",
+      "dateAsc": "Datum (Äldsta först)",
+      "dateDesc": "Datum (Nyaste först)"
+    }
+  }
 }

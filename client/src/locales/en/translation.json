@@ -55,5 +55,14 @@
   "myTrails": "Created Trails",
   "myFavoriteTrails": "Favorite Trails",
   "myGear": "Gear",
-  "anonymous": "Anonymous"
+  "anonymous": "Anonymous",
+  "filter": {
+    "sortLabel": "Sort by:",
+    "options": {
+      "nameAsc": "Name (A-Z)",
+      "nameDesc": "Name (Z-A)",
+      "dateAsc": "Date (Oldest first)",
+      "dateDesc": "Date (Newest first)"
+    }
+  }
 }

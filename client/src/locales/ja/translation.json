@@ -55,5 +55,14 @@
   "myTrails": "作成したトレイル",
   "myFavoriteTrails": "お気に入りのトレイル",
   "myGear": "装備",
-  "anonymous": "匿名"
+  "anonymous": "匿名",
+  "filter": {
+    "sortLabel": "並び替え:",
+    "options": {
+      "nameAsc": "名前 (A-Z)",
+      "nameDesc": "名前 (Z-A)",
+      "dateAsc": "日付 (古い順)",
+      "dateDesc": "日付 (新しい順)"
+    }
+  }
 }
