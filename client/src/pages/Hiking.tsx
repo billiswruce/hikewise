@@ -3,16 +3,20 @@ import { useTranslation } from "react-i18next";
 import styles from "../styles/Hiking.module.scss";
 import trailPlaceholder from "../assets/trailPlaceholdersquare.webp";
 import { Trail } from "../models/Trail";
+import { useFavorites } from "../context/FavoriteContext";
 
 const Hiking = () => {
   const { t } = useTranslation();
   const { upcomingTrails }: { upcomingTrails: Trail[] } = useOutletContext();
+  const { favorites, toggleFavorite } = useFavorites();
+
+  console.log("Trail object:", upcomingTrails);
 
   return (
     <div className={styles.hikingContainer}>
       <div className={styles.sections}>
         {upcomingTrails.map((trail) => (
-          <div key={trail.id} className={styles.section}>
+          <div key={trail._id} className={styles.section}>
             <img
               src={trail.image || trailPlaceholder}
               alt={trail.name}
@@ -30,6 +34,11 @@ const Hiking = () => {
                 <span>{t(trail.difficulty)}</span>
                 <span>{new Date(trail.hikeDate).toLocaleDateString()}</span>
               </div>
+              <button
+                className={styles.favoriteButton}
+                onClick={() => toggleFavorite(trail._id)}>
+                {favorites.has(trail._id) ? "❤️" : "🤍"}
+              </button>
             </div>
           </div>
         ))}
