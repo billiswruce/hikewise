@@ -61,7 +61,7 @@ const FavoriteTrails = () => {
                   <h3>{trail.name}</h3>
                 </span>
                 <span>{trail.length} km</span>
-                <span>{trail.difficulty}</span>
+                {/* <span>{trail.difficulty}</span> */}
                 <span>{new Date(trail.hikeDate).toLocaleDateString()}</span>
               </div>
             </div>

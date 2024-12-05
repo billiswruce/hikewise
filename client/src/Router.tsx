@@ -44,15 +44,13 @@ export const router = createBrowserRouter([
           },
           {
             path: "favorite-trails",
-            element: (
-              <ProtectedRoute element={<FavoriteTrails trails={[]} />} />
-            ),
+            element: <ProtectedRoute element={<FavoriteTrails />} />,
           },
         ],
       },
       {
         path: "/favorites",
-        element: <ProtectedRoute element={<FavoriteTrails trails={[]} />} />,
+        element: <ProtectedRoute element={<FavoriteTrails />} />,
       },
       {
         path: "/my-profile",

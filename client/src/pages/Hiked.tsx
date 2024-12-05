@@ -1,5 +1,4 @@
 import { useOutletContext } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import styles from "../styles/Hiking.module.scss";
 import hikedPlaceholder from "../assets/hikedPlaceholder.webp";
 import { Trail } from "../models/Trail";
@@ -9,7 +8,6 @@ import Filter from "../components/Filter";
 import { useTrailSort } from "../hooks/useTrailSort";
 
 const Hiked = () => {
-  const { t } = useTranslation();
   const { hikedTrails }: { hikedTrails: Trail[] } = useOutletContext();
   const { favorites, toggleFavorite } = useFavorites();
   const [sortOption, setSortOption] = useState<
@@ -39,7 +37,6 @@ const Hiked = () => {
               <div className={styles.trailDetails}>
                 <h3>{trail.name}</h3>
                 <span>{trail.length} km</span>
-                <span>{t(trail.difficulty)}</span>
                 <span>{new Date(trail.hikeDate).toLocaleDateString()}</span>
               </div>
             </div>
