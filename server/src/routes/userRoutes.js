@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
-      .populate("ownedGear") // Om ownedGear är ett separat schema
+      .populate("ownedGear")
       .populate("favoriteTrails");
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
@@ -48,10 +48,30 @@ router.post("/favorites/:trailId", async (req, res) => {
     }
 
     await user.save();
-
-    // Returnera den uppdaterade listan som array
     res.status(200).json(user.favoriteTrails);
   } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.delete("/favorites/:trailId", async (req, res) => {
+  try {
+    const userId = req.session.userId;
+    if (!userId) return res.status(401).json({ message: "Not authenticated" });
+
+    const user = await User.findById(userId);
+    const trailId = req.params.trailId;
+
+    const index = user.favoriteTrails.indexOf(trailId);
+    if (index > -1) {
+      user.favoriteTrails.splice(index, 1);
+      await user.save();
+      return res.status(200).json({ message: "Favorite removed" });
+    } else {
+      return res.status(404).json({ message: "Favorite not found" });
+    }
+  } catch (error) {
+    console.error("Error removing favorite:", error);
     res.status(500).json({ message: error.message });
   }
 });

@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
+
 const FavoriteContext = createContext<{
   favorites: Set<string>;
   toggleFavorite: (trailId: string) => Promise<void>;
@@ -18,7 +19,6 @@ export const FavoriteProvider = ({
     const loadFavorites = async () => {
       try {
         const yourAuthToken = localStorage.getItem("authToken");
-
         const response = await fetch(
           "http://localhost:3001/api/users/me/favorites",
           {
@@ -35,7 +35,7 @@ export const FavoriteProvider = ({
         }
 
         const data = await response.json();
-        setFavorites(new Set(data));
+        setFavorites(new Set(data.map((trail: { _id: string }) => trail._id)));
       } catch (err) {
         console.error("Failed to load favorites:", err);
       }
@@ -45,21 +45,30 @@ export const FavoriteProvider = ({
   }, []);
 
   const toggleFavorite = async (trailId: string) => {
-    console.log("Toggle favorite for trail ID:", trailId);
-    setFavorites((prevFavorites) => {
-      const newFavorites = new Set(prevFavorites);
-      if (newFavorites.has(trailId)) {
-        newFavorites.delete(trailId);
-      } else {
-        newFavorites.add(trailId);
-      }
-      return newFavorites;
-    });
-
     try {
-      await fetch(`http://localhost:3001/api/users/favorites/${trailId}`, {
-        method: "POST",
-        credentials: "include", // Viktigt för sessionhantering
+      const isCurrentlyFavorite = favorites.has(trailId);
+
+      const response = await fetch(
+        `http://localhost:3001/api/users/favorites/${trailId}`,
+        {
+          method: isCurrentlyFavorite ? "DELETE" : "POST",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to update favorite status in the database");
+      }
+
+      // Uppdatera lokal state
+      setFavorites((prevFavorites) => {
+        const newFavorites = new Set(prevFavorites);
+        if (isCurrentlyFavorite) {
+          newFavorites.delete(trailId);
+        } else {
+          newFavorites.add(trailId);
+        }
+        return newFavorites;
       });
     } catch (err) {
       console.error("Failed to update favorite:", err);
@@ -73,4 +82,4 @@ export const FavoriteProvider = ({
   );
 };
 
-export const useFavorites = () => useContext(FavoriteContext);
+export { FavoriteContext };
