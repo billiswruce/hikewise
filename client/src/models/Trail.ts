@@ -1,5 +1,5 @@
 export interface Trail {
-  id: string;
+  _id: string;
   name: string;
   length: number;
   difficulty: string;
@@ -10,3 +10,4 @@ export interface Trail {
   image?: string;
   creatorId: string;
 } 
+

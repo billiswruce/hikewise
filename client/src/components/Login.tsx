@@ -12,10 +12,8 @@ const Login = () => {
   useEffect(() => {
     const loginToBackend = async () => {
       if (!isAuthenticated || !user) return;
-
       console.log("Auth0 User data:", user);
       console.log("Inloggningsförsök till backend");
-
       try {
         const response = await fetch("http://localhost:3001/api/auth/login", {
           method: "POST",
@@ -29,7 +27,6 @@ const Login = () => {
             name: user.name,
           }),
         });
-
         if (response.ok) {
           const data = await response.json();
           console.log("Användare sparad på backend:", data);
