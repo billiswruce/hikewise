@@ -3,7 +3,7 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// Hämta användarens detaljer
+// Get user details
 router.get("/:userId", async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
@@ -16,7 +16,7 @@ router.get("/:userId", async (req, res) => {
   }
 });
 
-// Hämta användarens favoriter
+// Get user favorites
 router.get("/me/favorites", async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -31,7 +31,7 @@ router.get("/me/favorites", async (req, res) => {
   }
 });
 
-// Lägg till/ta bort favorit
+// Add/remove favorite
 router.post("/favorites/:trailId", async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -54,6 +54,7 @@ router.post("/favorites/:trailId", async (req, res) => {
   }
 });
 
+// Delete favorite
 router.delete("/favorites/:trailId", async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -76,6 +77,7 @@ router.delete("/favorites/:trailId", async (req, res) => {
   }
 });
 
+// Add gear
 router.post("/:userId/gear", async (req, res) => {
   const { name, quantity, condition, category } = req.body;
   try {

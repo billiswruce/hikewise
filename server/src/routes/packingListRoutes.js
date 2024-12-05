@@ -3,7 +3,7 @@ import PackingList from "../models/PackingList.js";
 
 const router = express.Router();
 
-// Skapa en packlista för en trail
+// Create packing list
 router.post("/", async (req, res) => {
   const { trailId, items } = req.body;
   try {
@@ -15,7 +15,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Hämta packlista för en trail
+// Get packing list
 router.get("/:trailId", async (req, res) => {
   try {
     const packingList = await PackingList.findOne({

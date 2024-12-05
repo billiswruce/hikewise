@@ -8,12 +8,12 @@ dotenv.config();
 
 const router = express.Router();
 
-// Auth0-konfiguration
+// Auth0-config
 const AUTH0_DOMAIN =
   process.env.AUTH0_DOMAIN || "dev-xd3jckbyc4yzmut8.us.auth0.com";
 const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE || "YOUR_API_IDENTIFIER";
 
-// JWT-konfiguration för att verifiera token
+// JWT-config for verifying token
 const client = jwksClient({
   jwksUri: `https://${AUTH0_DOMAIN}/.well-known/jwks.json`,
 });
@@ -25,7 +25,7 @@ const getKey = (header, callback) => {
   });
 };
 
-// Funktion för att verifiera en JWT-token
+// Verifying JWT token
 const verifyToken = (token) =>
   new Promise((resolve, reject) => {
     jwt.verify(
@@ -57,6 +57,7 @@ async function generateUniqueUsername(baseName) {
   }
 }
 
+// Login
 router.post("/login", async (req, res) => {
   const { auth0Id, email, name } = req.body;
 
@@ -103,6 +104,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Get user
 router.get("/me", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Ingen aktiv session" });
@@ -122,6 +124,7 @@ router.get("/me", async (req, res) => {
   }
 });
 
+// Logout
 router.post("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {

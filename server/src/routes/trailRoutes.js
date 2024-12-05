@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
   const placeholderImage = "http://localhost:5173/assets/trailPlaceholder.webp";
 
   try {
-    // Hämta väderdata
+    // Get weather data
     const weatherResponse = await axios.get(
       `https://api.openweathermap.org/data/2.5/weather`,
       {
@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
 
     const weatherData = weatherResponse.data;
 
-    // Skapa en ny trail
+    // Create new trail
     const newTrail = new Trail({
       name,
       location,
@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
       length,
       difficulty,
       description,
-      image: image || placeholderImage, // Använd placeholder om ingen bild laddas upp
+      image: image || placeholderImage,
       hikeDate,
       hikeEndDate,
       creatorId,
@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
       },
     });
 
-    // Spara trailen i databasen
+    // Save trail in db
     const savedTrail = await newTrail.save();
     res.status(201).json(savedTrail);
   } catch (error) {
@@ -68,11 +68,24 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Hämta trails för en specifik användare
+// Trails for specific user
 router.get("/user/:userId", async (req, res) => {
   try {
     const trails = await Trail.find({ creatorId: req.params.userId });
     res.json(trails);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get single trails
+router.get("/:id", async (req, res) => {
+  try {
+    const trail = await Trail.findById(req.params.id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+    res.json(trail);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -10,6 +10,7 @@ import FavoriteTrails from "./pages/FavoriteTrails";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./ProtectedRoute";
+import SingleTrail from "./pages/SingleTrail";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
       {
         path: "/my-profile",
         element: <ProtectedRoute element={<MyProfile />} />,
+      },
+      {
+        path: "/trail/:id",
+        element: <ProtectedRoute element={<SingleTrail />} />,
       },
       {
         path: "*",

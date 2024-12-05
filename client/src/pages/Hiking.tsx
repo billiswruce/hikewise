@@ -7,6 +7,7 @@ import Filter from "../components/Filter";
 import { useTrailSort } from "../hooks/useTrailSort";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const Hiking = () => {
   const { t } = useTranslation();
@@ -16,8 +17,16 @@ const Hiking = () => {
     "name-asc" | "name-desc" | "date-asc" | "date-desc"
   >("name-asc");
   const sortedTrails = useTrailSort(upcomingTrails, sortOption);
+  const navigate = useNavigate();
 
   console.log("Trail object:", upcomingTrails);
+
+  const handleTrailClick = (trailId: string, event: React.MouseEvent) => {
+    if ((event.target as HTMLElement).closest(`.${styles.favoriteButton}`)) {
+      return;
+    }
+    navigate(`/trail/${trailId}`);
+  };
 
   return (
     <div className={styles.hikingContainer}>
@@ -30,7 +39,10 @@ const Hiking = () => {
       </div>
       <div className={styles.sections}>
         {sortedTrails.map((trail) => (
-          <div key={trail._id} className={styles.section}>
+          <div
+            key={trail._id}
+            className={styles.section}
+            onClick={(e) => handleTrailClick(trail._id, e)}>
             <img
               src={trail.image || trailPlaceholder}
               alt={trail.name}

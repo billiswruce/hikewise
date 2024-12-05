@@ -1,4 +1,4 @@
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import styles from "../styles/Hiking.module.scss";
 import hikedPlaceholder from "../assets/hikedPlaceholder.webp";
 import { Trail } from "../models/Trail";
@@ -9,6 +9,7 @@ import { useTrailSort } from "../hooks/useTrailSort";
 import { useTranslation } from "react-i18next";
 
 const Hiked = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { hikedTrails }: { hikedTrails: Trail[] } = useOutletContext();
   const { favorites, toggleFavorite } = useFavorites();
@@ -18,6 +19,13 @@ const Hiked = () => {
   const sortedTrails = useTrailSort(hikedTrails, sortOption);
 
   console.log("Trail object:", hikedTrails);
+
+  const handleTrailClick = (trailId: string, event: React.MouseEvent) => {
+    if ((event.target as HTMLElement).closest(`.${styles.favoriteButton}`)) {
+      return;
+    }
+    navigate(`/trail/${trailId}`);
+  };
 
   return (
     <div className={styles.hikingContainer}>
@@ -30,7 +38,10 @@ const Hiked = () => {
       </div>
       <div className={styles.sections}>
         {sortedTrails.map((trail) => (
-          <div key={trail._id} className={styles.section}>
+          <div
+            key={trail._id}
+            className={styles.section}
+            onClick={(e) => handleTrailClick(trail._id, e)}>
             <img
               src={trail.image || hikedPlaceholder}
               alt={trail.name}

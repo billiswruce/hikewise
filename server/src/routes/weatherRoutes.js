@@ -3,6 +3,7 @@ import axios from "axios";
 
 const router = express.Router();
 
+// Get weather
 router.get("/:lat/:lon", async (req, res) => {
   const { lat, lon } = req.params;
 

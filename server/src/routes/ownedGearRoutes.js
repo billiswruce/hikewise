@@ -3,12 +3,10 @@ import OwnedGear from "../models/ownedGear.js";
 
 const router = express.Router();
 
-// Hämta ägd utrustning och mat för en användare
+// Get owned gear and food
 router.get("/", async (req, res) => {
   try {
     const userId = req.user.id;
-
-    // Hämta användarens ägda utrustning
     const ownedGear = await OwnedGear.findOne({ userId }).populate("userId");
 
     if (!ownedGear) {
@@ -17,7 +15,6 @@ router.get("/", async (req, res) => {
         .json({ message: "No gear found for the specified user." });
     }
 
-    // Dela upp föremålen i två kategorier: Utrustning och Mat
     const gearItems = ownedGear.items.filter((item) => item.type === "Gear");
     const foodItems = ownedGear.items.filter((item) => item.type === "Food");
 
@@ -31,19 +28,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Lägg till ny utrustning
+// Add new gear
 router.post("/", async (req, res) => {
   const { name, quantity, type, condition, categories } = req.body;
-  const userId = req.user.id; // Förutsätter autentisering
+  const userId = req.user.id;
 
   try {
-    // Hämta eller skapa OwnedGear för användaren
     let ownedGear = await OwnedGear.findOne({ userId });
     if (!ownedGear) {
       ownedGear = new OwnedGear({ userId, items: [] });
     }
-
-    // Lägg till ny utrustning till listan
     ownedGear.items.push({
       name,
       quantity,
@@ -62,7 +56,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Uppdatera en specifik utrustningsartikel
+// Update gear item
 router.put("/:itemId", async (req, res) => {
   const { name, quantity, condition, packed, type, categories } = req.body;
   const userId = req.user.id;
@@ -80,7 +74,6 @@ router.put("/:itemId", async (req, res) => {
       return res.status(404).json({ message: "Gear item not found" });
     }
 
-    // Uppdatera artikelns fält
     if (name) item.name = name;
     if (quantity) item.quantity = quantity;
     if (condition) item.condition = condition;
@@ -97,7 +90,7 @@ router.put("/:itemId", async (req, res) => {
   }
 });
 
-// Ta bort en specifik utrustningsartikel
+// Remove gear item
 router.delete("/:itemId", async (req, res) => {
   const userId = req.user.id;
 
@@ -114,7 +107,7 @@ router.delete("/:itemId", async (req, res) => {
       return res.status(404).json({ message: "Gear item not found" });
     }
 
-    item.remove(); // Ta bort artikeln
+    item.remove();
     await ownedGear.save();
 
     res.status(200).json({ message: "Gear item removed successfully" });
