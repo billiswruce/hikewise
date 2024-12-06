@@ -140,15 +140,13 @@ export const deletePackingListItem = async (req, res) => {
 
 export const updatePackingListItem = async (req, res) => {
   try {
-    const { id, itemId } = req.params; // Trail ID och Item ID
-    const { isFood, isChecked } = req.body; // Vilken lista och nytt statusvärde
+    const { id, itemId } = req.params;
+    const { isFood, isChecked } = req.body;
 
     const trail = await Trail.findById(id);
     if (!trail) return res.status(404).json({ message: "Trail not found" });
 
     const list = isFood ? trail.packingList.food : trail.packingList.gear;
-
-    // Hitta objektet och uppdatera `isChecked`
     const item = list.find((item) => item._id.toString() === itemId);
     if (!item) return res.status(404).json({ message: "Item not found" });
 
@@ -181,6 +179,57 @@ export const addComment = async (req, res) => {
     res.status(201).json(updatedTrail);
   } catch (error) {
     console.error("Error in addComment:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateComment = async (req, res) => {
+  try {
+    const { id, commentId } = req.params;
+    const { text } = req.body;
+
+    if (!text || text.trim() === "") {
+      return res.status(400).json({ message: "Comment text is required" });
+    }
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    const comment = trail.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    comment.text = text;
+    const updatedTrail = await trail.save();
+    res.status(200).json(updatedTrail);
+  } catch (error) {
+    console.error("Error in updateComment:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteComment = async (req, res) => {
+  try {
+    const { id, commentId } = req.params;
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    const comment = trail.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    comment.remove();
+    const updatedTrail = await trail.save();
+    res.status(200).json(updatedTrail);
+  } catch (error) {
+    console.error("Error in deleteComment:", error.message);
     res.status(500).json({ message: error.message });
   }
 };

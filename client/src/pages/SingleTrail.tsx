@@ -52,6 +52,8 @@ const SingleTrail = () => {
   const [isPackingListOpen, setIsPackingListOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [editingComment, setEditingComment] = useState<string | null>(null);
+  const [editedText, setEditedText] = useState("");
 
   const togglePackingList = () => setIsPackingListOpen((prev) => !prev);
 
@@ -178,6 +180,54 @@ const SingleTrail = () => {
     }
   };
 
+  const editComment = async (commentId: string, newText: string) => {
+    if (newText.trim() === "") {
+      console.error("Validation failed: Comment text is empty.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/trails/${id}/comments/${commentId}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: newText }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Response error data:", errorData);
+        throw new Error(`Failed to update comment: ${errorData.message}`);
+      }
+
+      const updatedTrail = await response.json();
+      setTrail(updatedTrail);
+    } catch (error) {
+      console.error("Error updating comment:", error);
+    }
+  };
+
+  const deleteComment = async (commentId: string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/trails/${id}/comments/${commentId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to delete comment");
+
+      const updatedTrail = await response.json();
+      setTrail(updatedTrail);
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
   useEffect(() => {
     fetchTrail();
   }, [fetchTrail]);
@@ -287,8 +337,34 @@ const SingleTrail = () => {
         <ul>
           {trail.comments.map((comment) => (
             <li key={comment._id}>
-              <p>{comment.text}</p>
-              <small>{new Date(comment.createdAt).toLocaleDateString()}</small>
+              {editingComment === comment._id ? (
+                <div>
+                  <input
+                    type="text"
+                    defaultValue={comment.text}
+                    onChange={(e) => setEditedText(e.target.value)}
+                  />
+                  <button onClick={() => editComment(comment._id, editedText)}>
+                    {t("save")}
+                  </button>
+                  <button onClick={() => setEditingComment(null)}>
+                    {t("cancel")}
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <p>{comment.text}</p>
+                  <small>
+                    {new Date(comment.createdAt).toLocaleDateString()}
+                  </small>
+                  <button onClick={() => setEditingComment(comment._id)}>
+                    {t("edit")}
+                  </button>
+                  <button onClick={() => deleteComment(comment._id)}>
+                    {t("delete")}
+                  </button>
+                </div>
+              )}
             </li>
           ))}
         </ul>
