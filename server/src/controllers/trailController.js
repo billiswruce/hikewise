@@ -111,3 +111,29 @@ export const addPackingListItem = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const deletePackingListItem = async (req, res) => {
+  try {
+    const { id, itemId } = req.params;
+    const { isFood } = req.body;
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    const list = isFood ? trail.packingList.food : trail.packingList.gear;
+    const updatedList = list.filter((item) => item._id.toString() !== itemId);
+
+    if (isFood) {
+      trail.packingList.food = updatedList;
+    } else {
+      trail.packingList.gear = updatedList;
+    }
+
+    const updatedTrail = await trail.save();
+    res.status(200).json(updatedTrail);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

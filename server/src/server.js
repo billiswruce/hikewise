@@ -10,7 +10,7 @@ import authRoutes from "./routes/authRoutes.js";
 import ownedGearRoutes from "./routes/ownedGearRoutes.js";
 import trailRoutes from "./routes/trailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import PackingList from "./routes/packingListRoutes.js";
+// import PackingList from "./routes/packingListRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import mapsRoutes from "./routes/mapsRoutes.js";
 
@@ -53,17 +53,15 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trails", trailRoutes);
 app.use("/api/owned-gear", ownedGearRoutes);
-app.use("/api/packing-list", PackingList);
+// app.use("/api/packing-list", PackingList);
 app.use("/api/weather", weatherRoutes);
 app.use("/api/maps", mapsRoutes);
 
-// Error-handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: err.message });
 });
 
-// Start the server
 app.listen(PORT, () =>
   console.log(`Server is running on http://localhost:${PORT}`.rainbow.bold)
 );
