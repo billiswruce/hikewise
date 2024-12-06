@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
@@ -9,6 +9,13 @@ interface PackingItem {
   _id?: string;
   name: string;
   isChecked: boolean;
+}
+
+interface Comment {
+  _id: string;
+  text: string;
+  createdAt: string;
+  userId?: string;
 }
 
 interface Trail {
@@ -35,14 +42,7 @@ interface Trail {
   };
 }
 
-interface Comment {
-  _id: string;
-  text: string;
-  createdAt: string;
-  userId: string;
-}
-
-export const SingleTrail = () => {
+const SingleTrail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const [trail, setTrail] = useState<Trail | null>(null);
@@ -51,8 +51,22 @@ export const SingleTrail = () => {
   const [isFood, setIsFood] = useState(false);
   const [isPackingListOpen, setIsPackingListOpen] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+  const [newComment, setNewComment] = useState("");
 
   const togglePackingList = () => setIsPackingListOpen((prev) => !prev);
+
+  const fetchTrail = useCallback(async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/trails/${id}`);
+      if (!response.ok) throw new Error("Trail not found");
+      const data = await response.json();
+      setTrail(data);
+    } catch (error) {
+      console.error("Error fetching trail:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
 
   const addPackingListItem = async () => {
     if (newPackingListItem.trim() === "" || !trail) return;
@@ -63,13 +77,8 @@ export const SingleTrail = () => {
         `http://localhost:3001/api/trails/${id}/packing-list`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: newPackingListItem,
-            isFood: isFood,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: newPackingListItem, isFood }),
         }
       );
 
@@ -93,9 +102,7 @@ export const SingleTrail = () => {
         `http://localhost:3001/api/trails/${id}/packing-list/${itemId}`,
         {
           method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ isFood }),
         }
       );
@@ -121,9 +128,7 @@ export const SingleTrail = () => {
         `http://localhost:3001/api/trails/${id}/packing-list/${itemId}`,
         {
           method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ isFood, isChecked }),
         }
       );
@@ -137,79 +142,64 @@ export const SingleTrail = () => {
     }
   };
 
-  //   const togglePackingListItem = async (itemId: string, isFood: boolean) => {
-  //     if (!trail) return;
+  const addComment = async () => {
+    if (newComment.trim() === "" || !trail) {
+      console.error("Validation failed: Comment is empty or trail is null.");
+      return;
+    }
 
-  //     try {
-  //       const response = await fetch(
-  //         `http://localhost:3001/api/trails/${id}/packing-list/${itemId}/toggle`,
-  //         {
-  //           method: "PATCH",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({ isFood }),
-  //         }
-  //       );
+    try {
+      console.log("Sending comment:", { text: newComment });
+      console.log("Trail ID:", id);
 
-  //       if (!response.ok) throw new Error("Failed to toggle item");
+      const response = await fetch(
+        `http://localhost:3001/api/trails/${id}/comments`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: newComment }),
+        }
+      );
 
-  //       const updatedTrail = await response.json();
-  //       setTrail(updatedTrail);
-  //     } catch (error) {
-  //       console.error("Error toggling packing list item:", error);
-  //     }
-  //   };
+      console.log("Response status:", response.status);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Response error data:", errorData);
+        throw new Error(`Failed to add comment: ${errorData.message}`);
+      }
+
+      const updatedTrail = await response.json();
+      console.log("Updated trail data received:", updatedTrail);
+      setTrail(updatedTrail);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error caught in addComment:");
+      console.error("Full error object:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchTrail = async () => {
-      try {
-        const trailResponse = await fetch(
-          `http://localhost:3001/api/trails/${id}`
-        );
-        if (!trailResponse.ok) throw new Error("Trail not found");
-        const trailData = await trailResponse.json();
-        setTrail(trailData);
-      } catch (error) {
-        console.error("Error fetching trail:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTrail();
-  }, [id]);
+  }, [fetchTrail]);
 
-  if (loading) {
-    return <div>{t("loading")}</div>;
-  }
-
-  if (!trail) {
-    return <div>{t("notFound")}</div>;
-  }
+  if (loading) return <div>{t("loading")}</div>;
+  if (!trail) return <div>{t("notFound")}</div>;
 
   return (
     <div className={styles.container}>
       <h1>{trail.name}</h1>
-
-      {/* Hero image */}
       <div className={styles.heroImage}>
-        {trail.image ? (
-          <img src={trail.image} alt={trail.name} />
-        ) : (
-          <img src={TrailPlaceholder} alt="Trail placeholder" />
-        )}
+        <img
+          src={trail.image || TrailPlaceholder}
+          alt={trail.name || "Trail placeholder"}
+        />
       </div>
-
-      {/* Trail info */}
       <div className={styles.infoSection}>
         <div className={styles.basicInfo}>
           <p>{trail.length} km</p>
           <p>{t(trail.difficulty)}</p>
           <p>{new Date(trail.hikeDate).toLocaleDateString()}</p>
         </div>
-
-        {/* Weather info */}
         <div className={styles.weather}>
           <img
             src={`http://openweathermap.org/img/w/${trail.weather.icon}.png`}
@@ -218,11 +208,8 @@ export const SingleTrail = () => {
           <p>{trail.weather.temperature}°C</p>
           <p>{trail.weather.description}</p>
         </div>
-
         <p className={styles.description}>{trail.description}</p>
       </div>
-
-      {/* Map */}
       <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
         <GoogleMap
           mapContainerClassName={styles.map}
@@ -231,8 +218,6 @@ export const SingleTrail = () => {
           <Marker position={{ lat: trail.latitude, lng: trail.longitude }} />
         </GoogleMap>
       </LoadScript>
-
-      {/* Packing List Accordion */}
       <div className={styles.packingListSection}>
         <button onClick={togglePackingList} className={styles.accordionButton}>
           {t("packingList")} {isPackingListOpen ? "▼" : "▶"}
@@ -258,7 +243,6 @@ export const SingleTrail = () => {
                 </li>
               ))}
             </ul>
-
             <h3>{t("food")}</h3>
             <ul>
               {trail.packingList.food.map((item) => (
@@ -278,7 +262,6 @@ export const SingleTrail = () => {
                 </li>
               ))}
             </ul>
-
             <div className={styles.addPackingItem}>
               <input
                 type="text"
@@ -299,8 +282,6 @@ export const SingleTrail = () => {
           </div>
         )}
       </div>
-
-      {/* Comments section */}
       <div className={styles.commentsSection}>
         <h2>{t("comments")}</h2>
         <ul>
@@ -311,6 +292,15 @@ export const SingleTrail = () => {
             </li>
           ))}
         </ul>
+        <div className={styles.addComment}>
+          <input
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder={t("addComment")}
+          />
+          <button onClick={addComment}>{t("add")}</button>
+        </div>
       </div>
     </div>
   );

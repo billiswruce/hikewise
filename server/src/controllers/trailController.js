@@ -160,3 +160,27 @@ export const updatePackingListItem = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const addComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { text } = req.body;
+
+    if (!text || text.trim() === "") {
+      return res.status(400).json({ message: "Comment text is required" });
+    }
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+    const newComment = { text, createdAt: new Date() };
+    trail.comments.push(newComment);
+
+    const updatedTrail = await trail.save();
+    res.status(201).json(updatedTrail);
+  } catch (error) {
+    console.error("Error in addComment:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
