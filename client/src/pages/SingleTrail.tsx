@@ -50,12 +50,14 @@ export const SingleTrail = () => {
   const [newPackingListItem, setNewPackingListItem] = useState("");
   const [isFood, setIsFood] = useState(false);
   const [isPackingListOpen, setIsPackingListOpen] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
   const togglePackingList = () => setIsPackingListOpen((prev) => !prev);
 
   const addPackingListItem = async () => {
     if (newPackingListItem.trim() === "" || !trail) return;
 
+    setIsAdding(true);
     try {
       const response = await fetch(
         `http://localhost:3001/api/trails/${id}/packing-list`,
@@ -78,18 +80,68 @@ export const SingleTrail = () => {
       setNewPackingListItem("");
     } catch (error) {
       console.error("Error adding packing list item:", error);
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
+  const removePackingListItem = async (itemId: string, isFood: boolean) => {
+    if (!trail) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/trails/${id}/packing-list/${itemId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ isFood }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to remove item");
+
+      const updatedTrail = await response.json();
+      setTrail(updatedTrail);
+    } catch (error) {
+      console.error("Error removing packing list item:", error);
+    }
+  };
+
+  const togglePackingListItem = async (itemId: string, isFood: boolean) => {
+    if (!trail) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/trails/${id}/packing-list/${itemId}/toggle`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ isFood }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to toggle item");
+
+      const updatedTrail = await response.json();
+      setTrail(updatedTrail);
+    } catch (error) {
+      console.error("Error toggling packing list item:", error);
     }
   };
 
   useEffect(() => {
     const fetchTrail = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/trails/${id}`);
-        if (!response.ok) {
-          throw new Error("Trail not found");
-        }
-        const data = await response.json();
-        setTrail(data);
+        const trailResponse = await fetch(
+          `http://localhost:3001/api/trails/${id}`
+        );
+        if (!trailResponse.ok) throw new Error("Trail not found");
+        const trailData = await trailResponse.json();
+        setTrail(trailData);
       } catch (error) {
         console.error("Error fetching trail:", error);
       } finally {
@@ -159,36 +211,58 @@ export const SingleTrail = () => {
         </button>
         {isPackingListOpen && (
           <div className={styles.packingListContent}>
-            <div className={styles.packingListSection}>
-              <h3>{t("gear")}</h3>
-              <ul>
-                {trail.packingList.gear.map((item) => (
-                  <li key={item._id}>{item.name}</li>
-                ))}
-              </ul>
+            <h3>{t("gear")}</h3>
+            <ul>
+              {trail.packingList.gear.map((item) => (
+                <li key={item._id}>
+                  <input
+                    type="checkbox"
+                    checked={item.isChecked}
+                    onChange={() => togglePackingListItem(item._id!, false)}
+                  />
+                  {item.name}
+                  <button
+                    onClick={() => removePackingListItem(item._id!, false)}>
+                    {t("remove")}
+                  </button>
+                </li>
+              ))}
+            </ul>
 
-              <h3>{t("food")}</h3>
-              <ul>
-                {trail.packingList.food.map((item) => (
-                  <li key={item._id}>{item.name}</li>
-                ))}
-              </ul>
+            <h3>{t("food")}</h3>
+            <ul>
+              {trail.packingList.food.map((item) => (
+                <li key={item._id}>
+                  <input
+                    type="checkbox"
+                    checked={item.isChecked}
+                    onChange={() => togglePackingListItem(item._id!, true)}
+                  />
+                  {item.name}
+                  <button
+                    onClick={() => removePackingListItem(item._id!, true)}>
+                    {t("remove")}
+                  </button>
+                </li>
+              ))}
+            </ul>
 
-              <div className={styles.addPackingItem}>
-                <input
-                  type="text"
-                  value={newPackingListItem}
-                  onChange={(e) => setNewPackingListItem(e.target.value)}
-                  placeholder={t("addItem")}
-                />
-                <select
-                  value={isFood ? "food" : "gear"}
-                  onChange={(e) => setIsFood(e.target.value === "food")}>
-                  <option value="gear">{t("gear")}</option>
-                  <option value="food">{t("food")}</option>
-                </select>
-                <button onClick={addPackingListItem}>{t("add")}</button>
-              </div>
+            <div className={styles.addPackingItem}>
+              <input
+                type="text"
+                value={newPackingListItem}
+                onChange={(e) => setNewPackingListItem(e.target.value)}
+                placeholder={t("addItem")}
+              />
+              <select
+                value={isFood ? "food" : "gear"}
+                onChange={(e) => setIsFood(e.target.value === "food")}>
+                <option value="gear">{t("gear")}</option>
+                <option value="food">{t("food")}</option>
+              </select>
+              <button onClick={addPackingListItem} disabled={isAdding}>
+                {isAdding ? t("adding...") : t("add")}
+              </button>
             </div>
           </div>
         )}

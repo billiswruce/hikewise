@@ -6,7 +6,7 @@ import {
 
 const router = express.Router();
 
-router.post("/", createPackingList);
+router.post("/:trailId", createPackingList);
 router.get("/:trailId", getPackingList);
 
 export default router;
