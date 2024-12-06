@@ -10,7 +10,7 @@ import authRoutes from "./routes/authRoutes.js";
 import ownedGearRoutes from "./routes/ownedGearRoutes.js";
 import trailRoutes from "./routes/trailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-// import PackingList from "./routes/packingListRoutes.js";
+import PackingList from "./routes/packingListRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import mapsRoutes from "./routes/mapsRoutes.js";
 
@@ -41,7 +41,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
 );
@@ -53,7 +53,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/trails", trailRoutes);
 app.use("/api/owned-gear", ownedGearRoutes);
-// app.use("/api/packing-list", PackingList);
+app.use("/api/packing-list", PackingList);
 app.use("/api/weather", weatherRoutes);
 app.use("/api/maps", mapsRoutes);
 

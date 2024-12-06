@@ -109,29 +109,57 @@ export const SingleTrail = () => {
     }
   };
 
-  const togglePackingListItem = async (itemId: string, isFood: boolean) => {
+  const updatePackingListItem = async (
+    itemId: string,
+    isFood: boolean,
+    isChecked: boolean
+  ) => {
     if (!trail) return;
 
     try {
       const response = await fetch(
-        `http://localhost:3001/api/trails/${id}/packing-list/${itemId}/toggle`,
+        `http://localhost:3001/api/trails/${id}/packing-list/${itemId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ isFood }),
+          body: JSON.stringify({ isFood, isChecked }),
         }
       );
 
-      if (!response.ok) throw new Error("Failed to toggle item");
+      if (!response.ok) throw new Error("Failed to update packing list item");
 
       const updatedTrail = await response.json();
       setTrail(updatedTrail);
     } catch (error) {
-      console.error("Error toggling packing list item:", error);
+      console.error("Error updating packing list item:", error);
     }
   };
+
+  //   const togglePackingListItem = async (itemId: string, isFood: boolean) => {
+  //     if (!trail) return;
+
+  //     try {
+  //       const response = await fetch(
+  //         `http://localhost:3001/api/trails/${id}/packing-list/${itemId}/toggle`,
+  //         {
+  //           method: "PATCH",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({ isFood }),
+  //         }
+  //       );
+
+  //       if (!response.ok) throw new Error("Failed to toggle item");
+
+  //       const updatedTrail = await response.json();
+  //       setTrail(updatedTrail);
+  //     } catch (error) {
+  //       console.error("Error toggling packing list item:", error);
+  //     }
+  //   };
 
   useEffect(() => {
     const fetchTrail = async () => {
@@ -218,7 +246,9 @@ export const SingleTrail = () => {
                   <input
                     type="checkbox"
                     checked={item.isChecked}
-                    onChange={() => togglePackingListItem(item._id!, false)}
+                    onChange={(e) =>
+                      updatePackingListItem(item._id!, false, e.target.checked)
+                    }
                   />
                   {item.name}
                   <button
@@ -236,7 +266,9 @@ export const SingleTrail = () => {
                   <input
                     type="checkbox"
                     checked={item.isChecked}
-                    onChange={() => togglePackingListItem(item._id!, true)}
+                    onChange={(e) =>
+                      updatePackingListItem(item._id!, true, e.target.checked)
+                    }
                   />
                   {item.name}
                   <button
