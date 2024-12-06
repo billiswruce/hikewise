@@ -15,6 +15,7 @@ export const createTrail = async (req, res) => {
     description,
     hiked,
     creatorId,
+    packingList,
   } = req.body;
 
   const placeholderImage = "http://localhost:5173/assets/trailPlaceholder.webp";
@@ -51,6 +52,10 @@ export const createTrail = async (req, res) => {
         description: weatherData.weather[0].description,
         icon: weatherData.weather[0].icon,
       },
+      packingList: packingList || {
+        gear: [],
+        food: [],
+      },
     });
 
     const savedTrail = await newTrail.save();
@@ -77,6 +82,31 @@ export const getTrail = async (req, res) => {
       return res.status(404).json({ message: "Trail not found" });
     }
     res.json(trail);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const addPackingListItem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, isFood } = req.body;
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    const newItem = { name, isChecked: false };
+
+    if (isFood) {
+      trail.packingList.food.push(newItem);
+    } else {
+      trail.packingList.gear.push(newItem);
+    }
+
+    const updatedTrail = await trail.save();
+    res.json(updatedTrail);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

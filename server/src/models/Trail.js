@@ -28,6 +28,20 @@ const trailSchema = new mongoose.Schema(
     },
     hikeDate: { type: Date, required: true },
     hikeEndDate: { type: Date, required: true },
+    packingList: {
+      gear: [
+        {
+          name: { type: String, required: true },
+          isChecked: { type: Boolean, default: false },
+        },
+      ],
+      food: [
+        {
+          name: { type: String, required: true },
+          isChecked: { type: Boolean, default: false },
+        },
+      ],
+    },
   },
   { timestamps: true }
 );

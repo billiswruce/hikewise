@@ -56,23 +56,57 @@
 // client/src/styles/SingleTrail.module.scss
 .accordionButton {
   background-color: #f1f1f1;
-  cursor: pointer;
-  padding: 10px;
-  width: 100%;
   border: none;
+  padding: 10px;
   text-align: left;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
   outline: none;
-  transition: 0.4s;
+  transition: background-color 0.3s ease;
+}
+
+.accordionButton:hover {
+  background-color: #ddd;
 }
 
 .packingListContent {
-  padding: 0 18px;
-  background-color: white;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-  max-height: 0; // Initially collapsed
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-.packingListContent.open {
-  max-height: 200px; // Adjust as needed
+.addPackingItem {
+  display: flex;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.addPackingItem input {
+  flex: 1;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.addPackingItem button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.addPackingItem button:hover {
+  background-color: #0056b3;
+}
+
+.addPackingItem select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
 }

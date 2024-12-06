@@ -5,6 +5,12 @@ import styles from "../styles/SingleTrail.module.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import TrailPlaceholder from "../assets/trailPlaceholdersquare.webp";
 
+interface PackingItem {
+  _id?: string;
+  name: string;
+  isChecked: boolean;
+}
+
 interface Trail {
   _id: string;
   name: string;
@@ -23,6 +29,10 @@ interface Trail {
     icon: string;
   };
   comments: Comment[];
+  packingList: {
+    gear: PackingItem[];
+    food: PackingItem[];
+  };
 }
 
 interface Comment {
@@ -37,39 +47,39 @@ export const SingleTrail = () => {
   const { id } = useParams();
   const [trail, setTrail] = useState<Trail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [newPackingListItem, setNewPackingListItem] = useState("");
+  const [isFood, setIsFood] = useState(false);
   const [isPackingListOpen, setIsPackingListOpen] = useState(false);
 
-  // Hardcoded packing list items
-  const packingListItems = [
-    "Backpack",
-    "Water",
-    "Food",
-    "First Aid Kit",
-    "Map",
-    "Compass",
-  ];
+  const togglePackingList = () => setIsPackingListOpen((prev) => !prev);
 
-  // Hardcoded comments
-  const comments = [
-    {
-      _id: "1",
-      text: "Great trail!",
-      createdAt: "2023-10-01",
-      userId: "user1",
-    },
-    {
-      _id: "2",
-      text: "Loved the scenery.",
-      createdAt: "2023-10-02",
-      userId: "user2",
-    },
-    {
-      _id: "3",
-      text: "Challenging but worth it.",
-      createdAt: "2023-10-03",
-      userId: "user3",
-    },
-  ];
+  const addPackingListItem = async () => {
+    if (newPackingListItem.trim() === "" || !trail) return;
+
+    try {
+      const response = await fetch(
+        `http://localhost:3001/api/trails/${id}/packing-list`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: newPackingListItem,
+            isFood: isFood,
+          }),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to add item");
+
+      const updatedTrail = await response.json();
+      setTrail(updatedTrail);
+      setNewPackingListItem("");
+    } catch (error) {
+      console.error("Error adding packing list item:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchTrail = async () => {
@@ -89,10 +99,6 @@ export const SingleTrail = () => {
 
     fetchTrail();
   }, [id]);
-
-  const togglePackingList = () => {
-    setIsPackingListOpen(!isPackingListOpen);
-  };
 
   if (loading) {
     return <div>{t("loading")}</div>;
@@ -149,33 +155,57 @@ export const SingleTrail = () => {
       {/* Packing List Accordion */}
       <div className={styles.packingListSection}>
         <button onClick={togglePackingList} className={styles.accordionButton}>
-          {t("packingList")}
+          {t("packingList")} {isPackingListOpen ? "▼" : "▶"}
         </button>
         {isPackingListOpen && (
-          <div
-            className={`${styles.packingListContent} ${
-              isPackingListOpen ? "open" : ""
-            }`}>
-            <ul>
-              {packingListItems.map((item, index) => (
-                <li key={index}>{item}</li>
-              ))}
-            </ul>
+          <div className={styles.packingListContent}>
+            <div className={styles.packingListSection}>
+              <h3>{t("gear")}</h3>
+              <ul>
+                {trail.packingList.gear.map((item) => (
+                  <li key={item._id}>{item.name}</li>
+                ))}
+              </ul>
+
+              <h3>{t("food")}</h3>
+              <ul>
+                {trail.packingList.food.map((item) => (
+                  <li key={item._id}>{item.name}</li>
+                ))}
+              </ul>
+
+              <div className={styles.addPackingItem}>
+                <input
+                  type="text"
+                  value={newPackingListItem}
+                  onChange={(e) => setNewPackingListItem(e.target.value)}
+                  placeholder={t("addItem")}
+                />
+                <select
+                  value={isFood ? "food" : "gear"}
+                  onChange={(e) => setIsFood(e.target.value === "food")}>
+                  <option value="gear">{t("gear")}</option>
+                  <option value="food">{t("food")}</option>
+                </select>
+                <button onClick={addPackingListItem}>{t("add")}</button>
+              </div>
+            </div>
           </div>
         )}
       </div>
 
       {/* Comments section */}
-      <div className={styles.commentsSection}></div>
-      <h2>{t("comments")}</h2>
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment._id}>
-            <p>{comment.text}</p>
-            <small>{new Date(comment.createdAt).toLocaleDateString()}</small>
-          </li>
-        ))}
-      </ul>
+      <div className={styles.commentsSection}>
+        <h2>{t("comments")}</h2>
+        <ul>
+          {trail.comments.map((comment) => (
+            <li key={comment._id}>
+              <p>{comment.text}</p>
+              <small>{new Date(comment.createdAt).toLocaleDateString()}</small>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
