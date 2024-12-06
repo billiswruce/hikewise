@@ -52,3 +52,27 @@
 .commentsSection {
   margin-top: 30px;
 }
+
+// client/src/styles/SingleTrail.module.scss
+.accordionButton {
+  background-color: #f1f1f1;
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  transition: 0.4s;
+}
+
+.packingListContent {
+  padding: 0 18px;
+  background-color: white;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  max-height: 0; // Initially collapsed
+}
+
+.packingListContent.open {
+  max-height: 200px; // Adjust as needed
+}

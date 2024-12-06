@@ -46,12 +46,10 @@ export const FavoriteProvider = ({
 
   const toggleFavorite = async (trailId: string) => {
     try {
-      const isCurrentlyFavorite = favorites.has(trailId);
-
       const response = await fetch(
-        `http://localhost:3001/api/users/favorites/${trailId}`,
+        `http://localhost:3001/api/users/favorites/toggle/${trailId}`,
         {
-          method: isCurrentlyFavorite ? "DELETE" : "POST",
+          method: "POST",
           credentials: "include",
         }
       );
@@ -63,6 +61,7 @@ export const FavoriteProvider = ({
       // Uppdatera lokal state
       setFavorites((prevFavorites) => {
         const newFavorites = new Set(prevFavorites);
+        const isCurrentlyFavorite = newFavorites.has(trailId);
         if (isCurrentlyFavorite) {
           newFavorites.delete(trailId);
         } else {

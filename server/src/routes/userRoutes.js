@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/:userId", getUserDetails);
 router.get("/me/favorites", getUserFavorites);
-router.post("/favorites/:trailId", toggleFavorite);
+router.post("/favorites/toggle/:trailId", toggleFavorite);
 router.post("/:userId/gear", addGear);
 
 export default router;

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import TrailPlaceholder from "../assets/trailPlaceholdersquare.webp";
 
 interface Trail {
   _id: string;
@@ -36,6 +37,39 @@ export const SingleTrail = () => {
   const { id } = useParams();
   const [trail, setTrail] = useState<Trail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPackingListOpen, setIsPackingListOpen] = useState(false);
+
+  // Hardcoded packing list items
+  const packingListItems = [
+    "Backpack",
+    "Water",
+    "Food",
+    "First Aid Kit",
+    "Map",
+    "Compass",
+  ];
+
+  // Hardcoded comments
+  const comments = [
+    {
+      _id: "1",
+      text: "Great trail!",
+      createdAt: "2023-10-01",
+      userId: "user1",
+    },
+    {
+      _id: "2",
+      text: "Loved the scenery.",
+      createdAt: "2023-10-02",
+      userId: "user2",
+    },
+    {
+      _id: "3",
+      text: "Challenging but worth it.",
+      createdAt: "2023-10-03",
+      userId: "user3",
+    },
+  ];
 
   useEffect(() => {
     const fetchTrail = async () => {
@@ -56,6 +90,10 @@ export const SingleTrail = () => {
     fetchTrail();
   }, [id]);
 
+  const togglePackingList = () => {
+    setIsPackingListOpen(!isPackingListOpen);
+  };
+
   if (loading) {
     return <div>{t("loading")}</div>;
   }
@@ -70,7 +108,11 @@ export const SingleTrail = () => {
 
       {/* Hero image */}
       <div className={styles.heroImage}>
-        <img src={trail.image} alt={trail.name} />
+        {trail.image ? (
+          <img src={trail.image} alt={trail.name} />
+        ) : (
+          <img src={TrailPlaceholder} alt="Trail placeholder" />
+        )}
       </div>
 
       {/* Trail info */}
@@ -104,11 +146,36 @@ export const SingleTrail = () => {
         </GoogleMap>
       </LoadScript>
 
-      {/* Comments section - to be implemented */}
-      <div className={styles.commentsSection}>
-        <h2>{t("comments")}</h2>
-        {/* Add comment form and list here */}
+      {/* Packing List Accordion */}
+      <div className={styles.packingListSection}>
+        <button onClick={togglePackingList} className={styles.accordionButton}>
+          {t("packingList")}
+        </button>
+        {isPackingListOpen && (
+          <div
+            className={`${styles.packingListContent} ${
+              isPackingListOpen ? "open" : ""
+            }`}>
+            <ul>
+              {packingListItems.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
+
+      {/* Comments section */}
+      <div className={styles.commentsSection}></div>
+      <h2>{t("comments")}</h2>
+      <ul>
+        {comments.map((comment) => (
+          <li key={comment._id}>
+            <p>{comment.text}</p>
+            <small>{new Date(comment.createdAt).toLocaleDateString()}</small>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
