@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+const commentSchema = new mongoose.Schema({
+  text: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  // userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+});
+
 const trailSchema = new mongoose.Schema(
   {
     image: { type: String, required: true },
@@ -11,12 +17,7 @@ const trailSchema = new mongoose.Schema(
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
     creatorId: { type: String, required: true },
-    comments: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Comment",
-      },
-    ],
+    comments: [commentSchema],
     weather: {
       temperature: Number,
       description: String,
@@ -28,11 +29,22 @@ const trailSchema = new mongoose.Schema(
     },
     hikeDate: { type: Date, required: true },
     hikeEndDate: { type: Date, required: true },
+    packingList: {
+      gear: [
+        {
+          name: { type: String, required: true },
+          isChecked: { type: Boolean, default: false },
+        },
+      ],
+      food: [
+        {
+          name: { type: String, required: true },
+          isChecked: { type: Boolean, default: false },
+        },
+      ],
+    },
   },
   { timestamps: true }
 );
 
 export default mongoose.model("Trail", trailSchema);
-
-//Trails: { id, name, image, location, length, difficulty, description, latitude, longitude, weather, creatorId, packingListId, CreatedAt, comment }// Gear: { id, userId, name, category, status }
-//ska koppla packinglist på något sätt här - gå till trail för att skapa din packinglist och skriva kommentarer/tankar???

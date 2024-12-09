@@ -20,6 +20,10 @@ const CreateTrail = () => {
     hikeDate: "",
     hikeEndDate: "",
     image: "",
+    packingList: {
+      gear: [],
+      food: [],
+    },
   });
 
   const libraries: Libraries = ["places"];
@@ -94,6 +98,7 @@ const CreateTrail = () => {
         },
         body: JSON.stringify({
           ...formData,
+          packingList: formData.packingList,
           creatorId: user?.sub,
           formattedHikeDate: formatDate(formData.hikeDate),
           formattedHikeEndDate: formatDate(formData.hikeEndDate),
@@ -152,6 +157,10 @@ const CreateTrail = () => {
               hikeDate: "",
               hikeEndDate: "",
               image: "",
+              packingList: {
+                gear: [],
+                food: [],
+              },
             })
           }>
           {t("reset")}

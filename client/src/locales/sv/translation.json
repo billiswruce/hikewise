@@ -8,8 +8,18 @@
   "auth0Id": "Ditt Auth0 ID är",
   "createTrail": "Skapa led",
   "favoriteTrails": "Favoritleder",
+  "trail": "Led",
   "trails": "Leder",
+  "trailsPlural": "Leder",
   "gear": "Utrustning",
+  "food": "Mat",
+  "journal": "Loggbok",
+  "edit": "Redigera",
+  "delete": "Radera",
+  "save": "Spara",
+  "back": "Tillbaka",
+  "add": "Lägg till",
+  "addComment": "Lägg till kommentar",
   "categories": "Kategorier etc!",
   "hikedTrails": "Vandrade leder",
   "hikingTrails": "Planerade leder",
@@ -57,6 +67,10 @@
   "myFavoriteTrails": "Mina favoritleder",
   "myGear": "Min utrustning",
   "anonymous": "Anonym",
+  "packingList": "Packlista",
+  "remove": "Ta bort",
+  "addItem": "Lägg till föremål",
+  "adding...": "Lägger till...",
   "filter": {
     "sortLabel": "Sortera efter:",
     "options": {
@@ -65,5 +79,14 @@
       "dateAsc": "Datum (Äldsta först)",
       "dateDesc": "Datum (Nyaste först)"
     }
+  },
+  "weather": {
+    "clearSky": "Klart",
+    "clouds": "Molnigt",
+    "rain": "Regn",
+    "thunderstorm": "Åska",
+    "snow": "Snö",
+    "mist": "Dimma",
+    "default": "Väder"
   }
 }

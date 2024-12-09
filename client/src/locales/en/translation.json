@@ -8,8 +8,17 @@
   "auth0Id": "Your Auth0 ID is",
   "createTrail": "Create Trail",
   "favoriteTrails": "Favorite Trails",
+  "trail": "Trail",
   "trails": "Trails",
   "gear": "Gear",
+  "food": "Food",
+  "journal": "Journal",
+  "edit": "Edit",
+  "delete": "Delete",
+  "save": "Save",
+  "back": "Back",
+  "add": "Add",
+  "addComment": "Add Comment",
   "categories": "Categories etc!",
   "hikedTrails": "Hiked Trails",
   "hikingTrails": "Hiking Trails",
@@ -64,5 +73,18 @@
       "dateAsc": "Date (Oldest first)",
       "dateDesc": "Date (Newest first)"
     }
-  }
+  },
+  "weather": {
+    "clearSky": "Clear Sky",
+    "clouds": "Cloudy",
+    "rain": "Rain",
+    "thunderstorm": "Thunderstorm",
+    "snow": "Snow",
+    "mist": "Mist",
+    "default": "Sunny"
+  },
+  "packingList": "Packing List",
+  "remove": "Remove",
+  "addItem": "Add item",
+  "adding...": "Adding..."
 }

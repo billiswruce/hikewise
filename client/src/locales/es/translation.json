@@ -8,8 +8,17 @@
     "auth0Id": "Tu ID de Auth0 es",
     "createTrail": "Crear sendero",
     "favoriteTrails": "Senderos favoritos",
+    "trail": "Sendero",
     "trails": "Senderos",
     "gear": "Equipamiento",
+    "food": "Comida",
+    "journal": "Diario",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "save": "Guardar",
+    "back": "Volver",
+    "add": "Añadir",
+    "addComment": "Añadir comentario",
     "categories": "Categorías, etc.",
     "hikedTrails": "Senderos recorridos",
     "hikingTrails": "Senderos para senderismo",
@@ -64,6 +73,18 @@
         "dateAsc": "Fecha (Más antiguo)",
         "dateDesc": "Fecha (Más reciente)"
       }
-    }
+    },
+    "weather": {
+      "clearSky": "Despejado",
+      "clouds": "Nublado",
+      "rain": "Lluvia",
+      "thunderstorm": "Tormenta",
+      "snow": "Nieve",
+      "mist": "Niebla",
+      "default": "Soleado"
+    },
+    "packingList": "Lista de equipamiento",
+    "remove": "Eliminar",
+    "addItem": "Añadir elemento",
+    "adding...": "Añadiendo..."
   }
-  

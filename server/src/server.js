@@ -41,7 +41,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
 );
@@ -57,13 +57,11 @@ app.use("/api/packing-list", PackingList);
 app.use("/api/weather", weatherRoutes);
 app.use("/api/maps", mapsRoutes);
 
-// Error-handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: err.message });
 });
 
-// Start the server
 app.listen(PORT, () =>
   console.log(`Server is running on http://localhost:${PORT}`.rainbow.bold)
 );

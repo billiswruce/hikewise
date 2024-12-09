@@ -1,18 +1,29 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Trail } from "../models/Trail";
 import styles from "../styles/Hiking.module.scss";
 import favoritePlaceholder from "../assets/favoritesPlaceholder.webp";
 import { useFavorites } from "../hooks/useFavorites";
 import Filter from "../components/Filter";
 import { useTrailSort } from "../hooks/useTrailSort";
+import { useTranslation } from "react-i18next";
 
 const FavoriteTrails = () => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const [favoriteTrails, setFavoriteTrails] = useState<Trail[]>([]);
   const [sortOption, setSortOption] = useState<
     "name-asc" | "name-desc" | "date-asc" | "date-desc"
   >("name-asc");
   const { favorites, toggleFavorite } = useFavorites();
   const sortedTrails = useTrailSort(favoriteTrails, sortOption);
+
+  const handleTrailClick = (trailId: string, event: React.MouseEvent) => {
+    if ((event.target as HTMLElement).closest(`.${styles.favoriteButton}`)) {
+      return;
+    }
+    navigate(`/trail/${trailId}`);
+  };
 
   useEffect(() => {
     const fetchFavoriteTrails = async () => {
@@ -40,11 +51,20 @@ const FavoriteTrails = () => {
 
   return (
     <div className={styles.hikingContainer}>
-      <Filter sortOption={sortOption} setSortOption={setSortOption} />
+      <div className={styles.headerSection}>
+        <Filter sortOption={sortOption} setSortOption={setSortOption} />
+        <span className={styles.trailCount}>
+          {sortedTrails.length}{" "}
+          {t(sortedTrails.length === 1 ? "trail" : "trails")}
+        </span>
+      </div>
 
       <div className={styles.sections}>
         {sortedTrails.map((trail) => (
-          <div key={trail._id} className={styles.section}>
+          <div
+            key={trail._id}
+            className={styles.section}
+            onClick={(e) => handleTrailClick(trail._id, e)}>
             <img
               src={trail.image || favoritePlaceholder}
               alt={trail.name}
