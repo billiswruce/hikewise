@@ -3,7 +3,16 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import TrailPlaceholder from "../assets/trailPlaceholdersquare.webp";
+import TrailPlaceholder from "../assets/trailPlaceholder.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSun,
+  faCloud,
+  faCloudRain,
+  faSnowflake,
+  faSmog,
+  faBolt,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface PackingItem {
   _id?: string;
@@ -54,8 +63,43 @@ const SingleTrail = () => {
   const [newComment, setNewComment] = useState("");
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [editedText, setEditedText] = useState("");
+  const [validImage, setValidImage] = useState<string>("");
+
+  useEffect(() => {
+    if (trail?.image) {
+      const img = new Image();
+      img.src = trail.image;
+
+      img.onload = () => {
+        setValidImage(trail.image);
+      };
+
+      img.onerror = () => {
+        setValidImage(TrailPlaceholder);
+      };
+    }
+  }, [trail?.image]);
 
   const togglePackingList = () => setIsPackingListOpen((prev) => !prev);
+
+  const getWeatherIcon = (description: string) => {
+    const desc = description.toLowerCase();
+
+    if (desc.includes("clear sky") || desc.includes("sunny"))
+      return { icon: faSun, label: t("weather.clearSky") };
+    if (desc.includes("few clouds") || desc.includes("clouds"))
+      return { icon: faCloud, label: t("weather.clouds") };
+    if (desc.includes("rain") || desc.includes("shower"))
+      return { icon: faCloudRain, label: t("weather.rain") };
+    if (desc.includes("thunderstorm"))
+      return { icon: faBolt, label: t("weather.thunderstorm") };
+    if (desc.includes("snow"))
+      return { icon: faSnowflake, label: t("weather.snow") };
+    if (desc.includes("mist") || desc.includes("fog") || desc.includes("haze"))
+      return { icon: faSmog, label: t("weather.mist") };
+
+    return { icon: faSun, label: t("weather.default") };
+  };
 
   const fetchTrail = useCallback(async () => {
     try {
@@ -235,147 +279,209 @@ const SingleTrail = () => {
   if (loading) return <div>{t("loading")}</div>;
   if (!trail) return <div>{t("notFound")}</div>;
 
+  const weatherInfo = getWeatherIcon(trail.weather.description);
+
   return (
-    <div className={styles.container}>
-      <h1>{trail.name}</h1>
-      <div className={styles.heroImage}>
-        <img
-          src={trail.image || TrailPlaceholder}
-          alt={trail.name || "Trail placeholder"}
-        />
-      </div>
-      <div className={styles.infoSection}>
-        <div className={styles.basicInfo}>
-          <p>{trail.length} km</p>
-          <p>{t(trail.difficulty)}</p>
-          <p>{new Date(trail.hikeDate).toLocaleDateString()}</p>
-        </div>
-        <div className={styles.weather}>
-          <img
-            src={`http://openweathermap.org/img/w/${trail.weather.icon}.png`}
-            alt={trail.weather.description}
-          />
-          <p>{trail.weather.temperature}°C</p>
-          <p>{trail.weather.description}</p>
-        </div>
-        <p className={styles.description}>{trail.description}</p>
-      </div>
-      <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-        <GoogleMap
-          mapContainerClassName={styles.map}
-          center={{ lat: trail.latitude, lng: trail.longitude }}
-          zoom={13}>
-          <Marker position={{ lat: trail.latitude, lng: trail.longitude }} />
-        </GoogleMap>
-      </LoadScript>
-      <div className={styles.packingListSection}>
-        <button onClick={togglePackingList} className={styles.accordionButton}>
-          {t("packingList")} {isPackingListOpen ? "▼" : "▶"}
-        </button>
-        {isPackingListOpen && (
-          <div className={styles.packingListContent}>
-            <h3>{t("gear")}</h3>
-            <ul>
-              {trail.packingList.gear.map((item) => (
-                <li key={item._id}>
-                  <input
-                    type="checkbox"
-                    checked={item.isChecked}
-                    onChange={(e) =>
-                      updatePackingListItem(item._id!, false, e.target.checked)
-                    }
-                  />
-                  {item.name}
-                  <button
-                    onClick={() => removePackingListItem(item._id!, false)}>
-                    {t("remove")}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <h3>{t("food")}</h3>
-            <ul>
-              {trail.packingList.food.map((item) => (
-                <li key={item._id}>
-                  <input
-                    type="checkbox"
-                    checked={item.isChecked}
-                    onChange={(e) =>
-                      updatePackingListItem(item._id!, true, e.target.checked)
-                    }
-                  />
-                  {item.name}
-                  <button
-                    onClick={() => removePackingListItem(item._id!, true)}>
-                    {t("remove")}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className={styles.addPackingItem}>
-              <input
-                type="text"
-                value={newPackingListItem}
-                onChange={(e) => setNewPackingListItem(e.target.value)}
-                placeholder={t("addItem")}
-              />
-              <select
-                value={isFood ? "food" : "gear"}
-                onChange={(e) => setIsFood(e.target.value === "food")}>
-                <option value="gear">{t("gear")}</option>
-                <option value="food">{t("food")}</option>
-              </select>
-              <button onClick={addPackingListItem} disabled={isAdding}>
-                {isAdding ? t("adding...") : t("add")}
-              </button>
-            </div>
+    <div>
+      <div
+        className={styles.heroImage}
+        style={{
+          backgroundImage: `url(${validImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      {/* Innehåll i vit container */}
+      <div className={styles.container}>
+        <div className={styles.titleWeatherContainer}>
+          <h1>{trail.name}</h1>
+          <div className={styles.weatherInfo}>
+            <FontAwesomeIcon
+              icon={weatherInfo.icon}
+              size="2x"
+              title={weatherInfo.label}
+            />
+            <p>{Math.floor(trail.weather.temperature)}°C</p>
+            <p>{weatherInfo.label}</p>
           </div>
-        )}
-      </div>
-      <div className={styles.commentsSection}>
-        <h2>{t("comments")}</h2>
-        <ul>
-          {trail.comments.map((comment) => (
-            <li key={comment._id}>
-              {editingComment === comment._id ? (
-                <div>
-                  <input
-                    type="text"
-                    defaultValue={comment.text}
-                    onChange={(e) => setEditedText(e.target.value)}
-                  />
-                  <button onClick={() => editComment(comment._id, editedText)}>
-                    {t("save")}
-                  </button>
-                  <button onClick={() => setEditingComment(null)}>
-                    {t("cancel")}
-                  </button>
+        </div>
+
+        {/* Grundläggande Information */}
+        <div className={styles.infoSection}>
+          <div className={styles.basicInfo}>
+            <p>{trail.length} km</p>
+            <p>{t(trail.difficulty)}</p>
+            <p>{new Date(trail.hikeDate).toLocaleDateString()}</p>
+          </div>
+          <p className={styles.description}>{trail.description}</p>
+        </div>
+
+        {/* Packlista */}
+        <div className={styles.packingListContainer}>
+          <div className={styles.packingListSection}>
+            <button
+              onClick={togglePackingList}
+              className={styles.accordionButton}>
+              <span className={styles.accordionTitle}>{t("packingList")}</span>
+              <span>{isPackingListOpen ? "▼" : "▶"}</span>
+            </button>
+
+            {isPackingListOpen && (
+              <div className={styles.accordionContentWrapper}>
+                <div className={styles.packingListContent}>
+                  <div className={styles.packingListGrid}>
+                    {/* Gear */}
+                    <div className={styles.packingColumn}>
+                      <h4>{t("gear")}</h4>
+                      <ul>
+                        {trail.packingList.gear.map((item) => (
+                          <li key={item._id} className={styles.item}>
+                            <input
+                              type="checkbox"
+                              checked={item.isChecked}
+                              onChange={(e) =>
+                                updatePackingListItem(
+                                  item._id!,
+                                  false,
+                                  e.target.checked
+                                )
+                              }
+                            />
+                            <span>{item.name}</span>
+                            <button
+                              className={styles.deleteButton}
+                              onClick={() =>
+                                removePackingListItem(item._id!, false)
+                              }>
+                              x
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Food */}
+                    <div className={styles.packingColumn}>
+                      <h4>{t("food")}</h4>
+                      <ul>
+                        {trail.packingList.food.map((item) => (
+                          <li key={item._id} className={styles.item}>
+                            <input
+                              type="checkbox"
+                              checked={item.isChecked}
+                              onChange={(e) =>
+                                updatePackingListItem(
+                                  item._id!,
+                                  true,
+                                  e.target.checked
+                                )
+                              }
+                            />
+                            <span>{item.name}</span>
+                            <button
+                              className={styles.deleteButton}
+                              onClick={() =>
+                                removePackingListItem(item._id!, true)
+                              }>
+                              x
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Add Item */}
+                  <div className={styles.addPackingItem}>
+                    <input
+                      type="text"
+                      value={newPackingListItem}
+                      onChange={(e) => setNewPackingListItem(e.target.value)}
+                      placeholder={t("addItem")}
+                    />
+                    <select
+                      value={isFood ? "food" : "gear"}
+                      onChange={(e) => setIsFood(e.target.value === "food")}>
+                      <option value="gear">{t("gear")}</option>
+                      <option value="food">{t("food")}</option>
+                    </select>
+                    <button
+                      className={styles.addButton}
+                      onClick={addPackingListItem}
+                      disabled={isAdding}>
+                      {isAdding ? t("adding...") : t("add")}
+                    </button>
+                  </div>
                 </div>
-              ) : (
-                <div>
-                  <p>{comment.text}</p>
-                  <small>
-                    {new Date(comment.createdAt).toLocaleDateString()}
-                  </small>
-                  <button onClick={() => setEditingComment(comment._id)}>
-                    {t("edit")}
-                  </button>
-                  <button onClick={() => deleteComment(comment._id)}>
-                    {t("delete")}
-                  </button>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-        <div className={styles.addComment}>
-          <input
-            type="text"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder={t("addComment")}
-          />
-          <button onClick={addComment}>{t("add")}</button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Karta */}
+        <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+          <GoogleMap
+            mapContainerClassName={styles.map}
+            center={{ lat: trail.latitude, lng: trail.longitude }}
+            zoom={13}>
+            <Marker position={{ lat: trail.latitude, lng: trail.longitude }} />
+          </GoogleMap>
+        </LoadScript>
+
+        {/* Kommentarer */}
+        <div className={styles.commentsSection}>
+          <h2>{t("journal")}</h2>
+          <ul>
+            {trail.comments.map((comment) => (
+              <li key={comment._id} className={styles.commentItem}>
+                {editingComment === comment._id ? (
+                  <div className={styles.commentEdit}>
+                    <textarea
+                      defaultValue={comment.text}
+                      onChange={(e) => setEditedText(e.target.value)}
+                      className={styles.commentInput}
+                    />
+                    <div className={styles.commentButtons}>
+                      <button
+                        onClick={() => editComment(comment._id, editedText)}>
+                        {t("save")}
+                      </button>
+                      <button onClick={() => setEditingComment(null)}>
+                        {t("back")}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className={styles.commentContent}>
+                    <p>{comment.text}</p>
+                    <small>
+                      {new Date(comment.createdAt).toLocaleDateString()}
+                    </small>
+                    <div className={styles.commentButtons}>
+                      <button onClick={() => setEditingComment(comment._id)}>
+                        {t("edit")}
+                      </button>
+                      <button onClick={() => deleteComment(comment._id)}>
+                        {t("delete")}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+          <div className={styles.addCommentSection}>
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder={t("addComment")}
+              className={styles.commentBox}
+            />
+            <button onClick={addComment} className={styles.addCommentButton}>
+              {t("add")}
+            </button>
+          </div>
         </div>
       </div>
     </div>

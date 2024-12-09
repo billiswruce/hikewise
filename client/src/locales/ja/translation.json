@@ -11,6 +11,14 @@
   "trail": "トレイル",
   "trails": "トレイル",
   "gear": "装備",
+  "food": "食べ物",
+  "journal": "日記",
+  "edit": "編集",
+  "delete": "削除",
+  "save": "保存",
+  "back": "戻る",
+  "add": "追加",
+  "addComment": "コメントを追加",
   "categories": "カテゴリーなど！",
   "hikedTrails": "歩いたトレイル",
   "hikingTrails": "ハイキングトレイル",
@@ -43,7 +51,7 @@
   "markerTooltip": "地図をクリックして場所を選択",
   "geocodingError": "これらの座標に住所が見つかりません",
   "autocompletePlaceholder": "場所を入力",
-  "dateFormat": "MM/DD/YYYY",
+  "dateFormat": "yyyy-MM-dd",
   "uploadImage": "画像をアップロード",
   "removeImage": "画像を削除",
   "uploadImageError": "画像をアップロードできませんでした。",
@@ -52,7 +60,7 @@
   "chooseFile": "ファイルを選択",
   "noFileChosen": "ファイルが選択されていません",
   "editProfile": "プロフィールを編集",
-  "profileDescription": "ここでは トレイルと装備を見つけることができます！",
+  "profileDescription": "ここではトレイルと装備を見つけることができます！",
   "myTrails": "作成したトレイル",
   "myFavoriteTrails": "お気に入りのトレイル",
   "myGear": "装備",
@@ -65,5 +73,18 @@
       "dateAsc": "日付 (古い順)",
       "dateDesc": "日付 (新しい順)"
     }
-  }
+  },
+  "weather": {
+    "clearSky": "晴れ",
+    "clouds": "曇り",
+    "rain": "雨",
+    "thunderstorm": "雷雨",
+    "snow": "雪",
+    "mist": "霧",
+    "default": "晴れ"
+  },
+  "packingList": "装備リスト",
+  "remove": "削除",
+  "addItem": "アイテムを追加",
+  "adding...": "追加中..."
 }
