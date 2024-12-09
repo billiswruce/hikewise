@@ -4,10 +4,12 @@ const Gear = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <h1>{t("gear")}</h1>
-      <p>{t("categories")}</p>
-    </div>
+    <>
+      <div>
+        <h1>{t("gear")}</h1>
+        <p>{t("categories")}</p>
+      </div>
+    </>
   );
 };
 

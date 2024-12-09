@@ -120,53 +120,55 @@ const CreateTrail = () => {
   };
 
   return (
-    <LoadScript
-      googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}
-      libraries={libraries}>
-      <div>
-        <div
-          className={styles.banner}
-          style={{
-            backgroundImage: `url(${backgroundImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
-
-        <div className={styles.formContainer}>
-          <TrailForm
-            formData={formData}
-            handleChange={handleChange}
-            handleImageUpload={handleImageUpload}
-            handleSubmit={handleSubmit}
+    <>
+      <LoadScript
+        googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}
+        libraries={libraries}>
+        <div>
+          <div
+            className={styles.banner}
+            style={{
+              backgroundImage: `url(${backgroundImage})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
           />
-        </div>
 
-        <button
-          type="button"
-          className={styles.resetButton}
-          onClick={() =>
-            setFormData({
-              name: "",
-              length: "",
-              difficulty: "",
-              description: "",
-              latitude: 57.7089,
-              longitude: 11.9746,
-              location: "Göteborg, Sweden",
-              hikeDate: "",
-              hikeEndDate: "",
-              image: "",
-              packingList: {
-                gear: [],
-                food: [],
-              },
-            })
-          }>
-          {t("reset")}
-        </button>
-      </div>
-    </LoadScript>
+          <div className={styles.formContainer}>
+            <TrailForm
+              formData={formData}
+              handleChange={handleChange}
+              handleImageUpload={handleImageUpload}
+              handleSubmit={handleSubmit}
+            />
+          </div>
+
+          <button
+            type="button"
+            className={styles.resetButton}
+            onClick={() =>
+              setFormData({
+                name: "",
+                length: "",
+                difficulty: "",
+                description: "",
+                latitude: 57.7089,
+                longitude: 11.9746,
+                location: "Göteborg, Sweden",
+                hikeDate: "",
+                hikeEndDate: "",
+                image: "",
+                packingList: {
+                  gear: [],
+                  food: [],
+                },
+              })
+            }>
+            {t("reset")}
+          </button>
+        </div>
+      </LoadScript>
+    </>
   );
 };
 
