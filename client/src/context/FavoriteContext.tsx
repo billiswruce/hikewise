@@ -19,29 +19,41 @@ export const FavoriteProvider = ({
 
   useEffect(() => {
     const loadFavorites = async () => {
-      if (!isAuthenticated) return;
+      if (!isAuthenticated) {
+        setFavorites(new Set());
+        return;
+      }
 
       try {
-        const token = await getAccessTokenSilently();
+        // const token = await getAccessTokenSilently();
+        console.log("Försöker hämta favoriter...");
+
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
           {
             method: "GET",
-            credentials: "include",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            credentials: "include", // Skicka session-cookie
           }
         );
+        console.log("Response status:", response.status);
 
         if (!response.ok) {
-          throw new Error("Failed to fetch favorites");
+          const errorText = await response.text();
+          console.error("Server response:", errorText);
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await response.json();
-        setFavorites(new Set(data.map((trail: { _id: string }) => trail._id)));
+        const favoriteTrails = await response.json();
+        console.log("Hämtade favoriter:", favoriteTrails);
+
+        // Kontrollera om favoriteTrails är en array innan vi använder map
+        if (Array.isArray(favoriteTrails)) {
+          setFavorites(new Set(favoriteTrails.map((trail) => trail._id)));
+        } else {
+          console.error("Oväntad datastruktur:", favoriteTrails);
+        }
       } catch (err) {
-        console.error("Failed to load favorites:", err);
+        console.error("Fel vid hämtning av favoriter:", err);
       }
     };
 
@@ -49,8 +61,15 @@ export const FavoriteProvider = ({
   }, [isAuthenticated, getAccessTokenSilently]);
 
   const toggleFavorite = async (trailId: string) => {
+    if (!isAuthenticated) {
+      console.log("Användaren måste vara inloggad för att hantera favoriter");
+      return;
+    }
+
     try {
       const token = await getAccessTokenSilently();
+      console.log("Försöker toggla favorit för trail:", trailId);
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/favorites/toggle/${trailId}`,
         {
@@ -58,27 +77,26 @@ export const FavoriteProvider = ({
           credentials: "include",
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
         }
       );
 
       if (!response.ok) {
-        throw new Error("Failed to update favorite status in the database");
+        const errorText = await response.text();
+        console.error("Server response:", errorText);
+        throw new Error("Kunde inte uppdatera favoritstatus");
       }
 
-      // Uppdatera lokal state
-      setFavorites((prevFavorites) => {
-        const newFavorites = new Set(prevFavorites);
-        const isCurrentlyFavorite = newFavorites.has(trailId);
-        if (isCurrentlyFavorite) {
-          newFavorites.delete(trailId);
-        } else {
-          newFavorites.add(trailId);
-        }
-        return newFavorites;
-      });
+      const result = await response.json();
+      console.log("Toggle resultat:", result);
+
+      // Uppdatera lokala favoriter baserat på serverns svar
+      if (result.favorites) {
+        setFavorites(new Set(result.favorites));
+      }
     } catch (err) {
-      console.error("Failed to update favorite:", err);
+      console.error("Fel vid uppdatering av favorit:", err);
     }
   };
 

@@ -1,13 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
+// Hämta miljövariabeln för API-URL
+const API_URL = process.env.VITE_API_URL || "http://localhost:3001";
+
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3001",
+        target: API_URL, 
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
@@ -15,7 +17,11 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '~': '/src', // Alias fungerar nu korrekt
+      "~": "/src",
     },
+  },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
   },
 });

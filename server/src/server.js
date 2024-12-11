@@ -11,27 +11,35 @@ import ownedGearRoutes from "./routes/ownedGearRoutes.js";
 import packingListRoutes from "./routes/packingListRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import mapsRoutes from "./routes/mapsRoutes.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
+// Middleware för att logga cookies
+app.use(cookieParser());
+app.use((req, res, next) => {
+  console.log("Cookies:", req.cookies);
+  next();
+});
+
+// CORS-konfiguration
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
       "https://hikewise.vercel.app",
       "https://hikewise-backend.vercel.app",
-      "https://hikewise-backend-lu3c9nfbe-jessicatell-hotmailcoms-projects.vercel.app",
-      "https://hikewise-billiswruce-jessicatell-hotmailcoms-projects.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
+// Session-konfiguration
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "default_secret_key",
@@ -40,24 +48,23 @@ app.use(
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
       collectionName: "sessions",
-      touchAfter: 24 * 3600,
-      stringify: false,
     }),
     cookie: {
+      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
 
-// Connect to MongoDB before starting the server
 (async () => {
   try {
     console.log("Initializing MongoDB connection...");
     await connectDB();
-    console.log("MongoDB connected, starting server...");
+    console.log("✅ MongoDB connected, starting server...");
 
-    // Add your routes only after MongoDB is connected
+    // Routes
     app.use("/api/auth", authRoutes);
     app.use("/api/users", userRoutes);
     app.use("/api/trails", trailRoutes);
@@ -73,17 +80,13 @@ app.use(
 
     // Global error handling
     app.use((err, req, res, next) => {
-      console.error(err.message);
+      console.error("Global error:", err.message);
       res.status(500).json({ message: "Server error", error: err.message });
     });
 
-    // Pre-flight OPTIONS handling
-    app.options("*", cors());
-
-    // Start the server
     const PORT = process.env.PORT || 3001;
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}! ✅`);
+      console.log(`🚀 Server is running on port ${PORT}`);
     });
   } catch (error) {
     console.error("Failed to initialize MongoDB connection:", error.message);

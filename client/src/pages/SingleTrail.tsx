@@ -104,7 +104,10 @@ const SingleTrail = () => {
   const fetchTrail = useCallback(async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/trails/${id}`
+        `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
+        {
+          credentials: "include",
+        }
       );
       if (!response.ok) throw new Error("Trail not found");
       const data = await response.json();
@@ -126,6 +129,7 @@ const SingleTrail = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ name: newPackingListItem, isFood }),
         }
       );
@@ -153,6 +157,7 @@ const SingleTrail = () => {
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ isFood }),
         }
       );
@@ -181,6 +186,7 @@ const SingleTrail = () => {
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ isFood, isChecked }),
         }
       );
@@ -209,6 +215,7 @@ const SingleTrail = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ text: newComment }),
         }
       );
@@ -244,6 +251,7 @@ const SingleTrail = () => {
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ text: newText }),
         }
       );
@@ -270,6 +278,7 @@ const SingleTrail = () => {
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         }
       );
 
