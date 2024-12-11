@@ -18,7 +18,8 @@ export const createTrail = async (req, res) => {
     packingList,
   } = req.body;
 
-  const placeholderImage = "http://localhost:5173/assets/trailPlaceholder.webp";
+  const placeholderImage =
+    "https://hikewise-backend.vercel.app/assets/trailPlaceholder.webp";
 
   try {
     const weatherResponse = await axios.get(

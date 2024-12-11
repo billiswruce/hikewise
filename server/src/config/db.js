@@ -23,8 +23,6 @@ const connectDB = async () => {
       family: 4,
       retryWrites: true,
       w: "majority",
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     };
 
     cachedConnection.promise = mongoose.connect(process.env.MONGO_URI, opts);
