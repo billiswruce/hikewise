@@ -23,7 +23,7 @@ const ownedGearSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "AuthUser",
       required: true,
     },
     items: [
@@ -32,19 +32,18 @@ const ownedGearSchema = new mongoose.Schema(
         quantity: { type: Number, required: true, min: 1 },
         categories: {
           type: [String],
-          enum: categories,
           required: true,
-          validate: [(v) => v.length <= 3, "Maximum 3 categories allowed"],
+          validate: [(v) => v.length > 0, "At least one category required"],
         },
-        type: { type: String, enum: ["Gear", "Food"], required: true },
+        type: { type: String, enum: ["Gear"], required: true },
         packed: { type: Boolean, default: false },
         condition: {
           type: String,
           enum: ["Good", "Okay", "Poor"],
           default: "Good",
         },
-        needsToBuy: { type: Boolean, default: false },
-        needsRenewal: { type: Boolean, default: false },
+        brand: { type: String },
+        color: { type: String },
       },
     ],
   },

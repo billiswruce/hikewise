@@ -1,12 +1,10 @@
 import User from "../models/User.js";
-// import { generateUniqueUsername } from "../utils/userUtils.js";
 
+// Funktion för att logga in eller skapa en ny användare
 export const login = async (req, res) => {
   const { auth0Id, email, name } = req.body;
 
-  // Loggar inkommande data
   console.log("Inkommande data från frontend:", { auth0Id, email, name });
-  console.log("Request body:", req.body);
 
   try {
     // Kontrollera att auth0Id finns
@@ -19,7 +17,7 @@ export const login = async (req, res) => {
     let user = await User.findOne({ auth0Id });
 
     if (user) {
-      // Uppdatera email om den skickas från frontend
+      // Befintlig användare hittad, uppdatera email om den finns
       console.log("Befintlig användare hittad:", user);
       user.email = email || user.email;
       await user.save();
@@ -27,34 +25,44 @@ export const login = async (req, res) => {
       req.session.userId = user._id;
       console.log("Session userId satt till:", req.session.userId);
 
-      await req.session.save(); // Spara sessionen explicit
-      return res.status(200).json({
-        message: "Användare inloggad!",
-        user,
+      return req.session.save((err) => {
+        if (err) {
+          console.error("Fel vid session.save():", err);
+          return res.status(500).json({ message: "Failed to save session" });
+        }
+        res.status(200).json({
+          message: "Användare inloggad!",
+          user,
+        });
+      });
+    } else {
+      // Skapa ny användare om ingen befintlig hittas
+      console.log("Ingen användare hittades, skapar ny användare...");
+      const uniqueUsername = name || `user_${Date.now()}`;
+      user = await User.create({
+        auth0Id,
+        email: email || "",
+        username: uniqueUsername,
+        favoriteTrails: [],
+        ownedGear: [],
+      });
+
+      req.session.userId = user._id;
+      console.log("Ny användare skapad:", user);
+
+      return req.session.save((err) => {
+        if (err) {
+          console.error("Fel vid session.save():", err);
+          return res.status(500).json({ message: "Failed to save session" });
+        }
+        res.status(200).json({
+          message: "Ny användare skapad och inloggad!",
+          user,
+        });
       });
     }
-
-    // Skapa ny användare om ingen befintlig hittas
-    const uniqueUsername = await generateUniqueUsername(name || "user");
-    user = await User.create({
-      auth0Id,
-      email: email || "",
-      username: uniqueUsername,
-      favoriteTrails: [], // Initiera favoritlista som tom array
-    });
-
-    req.session.userId = user._id;
-    console.log("Ny användare skapad:", user);
-    console.log("Session userId satt till:", req.session.userId);
-
-    await req.session.save(); // Spara sessionen explicit
-
-    res.status(200).json({
-      message: "Ny användare skapad och inloggad!",
-      user,
-    });
   } catch (error) {
-    console.error("Detaljerat fel vid inloggning:", error.message);
+    console.error("Fel vid inloggning:", error.message);
     res.status(500).json({
       message: "Fel vid inloggning",
       error: error.message,
@@ -62,6 +70,7 @@ export const login = async (req, res) => {
   }
 };
 
+// Funktion för att hämta nuvarande användare
 export const getMe = async (req, res) => {
   console.log("Kontrollerar aktiv session...");
 
@@ -81,6 +90,7 @@ export const getMe = async (req, res) => {
       );
       return res.status(404).json({ message: "Användare hittades inte" });
     }
+
     console.log("Användare hämtad från databasen:", user);
     res.status(200).json(user);
   } catch (error) {
@@ -89,6 +99,7 @@ export const getMe = async (req, res) => {
   }
 };
 
+// Funktion för att logga ut användaren
 export const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
