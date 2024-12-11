@@ -4,43 +4,54 @@ import User from "../models/User.js";
 export const login = async (req, res) => {
   const { auth0Id, email, name } = req.body;
 
+  // Loggar inkommande data
   console.log("Inkommande data från frontend:", { auth0Id, email, name });
   console.log("Request body:", req.body);
 
   try {
+    // Kontrollera att auth0Id finns
     if (!auth0Id) {
       console.warn("auth0Id saknas i request body!");
       return res.status(400).json({ message: "auth0Id är obligatoriskt" });
     }
 
-    let existingUser = await User.findOne({ auth0Id });
+    // Hämta befintlig användare
+    let user = await User.findOne({ auth0Id });
 
-    if (existingUser) {
-      existingUser.email = email || existingUser.email;
-      await existingUser.save();
+    if (user) {
+      // Uppdatera email om den skickas från frontend
+      console.log("Befintlig användare hittad:", user);
+      user.email = email || user.email;
+      await user.save();
 
-      req.session.userId = existingUser._id;
+      req.session.userId = user._id;
       console.log("Session userId satt till:", req.session.userId);
+
+      await req.session.save(); // Spara sessionen explicit
       return res.status(200).json({
         message: "Användare inloggad!",
-        user: existingUser,
+        user,
       });
     }
 
-    // Skapa ny användare
+    // Skapa ny användare om ingen befintlig hittas
     const uniqueUsername = await generateUniqueUsername(name || "user");
-    const newUser = await User.create({
+    user = await User.create({
       auth0Id,
       email: email || "",
       username: uniqueUsername,
+      favoriteTrails: [], // Initiera favoritlista som tom array
     });
 
-    req.session.userId = newUser._id; // Flyttad här
-    console.log("Ny användare skapad:", newUser);
+    req.session.userId = user._id;
+    console.log("Ny användare skapad:", user);
     console.log("Session userId satt till:", req.session.userId);
+
+    await req.session.save(); // Spara sessionen explicit
+
     res.status(200).json({
       message: "Ny användare skapad och inloggad!",
-      user: newUser,
+      user,
     });
   } catch (error) {
     console.error("Detaljerat fel vid inloggning:", error.message);

@@ -60,43 +60,35 @@ export const FavoriteProvider = ({
     loadFavorites();
   }, [isAuthenticated, getAccessTokenSilently]);
 
+  // In FavoriteContext.tsx
   const toggleFavorite = async (trailId: string) => {
     if (!isAuthenticated) {
-      console.log("Användaren måste vara inloggad för att hantera favoriter");
+      console.log("User must be logged in to manage favorites");
       return;
     }
 
     try {
-      const token = await getAccessTokenSilently();
-      console.log("Försöker toggla favorit för trail:", trailId);
-
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/favorites/toggle/${trailId}`,
         {
           method: "POST",
           credentials: "include",
           headers: {
-            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
       );
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Server response:", errorText);
-        throw new Error("Kunde inte uppdatera favoritstatus");
+        const errorData = await response.json();
+        console.error("Server error:", errorData);
+        throw new Error(errorData.message);
       }
 
-      const result = await response.json();
-      console.log("Toggle resultat:", result);
-
-      // Uppdatera lokala favoriter baserat på serverns svar
-      if (result.favorites) {
-        setFavorites(new Set(result.favorites));
-      }
-    } catch (err) {
-      console.error("Fel vid uppdatering av favorit:", err);
+      const data = await response.json();
+      setFavorites(new Set(data.favorites));
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
     }
   };
 
