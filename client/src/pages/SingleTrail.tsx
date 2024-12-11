@@ -103,7 +103,12 @@ const SingleTrail = () => {
 
   const fetchTrail = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/trails/${id}`);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
+        {
+          credentials: "include",
+        }
+      );
       if (!response.ok) throw new Error("Trail not found");
       const data = await response.json();
       setTrail(data);
@@ -120,10 +125,11 @@ const SingleTrail = () => {
     setIsAdding(true);
     try {
       const response = await fetch(
-        `http://localhost:3001/api/trails/${id}/packing-list`,
+        `${import.meta.env.VITE_API_URL}/api/trails/${id}/packing-list`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ name: newPackingListItem, isFood }),
         }
       );
@@ -145,10 +151,13 @@ const SingleTrail = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/api/trails/${id}/packing-list/${itemId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/trails/${id}/packing-list/${itemId}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ isFood }),
         }
       );
@@ -171,10 +180,13 @@ const SingleTrail = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/api/trails/${id}/packing-list/${itemId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/trails/${id}/packing-list/${itemId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ isFood, isChecked }),
         }
       );
@@ -199,10 +211,11 @@ const SingleTrail = () => {
       console.log("Trail ID:", id);
 
       const response = await fetch(
-        `http://localhost:3001/api/trails/${id}/comments`,
+        `${import.meta.env.VITE_API_URL}/api/trails/${id}/comments`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ text: newComment }),
         }
       );
@@ -232,10 +245,13 @@ const SingleTrail = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/api/trails/${id}/comments/${commentId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/trails/${id}/comments/${commentId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ text: newText }),
         }
       );
@@ -256,10 +272,13 @@ const SingleTrail = () => {
   const deleteComment = async (commentId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/trails/${id}/comments/${commentId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/trails/${id}/comments/${commentId}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
         }
       );
 

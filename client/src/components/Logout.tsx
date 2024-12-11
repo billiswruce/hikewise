@@ -1,17 +1,26 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/Buttons.module.scss";
+import { useEffect } from "react";
+
 const Logout = () => {
-  const { logout } = useAuth0();
+  const { logout, isAuthenticated  } = useAuth0();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    console.log("isAuthenticated:", isAuthenticated);
+  }, [isAuthenticated]);
 
   const handleLogout = async () => {
     try {
       console.log("Attempting to log out from backend...");
-      const response = await fetch("http://localhost:3001/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         console.log("Backend session successfully ended");

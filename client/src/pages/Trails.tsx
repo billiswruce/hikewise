@@ -20,8 +20,20 @@ const Trails = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:3001/api/trails/user/${user.sub}`
+          `${import.meta.env.VITE_API_URL}/api/trails/user/${user.sub}`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
+
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
         setTrails(data);
       } catch (error) {

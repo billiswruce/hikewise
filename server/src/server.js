@@ -1,29 +1,48 @@
-import "module-alias/register.js";
 import express from "express";
 import dotenv from "dotenv";
-import "colors";
 import cors from "cors";
-import connectDB from "./config/db.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-import ownedGearRoutes from "./routes/ownedGearRoutes.js";
-import trailRoutes from "./routes/trailRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import PackingList from "./routes/packingListRoutes.js";
+import trailRoutes from "./routes/trailRoutes.js";
+import ownedGearRoutes from "./routes/ownedGearRoutes.js";
+import packingListRoutes from "./routes/packingListRoutes.js";
 import weatherRoutes from "./routes/weatherRoutes.js";
 import mapsRoutes from "./routes/mapsRoutes.js";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
-connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
-// Configure session middleware
+// Middleware för att logga cookies
+app.use(cookieParser());
+app.use((req, res, next) => {
+  console.log("Cookies:", req.cookies);
+  next();
+});
+
+// CORS-konfiguration
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://hikewise.vercel.app",
+      "https://hikewise-backend.vercel.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    credentials: true,
+  })
+);
+
+// Session-konfiguration
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "your_secret_key",
+    secret: process.env.SESSION_SECRET || "default_secret_key",
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -31,37 +50,46 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
+      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
 
-app.use(express.json());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true,
-  })
-);
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
+(async () => {
+  try {
+    console.log("Initializing MongoDB connection...");
+    await connectDB();
+    console.log("✅ MongoDB connected, starting server...");
 
-// Add your existing routes
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/trails", trailRoutes);
-app.use("/api/owned-gear", ownedGearRoutes);
-app.use("/api/packing-list", PackingList);
-app.use("/api/weather", weatherRoutes);
-app.use("/api/maps", mapsRoutes);
+    // Routes
+    app.use("/api/auth", authRoutes);
+    app.use("/api/users", userRoutes);
+    app.use("/api/trails", trailRoutes);
+    app.use("/api/owned-gear", ownedGearRoutes);
+    app.use("/api/packing-list", packingListRoutes);
+    app.use("/api/weather", weatherRoutes);
+    app.use("/api/maps", mapsRoutes);
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: err.message });
-});
+    // Test-Route
+    app.get("/api/hello", (req, res) => {
+      res.json({ message: "Hello from the backend!" });
+    });
 
-app.listen(PORT, () =>
-  console.log(`Server is running on http://localhost:${PORT}`.rainbow.bold)
-);
+    // Global error handling
+    app.use((err, req, res, next) => {
+      console.error("Global error:", err.message);
+      res.status(500).json({ message: "Server error", error: err.message });
+    });
+
+    const PORT = process.env.PORT || 3001;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to initialize MongoDB connection:", error.message);
+    process.exit(1);
+  }
+})();

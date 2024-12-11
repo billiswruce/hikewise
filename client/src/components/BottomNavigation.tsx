@@ -5,7 +5,7 @@ import trailsIcon from "../assets/box-archive-solid.svg";
 import mapIcon from "../assets/map-regular.svg";
 import gearIcon from "../assets/box-archive-solid.svg";
 import accountIcon from "../assets/person-hiking-solid.svg";
-import styles from "../styles/bottomNavigation.module.scss";
+import styles from "../styles/BottomNavigation.module.scss";
 
 const BottomNavigation: React.FC = () => {
   const { t } = useTranslation();

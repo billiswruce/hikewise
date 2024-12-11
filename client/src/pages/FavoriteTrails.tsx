@@ -28,7 +28,7 @@ const FavoriteTrails = () => {
     const fetchFavoriteTrails = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3001/api/users/me/favorites",
+          `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
           {
             credentials: "include",
           }

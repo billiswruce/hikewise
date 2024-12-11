@@ -1,4 +1,4 @@
-import OwnedGear from "../models/ownedGear.js";
+import OwnedGear from "../models/OwnedGear.js";
 
 export const getOwnedGear = async (req, res) => {
   try {
