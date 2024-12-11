@@ -13,20 +13,23 @@ const Login = () => {
     const loginToBackend = async () => {
       if (!isAuthenticated || !user) return;
       console.log("Auth0 User data:", user);
-      console.log("Inloggningsförsök till backend");
+      console.log("Inlogg till backend");
       try {
-        const response = await fetch("http://localhost:3001/api/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            auth0Id: user.sub,
-            email: user.email,
-            name: user.name,
-          }),
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/auth/login`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+              auth0Id: user.sub,
+              email: user.email,
+              name: user.name,
+            }),
+          }
+        );
         if (response.ok) {
           const data = await response.json();
           console.log("Användare sparad på backend:", data);

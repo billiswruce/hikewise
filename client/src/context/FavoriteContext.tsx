@@ -20,7 +20,7 @@ export const FavoriteProvider = ({
       try {
         const yourAuthToken = localStorage.getItem("authToken");
         const response = await fetch(
-          "http://localhost:3001/api/users/me/favorites",
+          `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
           {
             method: "GET",
             credentials: "include",
@@ -47,7 +47,7 @@ export const FavoriteProvider = ({
   const toggleFavorite = async (trailId: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/api/users/favorites/toggle/${trailId}`,
+        `${import.meta.env.VITE_API_URL}/api/users/favorites/toggle/${trailId}`,
         {
           method: "POST",
           credentials: "include",

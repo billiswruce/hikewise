@@ -8,10 +8,13 @@ const Logout = () => {
   const handleLogout = async () => {
     try {
       console.log("Attempting to log out from backend...");
-      const response = await fetch("http://localhost:3001/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/logout`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         console.log("Backend session successfully ended");

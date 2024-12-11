@@ -91,19 +91,22 @@ const CreateTrail = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/trails", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          packingList: formData.packingList,
-          creatorId: user?.sub,
-          formattedHikeDate: formatDate(formData.hikeDate),
-          formattedHikeEndDate: formatDate(formData.hikeEndDate),
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/trails`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+            packingList: formData.packingList,
+            creatorId: user?.sub,
+            formattedHikeDate: formatDate(formData.hikeDate),
+            formattedHikeEndDate: formatDate(formData.hikeEndDate),
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();

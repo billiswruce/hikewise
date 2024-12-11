@@ -20,7 +20,7 @@ const Trails = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:3001/api/trails/user/${user.sub}`
+          `${import.meta.env.VITE_API_URL}/api/trails/user/${user.sub}`
         );
         const data = await response.json();
         setTrails(data);
