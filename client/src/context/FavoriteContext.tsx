@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const FavoriteContext = createContext<{
   favorites: Set<string>;
@@ -13,19 +14,22 @@ export const FavoriteProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const loadFavorites = async () => {
+      if (!isAuthenticated) return;
+
       try {
-        const yourAuthToken = localStorage.getItem("authToken");
+        const token = await getAccessTokenSilently();
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
           {
             method: "GET",
             credentials: "include",
             headers: {
-              Authorization: `Bearer ${yourAuthToken}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -42,15 +46,19 @@ export const FavoriteProvider = ({
     };
 
     loadFavorites();
-  }, []);
+  }, [isAuthenticated, getAccessTokenSilently]);
 
   const toggleFavorite = async (trailId: string) => {
     try {
+      const token = await getAccessTokenSilently();
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/favorites/toggle/${trailId}`,
         {
           method: "POST",
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 

@@ -7,9 +7,7 @@ export const App = () => {
   const [apiData, setApiData] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(
-      "https://hikewise-backend-lu3c9nfbe-jessicatell-hotmailcoms-projects.vercel.app/api/hello"
-    )
+    fetch(`${import.meta.env.VITE_API_URL}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched data:", data);

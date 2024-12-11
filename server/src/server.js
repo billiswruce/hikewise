@@ -24,12 +24,14 @@ app.use(
       "https://hikewise.vercel.app",
       "https://hikewise-backend.vercel.app",
       "https://hikewise-backend-lu3c9nfbe-jessicatell-hotmailcoms-projects.vercel.app",
+      "https://hikewise-billiswruce-jessicatell-hotmailcoms-projects.vercel.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "default_secret_key",
@@ -85,6 +87,6 @@ app.use(
     });
   } catch (error) {
     console.error("Failed to initialize MongoDB connection:", error.message);
-    process.exit(1); // Stop the process if MongoDB fails to connect
+    process.exit(1);
   }
 })();

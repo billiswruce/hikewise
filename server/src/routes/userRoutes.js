@@ -5,12 +5,13 @@ import {
   toggleFavorite,
   addGear,
 } from "../controllers/userController.js";
+import { isAuthenticated } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/:userId", getUserDetails);
-router.get("/me/favorites", getUserFavorites);
-router.post("/favorites/toggle/:trailId", toggleFavorite);
-router.post("/:userId/gear", addGear);
+router.get("/:userId", isAuthenticated, getUserDetails);
+router.get("/me/favorites", isAuthenticated, getUserFavorites);
+router.post("/favorites/toggle/:trailId", isAuthenticated, toggleFavorite);
+router.post("/:userId/gear", isAuthenticated, addGear);
 
 export default router;
