@@ -25,28 +25,41 @@ export const getOwnedGear = async (req, res) => {
 };
 
 export const addGearItem = async (req, res) => {
-  const { name, quantity, type, condition, categories } = req.body;
-  const userId = req.user.id;
-
   try {
+    const userId = req.user?.id;
+    console.log("Received userId:", userId); // Logga userId
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const { name, quantity, condition, categories, brand, color } = req.body;
+    console.log("Received item data:", req.body); // Logga inkommande data
+
     let ownedGear = await OwnedGear.findOne({ userId });
     if (!ownedGear) {
+      console.log("Creating new OwnedGear document for userId:", userId);
       ownedGear = new OwnedGear({ userId, items: [] });
     }
+
     ownedGear.items.push({
       name,
       quantity,
-      type,
+      type: "Gear",
       condition,
       categories,
       packed: false,
+      brand,
+      color,
     });
 
+    console.log("OwnedGear before save:", ownedGear); // Före .save()
     await ownedGear.save();
+    console.log("OwnedGear after save:", ownedGear); // Efter .save()
 
-    res.status(201).json({ message: "Gear item added successfully" });
+    res.status(201).json({
+      message: "Gear item added successfully",
+      item: ownedGear.items[ownedGear.items.length - 1],
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Error in addGearItem:", error);
     res.status(500).json({ message: "Error adding gear item" });
   }
 };
@@ -107,5 +120,43 @@ export const deleteGearItem = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error deleting gear item" });
+  }
+};
+
+export const getGearByType = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      console.error("No user ID found in request");
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { type } = req.query;
+    if (!type) {
+      console.error("No type provided in query");
+      return res.status(400).json({ message: "Type parameter is required" });
+    }
+
+    console.log(`Fetching gear for user ${userId} with type ${type}`);
+
+    const ownedGear = await OwnedGear.findOne({ userId });
+    console.log("Found owned gear:", ownedGear);
+
+    if (!ownedGear) {
+      return res.status(200).json([]);
+    }
+
+    const filteredItems = ownedGear.items.filter((item) =>
+      item.categories.includes(type)
+    );
+    console.log("Filtered items:", filteredItems);
+
+    res.status(200).json(filteredItems);
+  } catch (error) {
+    console.error("Error in getGearByType:", error);
+    res.status(500).json({
+      message: "Error fetching filtered gear items.",
+      error: error.message,
+    });
   }
 };

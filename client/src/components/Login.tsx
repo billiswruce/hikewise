@@ -30,6 +30,7 @@ const Login = () => {
             }),
           }
         );
+
         if (response.ok) {
           const data = await response.json();
           console.log("Användare sparad på backend:", data);
