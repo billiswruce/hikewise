@@ -1,23 +1,19 @@
 import User from "../models/User.js";
 
-// Funktion för att logga in eller skapa en ny användare
 export const login = async (req, res) => {
   const { auth0Id, email, name } = req.body;
 
   console.log("Inkommande data från frontend:", { auth0Id, email, name });
 
   try {
-    // Kontrollera att auth0Id finns
     if (!auth0Id) {
       console.warn("auth0Id saknas i request body!");
       return res.status(400).json({ message: "auth0Id är obligatoriskt" });
     }
 
-    // Hämta befintlig användare
     let user = await User.findOne({ auth0Id });
 
     if (user) {
-      // Befintlig användare hittad, uppdatera email om den finns
       console.log("Befintlig användare hittad:", user);
       user.email = email || user.email;
       await user.save();
@@ -36,7 +32,6 @@ export const login = async (req, res) => {
         });
       });
     } else {
-      // Skapa ny användare om ingen befintlig hittas
       console.log("Ingen användare hittades, skapar ny användare...");
       const uniqueUsername = name || `user_${Date.now()}`;
       user = await User.create({
@@ -70,7 +65,6 @@ export const login = async (req, res) => {
   }
 };
 
-// Funktion för att hämta nuvarande användare
 export const getMe = async (req, res) => {
   console.log("Kontrollerar aktiv session...");
 
@@ -99,7 +93,6 @@ export const getMe = async (req, res) => {
   }
 };
 
-// Funktion för att logga ut användaren
 export const logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {

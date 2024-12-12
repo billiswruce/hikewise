@@ -18,15 +18,12 @@ dotenv.config();
 const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
-
-// Middleware för att logga cookies
 app.use(cookieParser());
 app.use((req, res, next) => {
   console.log("Cookies:", req.cookies);
   next();
 });
 
-// CORS-konfiguration
 app.use(
   cors({
     origin: [
@@ -40,25 +37,26 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+let sessionArguments = {
+  secret: process.env.SESSION_SECRET || "default_secret_key",
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: "sessions",
+  }),
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 24 * 60 * 60 * 1000,
+  },
+};
+console.log(sessionArguments);
+app.set("trust proxy", true);
+app.use(session(sessionArguments));
 
-// Session-konfiguration
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "default_secret_key",
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGO_URI,
-      collectionName: "sessions",
-    }),
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 24 * 60 * 60 * 1000,
-    },
-  })
-);
+// {"cookie":{"originalMaxAge":86400000,"expires":"2024-12-12T17:33:33.894Z","secure":true,"httpOnly":true,"path":"/","sameSite":"none"},"userId":"674894ed2a1c2f11727b05ef"}
 
 // const __dirname = path.resolve();
 // app.use(express.static(path.join(__dirname, "public")));
@@ -68,8 +66,6 @@ app.use(
     console.log("Initializing MongoDB connection...");
     await connectDB();
     console.log("✅ MongoDB connected, starting server...");
-
-    // Routes
     app.use("/api/auth", authRoutes);
     app.use("/api/users", userRoutes);
     app.use("/api/trails", trailRoutes);
@@ -77,13 +73,9 @@ app.use(
     app.use("/api/packing-list", packingListRoutes);
     app.use("/api/weather", weatherRoutes);
     app.use("/api/maps", mapsRoutes);
-
-    // Test-Route
     app.get("/api/hello", (req, res) => {
       res.json({ message: "Hello from the backend!" });
     });
-
-    // Global error handling
     app.use((err, req, res, next) => {
       console.error("Global error:", err.message);
       res.status(500).json({ message: "Server error", error: err.message });
