@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import LoadingScreen from "../components/LoadingScreen"; // Anpassa sökvägen för din loading-skärm
 
 const FavoriteContext = createContext<{
   favorites: Set<string>;
@@ -26,6 +27,7 @@ export const FavoriteProvider = ({
       return;
     }
 
+    setIsLoading(true); // Aktivera loading state
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
@@ -45,6 +47,8 @@ export const FavoriteProvider = ({
       }
     } catch (err) {
       console.error("Error fetching favorites:", err);
+    } finally {
+      setIsLoading(false); // Stäng av loading state
     }
   }, [isAuthenticated]);
 
@@ -92,6 +96,7 @@ export const FavoriteProvider = ({
 
   return (
     <FavoriteContext.Provider value={{ favorites, toggleFavorite, isLoading }}>
+      {isLoading && <LoadingScreen />}
       {children}
     </FavoriteContext.Provider>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import LoadingScreen from "../components/LoadingScreen";
 
 interface GearItem {
   _id?: string;
@@ -53,8 +54,11 @@ export const Gear = () => {
     categories: [] as string[],
   });
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // Hämta gear
   const fetchGear = async () => {
+    setIsLoading(true);
     try {
       const queryParams = new URLSearchParams({
         type,
@@ -71,6 +75,8 @@ export const Gear = () => {
       setGearItems(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching gear:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,97 +118,102 @@ export const Gear = () => {
   };
 
   return (
-    <div>
-      <h1>{t("gear")}</h1>
-
-      {/* Typval */}
+    <>
+      {isLoading && <LoadingScreen />}
       <div>
-        <button onClick={() => setType("Clothing")}>{t("clothing")}</button>
-        <button onClick={() => setType("Equipment")}>{t("equipment")}</button>
+        <h1>{t("gear")}</h1>
+
+        {/* Typval */}
+        <div>
+          <button onClick={() => setType("Clothing")}>{t("clothing")}</button>
+          <button onClick={() => setType("Equipment")}>{t("equipment")}</button>
+        </div>
+
+        {/* Dropdown för kategori */}
+        <select
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}>
+          <option value="">{t("allCategories")}</option>
+          {CATEGORIES[type].map((category) => (
+            <option key={category} value={category}>
+              {t(category.toLowerCase())}
+            </option>
+          ))}
+        </select>
+
+        {/* Lista över gear */}
+        <ul>
+          {gearItems.map((item) => (
+            <li key={item._id}>
+              {item.name} - {item.quantity} - {item.condition}{" "}
+              {item.brand && `(${t("brand")}: ${item.brand})`}{" "}
+              {item.color && `(${t("color")}: ${item.color})`}
+              <input type="checkbox" checked={item.packed} readOnly />
+            </li>
+          ))}
+        </ul>
+
+        {/* Formulär för ny gear */}
+        <h2>{t("addGear")}</h2>
+        <input
+          type="text"
+          placeholder={t("name")}
+          value={newItem.name}
+          onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+        />
+        <input
+          type="number"
+          min="1"
+          placeholder={t("quantity")}
+          value={newItem.quantity}
+          onChange={(e) =>
+            setNewItem({ ...newItem, quantity: Number(e.target.value) })
+          }
+        />
+        <input
+          type="text"
+          placeholder={t("brand")}
+          value={newItem.brand}
+          onChange={(e) => setNewItem({ ...newItem, brand: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder={t("color")}
+          value={newItem.color}
+          onChange={(e) => setNewItem({ ...newItem, color: e.target.value })}
+        />
+        <select
+          value={newItem.condition}
+          onChange={(e) =>
+            setNewItem({ ...newItem, condition: e.target.value })
+          }>
+          <option value="Good">{t("good")}</option>
+          <option value="Fair">{t("fair")}</option>
+          <option value="Poor">{t("poor")}</option>
+        </select>
+        <div>
+          <h4>{t("selectCategories")}</h4>
+          {CATEGORIES[type].map((category) => (
+            <label key={category}>
+              <input
+                type="checkbox"
+                checked={newItem.categories.includes(category)}
+                onChange={() =>
+                  setNewItem((prev) => ({
+                    ...prev,
+                    categories: prev.categories.includes(category)
+                      ? prev.categories.filter((c) => c !== category)
+                      : [...prev.categories, category],
+                  }))
+                }
+              />
+              {t(category.toLowerCase())}
+            </label>
+          ))}
+        </div>
+        <button onClick={addGearItem}>{t("add")}</button>
       </div>
-
-      {/* Dropdown för kategori */}
-      <select
-        value={selectedCategory}
-        onChange={(e) => setSelectedCategory(e.target.value)}>
-        <option value="">{t("allCategories")}</option>
-        {CATEGORIES[type].map((category) => (
-          <option key={category} value={category}>
-            {t(category.toLowerCase())}
-          </option>
-        ))}
-      </select>
-
-      {/* Lista över gear */}
-      <ul>
-        {gearItems.map((item) => (
-          <li key={item._id}>
-            {item.name} - {item.quantity} - {item.condition}{" "}
-            {item.brand && `(${t("brand")}: ${item.brand})`}{" "}
-            {item.color && `(${t("color")}: ${item.color})`}
-            <input type="checkbox" checked={item.packed} readOnly />
-          </li>
-        ))}
-      </ul>
-
-      {/* Formulär för ny gear */}
-      <h2>{t("addGear")}</h2>
-      <input
-        type="text"
-        placeholder={t("name")}
-        value={newItem.name}
-        onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-      />
-      <input
-        type="number"
-        min="1"
-        placeholder={t("quantity")}
-        value={newItem.quantity}
-        onChange={(e) =>
-          setNewItem({ ...newItem, quantity: Number(e.target.value) })
-        }
-      />
-      <input
-        type="text"
-        placeholder={t("brand")}
-        value={newItem.brand}
-        onChange={(e) => setNewItem({ ...newItem, brand: e.target.value })}
-      />
-      <input
-        type="text"
-        placeholder={t("color")}
-        value={newItem.color}
-        onChange={(e) => setNewItem({ ...newItem, color: e.target.value })}
-      />
-      <select
-        value={newItem.condition}
-        onChange={(e) => setNewItem({ ...newItem, condition: e.target.value })}>
-        <option value="Good">{t("good")}</option>
-        <option value="Fair">{t("fair")}</option>
-        <option value="Poor">{t("poor")}</option>
-      </select>
-      <div>
-        <h4>{t("selectCategories")}</h4>
-        {CATEGORIES[type].map((category) => (
-          <label key={category}>
-            <input
-              type="checkbox"
-              checked={newItem.categories.includes(category)}
-              onChange={() =>
-                setNewItem((prev) => ({
-                  ...prev,
-                  categories: prev.categories.includes(category)
-                    ? prev.categories.filter((c) => c !== category)
-                    : [...prev.categories, category],
-                }))
-              }
-            />
-            {t(category.toLowerCase())}
-          </label>
-        ))}
-      </div>
-      <button onClick={addGearItem}>{t("add")}</button>
-    </div>
+    </>
   );
 };
 

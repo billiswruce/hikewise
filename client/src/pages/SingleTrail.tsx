@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import TrailPlaceholder from "../assets/trailPlaceholder.webp";
+import LoadingScreen from "../components/LoadingScreen";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSun,
@@ -102,6 +103,7 @@ const SingleTrail = () => {
   };
 
   const fetchTrail = useCallback(async () => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
@@ -295,7 +297,7 @@ const SingleTrail = () => {
     fetchTrail();
   }, [fetchTrail]);
 
-  if (loading) return <div>{t("loading")}</div>;
+  if (loading) return <LoadingScreen />;
   if (!trail) return <div>{t("notFound")}</div>;
 
   const weatherInfo = getWeatherIcon(trail.weather.description);
