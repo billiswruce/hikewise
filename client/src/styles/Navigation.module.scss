@@ -8,7 +8,10 @@
     flex-direction: row;
     gap: 1.5rem;
     align-items: center;
-    padding: 0.5rem 3rem !important;
+    padding: 0.5rem 3rem;
+    background-color: var(--color-white);
+    z-index: 1000;
+    transition: transform 0.3s ease;
   }
 }
 
