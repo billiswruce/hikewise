@@ -18,7 +18,7 @@ export const createTrail = async (req, res) => {
     packingList,
   } = req.body;
 
-  // const placeholderImage = "/trailPlaceholder.webp";
+  const placeholderImage = "/trailPlaceholder.webp";
 
   try {
     const weatherResponse = await axios.get(
@@ -61,7 +61,7 @@ export const createTrail = async (req, res) => {
     const savedTrail = await newTrail.save();
     res.status(201).json(savedTrail);
   } catch (error) {
-    console.error(error.message);
+    console.error("Error creating trail:", error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -220,12 +220,10 @@ export const deleteComment = async (req, res) => {
       return res.status(404).json({ message: "Trail not found" });
     }
 
-    const comment = trail.comments.id(commentId);
-    if (!comment) {
-      return res.status(404).json({ message: "Comment not found" });
-    }
+    trail.comments = trail.comments.filter(
+      (comment) => comment._id.toString() !== commentId
+    );
 
-    comment.remove();
     const updatedTrail = await trail.save();
     res.status(200).json(updatedTrail);
   } catch (error) {

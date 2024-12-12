@@ -47,6 +47,7 @@
   "searchLocation": "Sök plats",
   "selectedLocation": "Vald plats",
   "createTrailButton": "Skapa led",
+  "trailCreatedSuccessfully": "Led skapad!",
   "resetButton": "Återställ",
   "loading": "Laddar...",
   "markerTooltip": "Klicka på kartan för att välja plats",

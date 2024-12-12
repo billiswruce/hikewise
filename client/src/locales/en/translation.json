@@ -46,6 +46,7 @@
   "searchLocation": "Search for location",
   "selectedLocation": "Selected Location",
   "createTrailButton": "Create Trail",
+  "trailCreatedSuccessfully": "Trail created successfully!",
   "resetButton": "Reset",
   "loading": "Loading...",
   "markerTooltip": "Click on the map to select a location",

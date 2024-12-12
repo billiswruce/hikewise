@@ -7,6 +7,7 @@
   "welcomeUser": "Bienvenue!",
   "auth0Id": "Votre identifiant Auth0 est",
   "createTrail": "Créer sentier",
+  "trailCreatedSuccessfully": "Sentier créé avec succès!",
   "favoriteTrails": "Sentiers favoris",
   "trail": "Sentier",
   "trails": "Sentiers",

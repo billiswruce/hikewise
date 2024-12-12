@@ -46,6 +46,7 @@
     "searchLocation": "Buscar ubicación",
     "selectedLocation": "Ubicación seleccionada",
     "createTrailButton": "Crear sendero",
+    "trailCreatedSuccessfully": "Sendero creado correctamente!",
     "resetButton": "Restablecer",
     "loading": "Cargando...",
     "markerTooltip": "Haz clic en el mapa para seleccionar una ubicación",

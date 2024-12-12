@@ -64,6 +64,7 @@ const SingleTrail = () => {
   const [editingComment, setEditingComment] = useState<string | null>(null);
   const [editedText, setEditedText] = useState("");
   const [validImage, setValidImage] = useState<string>("");
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (trail?.image) {
@@ -244,6 +245,7 @@ const SingleTrail = () => {
     }
 
     try {
+      setIsSaving(true); // Starta sparande
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
@@ -263,9 +265,12 @@ const SingleTrail = () => {
       }
 
       const updatedTrail = await response.json();
-      setTrail(updatedTrail);
+      setTrail(updatedTrail); // Uppdatera trail-data
+      setEditingComment(null); // Stäng redigeringsläget
     } catch (error) {
       console.error("Error updating comment:", error);
+    } finally {
+      setIsSaving(false); // Slutför sparande
     }
   };
 
@@ -277,12 +282,14 @@ const SingleTrail = () => {
         }/api/trails/${id}/comments/${commentId}`,
         {
           method: "DELETE",
-          headers: { "Content-Type": "application/json" },
           credentials: "include",
         }
       );
 
-      if (!response.ok) throw new Error("Failed to delete comment");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to delete comment: ${errorData.message}`);
+      }
 
       const updatedTrail = await response.json();
       setTrail(updatedTrail);
@@ -455,30 +462,42 @@ const SingleTrail = () => {
             {trail.comments.map((comment) => (
               <li key={comment._id} className={styles.commentItem}>
                 {editingComment === comment._id ? (
+                  // Redigeringsläge
                   <div className={styles.commentEdit}>
                     <textarea
-                      defaultValue={comment.text}
+                      value={editedText} // Kopplar värdet till `editedText`
                       onChange={(e) => setEditedText(e.target.value)}
                       className={styles.commentInput}
                     />
                     <div className={styles.commentButtons}>
                       <button
-                        onClick={() => editComment(comment._id, editedText)}>
-                        {t("save")}
+                        onClick={() => editComment(comment._id, editedText)}
+                        disabled={isSaving} // Hindra flera klick under sparning
+                      >
+                        {isSaving ? t("saving...") : t("save")}
                       </button>
-                      <button onClick={() => setEditingComment(null)}>
+                      <button
+                        onClick={() => {
+                          setEditingComment(null); // Avbryt redigering
+                          setEditedText(""); // Rensa redigeringstext
+                        }}>
                         {t("back")}
                       </button>
                     </div>
                   </div>
                 ) : (
+                  // Visningsläge
                   <div className={styles.commentContent}>
                     <p>{comment.text}</p>
                     <small>
                       {new Date(comment.createdAt).toLocaleDateString()}
                     </small>
                     <div className={styles.commentButtons}>
-                      <button onClick={() => setEditingComment(comment._id)}>
+                      <button
+                        onClick={() => {
+                          setEditingComment(comment._id); // Aktivera redigering
+                          setEditedText(comment.text); // Fyll i nuvarande text
+                        }}>
                         {t("edit")}
                       </button>
                       <button onClick={() => deleteComment(comment._id)}>
@@ -490,6 +509,8 @@ const SingleTrail = () => {
               </li>
             ))}
           </ul>
+
+          {/* Lägg till kommentar */}
           <div className={styles.addCommentSection}>
             <textarea
               value={newComment}
@@ -497,8 +518,12 @@ const SingleTrail = () => {
               placeholder={t("addComment")}
               className={styles.commentBox}
             />
-            <button onClick={addComment} className={styles.addCommentButton}>
-              {t("add")}
+            <button
+              onClick={addComment}
+              className={styles.addCommentButton}
+              disabled={isSaving} // Hindra flera klick under sparning
+            >
+              {isSaving ? t("adding...") : t("add")}
             </button>
           </div>
         </div>
