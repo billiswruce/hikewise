@@ -36,6 +36,10 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute element={<Trails />} />,
         children: [
           {
+            index: true,
+            element: <ProtectedRoute element={<Hiking />} />,
+          },
+          {
             path: "hiked",
             element: <ProtectedRoute element={<Hiked />} />,
           },

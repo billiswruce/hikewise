@@ -4,7 +4,7 @@ import Logout from "../components/Logout";
 import { useAuth0 } from "@auth0/auth0-react";
 import styles from "../styles/MyProfile.module.scss";
 import gearPlaceholder from "../assets/gearPlaceholder.jpg";
-import trailPlaceholder from "../assets/trailPlaceholder.jpg";
+import trailPlaceholder from "../assets/trailPlaceholder.webp";
 import favoritesPlaceholder from "../assets/favoritesPlaceholder.jpg";
 import profilePlaceholder from "../assets/profilePlaceholder.png";
 import buttonStyles from "../styles/Buttons.module.scss";

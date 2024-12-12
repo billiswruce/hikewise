@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import TrailPlaceholder from "../assets/trailPlaceholder.jpg";
+import TrailPlaceholder from "../assets/trailPlaceholder.webp";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSun,
