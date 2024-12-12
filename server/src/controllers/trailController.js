@@ -87,6 +87,52 @@ export const getTrail = async (req, res) => {
   }
 };
 
+export const updateTrail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    // Uppdatera väderdata om lat/long har ändrats
+    if (updates.latitude && updates.longitude) {
+      const weatherResponse = await axios.get(
+        `https://api.openweathermap.org/data/2.5/weather`,
+        {
+          params: {
+            lat: updates.latitude,
+            lon: updates.longitude,
+            appid: process.env.OPENWEATHER_API_KEY,
+            units: "metric",
+          },
+        }
+      );
+
+      updates.weather = {
+        temperature: weatherResponse.data.main.temp,
+        description: weatherResponse.data.weather[0].description,
+        icon: weatherResponse.data.weather[0].icon,
+      };
+    }
+
+    const updatedTrail = await Trail.findByIdAndUpdate(
+      id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedTrail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    res.status(200).json(updatedTrail);
+  } catch (error) {
+    console.error("Error updating trail:", error);
+    res.status(500).json({
+      message: "Error updating trail",
+      error: error.message,
+    });
+  }
+};
+
 export const addPackingListItem = async (req, res) => {
   try {
     const { id } = req.params;
