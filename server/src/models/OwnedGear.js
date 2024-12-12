@@ -1,21 +1,40 @@
 import mongoose from "mongoose";
 
 const categories = [
-  "Tent",
-  "Sleeping Bag",
-  "Sleeping Pad",
-  "Cooking",
-  "Food Preparation",
-  "Water Filtration",
-  "Clothing",
-  "Backpack",
-  "Lamp",
-  "Headlamp",
-  "Navigation",
+  // Kläder
+  "Jackets",
+  "Pants",
+  "Base Layers",
+  "Socks",
+  "Rain Gear",
+  "Gloves",
+  "Hats",
   "Shoes",
-  "Camera",
+
+  // Utrustning
+  "Tents",
+  "Sleeping Bags",
+  "Sleeping Pads",
+  "Backpacks",
+  "Cooking Equipment",
+  "Water Filtration",
+  "Navigation",
+  "Lighting",
+
+  // Säkerhet
   "First Aid",
-  "Fishing Gear",
+  "Emergency Equipment",
+  "Communication Devices",
+
+  // Verktyg
+  "Tools",
+  "Repair Kits",
+  "Knives",
+
+  // Övrigt
+  "Electronics",
+  "Camera Equipment",
+  "Hygiene",
   "Miscellaneous",
 ];
 
@@ -33,17 +52,20 @@ const ownedGearSchema = new mongoose.Schema(
         categories: {
           type: [String],
           required: true,
+          enum: categories,
           validate: [(v) => v.length > 0, "At least one category required"],
         },
-        type: { type: String, enum: ["Gear"], required: true },
+        type: { type: String, enum: ["Clothing", "Equipment"], required: true },
         packed: { type: Boolean, default: false },
         condition: {
           type: String,
-          enum: ["Good", "Okay", "Poor"],
+          enum: ["New", "Good", "Fair", "Poor"],
           default: "Good",
         },
         brand: { type: String },
         color: { type: String },
+        weight: { type: Number }, // i gram
+        notes: { type: String },
       },
     ],
   },
