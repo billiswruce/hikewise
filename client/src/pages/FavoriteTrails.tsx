@@ -17,20 +17,20 @@ const FavoriteTrails = () => {
   >("name-asc");
   const { favorites, toggleFavorite } = useFavorites();
   const sortedTrails = useTrailSort(favoriteTrails, sortOption);
-
-  // Optimistisk uppdatering vid toggle
   const handleToggleFavorite = async (trailId: string) => {
+    const confirmRemove = window.confirm(t("confirmRemoveFavorite"));
+
+    if (!confirmRemove) {
+      return;
+    }
+
     try {
-      // Optimistiskt filter: ta bort trail från state
       setFavoriteTrails((prevTrails) =>
         prevTrails.filter((trail) => trail._id !== trailId)
       );
-
-      // Kalla toggleFavorite för att uppdatera backend och global state
       await toggleFavorite(trailId);
     } catch (error) {
       console.error("Error toggling favorite:", error);
-      // Återställ om det misslyckas
       fetchFavoriteTrails();
     }
   };
@@ -105,7 +105,7 @@ const FavoriteTrails = () => {
                 favorites.has(trail._id) ? styles.active : ""
               }`}
               onClick={(e) => {
-                e.stopPropagation(); // Förhindra klick på kortet
+                e.stopPropagation();
                 handleToggleFavorite(trail._id);
               }}>
               <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

@@ -33,6 +33,7 @@
   "protectedPageDescription": "Den här sidan är endast tillgänglig för autentiserade användare.",
   "startPlanning": "Börja planera",
   "landingAfterLogin": "Detta är där du landar efter att ha loggat in",
+  "confirmRemoveFavorite": "Är du säker på att du vill ta bort leden från dina favoriter?",
   "trailName": "Ledens namn",
   "length": "Längd (km)",
   "difficulty": "Välj svårighetsgrad",

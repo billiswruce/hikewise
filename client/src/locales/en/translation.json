@@ -32,6 +32,7 @@
   "protectedPageDescription": "This page is only accessible to authenticated users.",
   "startPlanning": "Start Planning",
   "landingAfterLogin": "This is where you land after logging in",
+  "confirmRemoveFavorite": "Are you sure you want to remove favorite?",
   "trailName": "Trail name",
   "length": "Length (km)",
   "difficulty": "Select Difficulty",
