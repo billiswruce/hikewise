@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useAuth0 } from "@auth0/auth0-react";
 import styles from "../styles/Trails.module.scss";
 import { Trail } from "../models/Trail";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Trails = () => {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ const Trails = () => {
     const fetchTrails = async () => {
       if (!user?.sub) return;
 
+      setLoading(true);
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/trails/user/${user.sub}`,
@@ -59,7 +61,7 @@ const Trails = () => {
     }
   }, [location]);
 
-  if (loading) return <div>{t("loading")}</div>;
+  if (loading) return <LoadingScreen />;
 
   const upcomingTrails = trails.filter(
     (trail) => new Date(trail.hikeDate) >= new Date()

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import TrailPlaceholder from "../assets/trailPlaceholder.webp";
+import LoadingScreen from "../components/LoadingScreen";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSun,
@@ -51,6 +52,15 @@ interface Trail {
   };
 }
 
+// Lägg till denna enum för att matcha backend
+enum Difficulty {
+  Simple = "simple",
+  Easy = "easy",
+  Medium = "medium",
+  Hard = "hard",
+  Epic = "epic",
+}
+
 const SingleTrail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -65,6 +75,8 @@ const SingleTrail = () => {
   const [editedText, setEditedText] = useState("");
   const [validImage, setValidImage] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState<Trail | null>(null);
 
   useEffect(() => {
     if (trail?.image) {
@@ -80,6 +92,12 @@ const SingleTrail = () => {
       };
     }
   }, [trail?.image]);
+
+  useEffect(() => {
+    if (trail) {
+      setFormData(trail);
+    }
+  }, [trail]);
 
   const togglePackingList = () => setIsPackingListOpen((prev) => !prev);
 
@@ -103,6 +121,7 @@ const SingleTrail = () => {
   };
 
   const fetchTrail = useCallback(async () => {
+    setLoading(true);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
@@ -298,17 +317,50 @@ const SingleTrail = () => {
     }
   };
 
+  const handleEditChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev!, [name]: value }));
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(formData),
+        }
+      );
+      if (!response.ok) throw new Error("Failed to update trail");
+      const updatedTrail = await response.json();
+      setTrail(updatedTrail);
+      setIsEditing(false);
+      alert(t("trailUpdatedSuccessfully"));
+    } catch (error) {
+      console.error("Error updating trail:", error);
+      alert(t("errorUpdatingTrail"));
+    }
+  };
+
   useEffect(() => {
     fetchTrail();
   }, [fetchTrail]);
 
-  if (loading) return <div>{t("loading")}</div>;
+  if (loading) return <LoadingScreen />;
   if (!trail) return <div>{t("notFound")}</div>;
 
   const weatherInfo = getWeatherIcon(trail.weather.description);
 
   return (
     <div>
+      {/* Hero Image */}
       <div
         className={styles.heroImage}
         style={{
@@ -318,10 +370,22 @@ const SingleTrail = () => {
           backgroundRepeat: "no-repeat",
         }}
       />
-      {/* Innehåll i vit container */}
+
+      {/* Container för all information */}
       <div className={styles.container}>
+        {/* Titel och v��der */}
         <div className={styles.titleWeatherContainer}>
-          <h1>{trail.name}</h1>
+          {isEditing ? (
+            <input
+              type="text"
+              name="name"
+              value={formData?.name || ""}
+              onChange={handleEditChange}
+              className={styles.editInput}
+            />
+          ) : (
+            <h1>{trail.name}</h1>
+          )}
           <div className={styles.weatherInfo}>
             <FontAwesomeIcon
               icon={weatherInfo.icon}
@@ -335,12 +399,121 @@ const SingleTrail = () => {
 
         {/* Grundläggande Information */}
         <div className={styles.infoSection}>
-          <div className={styles.basicInfo}>
-            <p>{trail.length} km</p>
-            <p>{t(trail.difficulty)}</p>
-            <p>{new Date(trail.hikeDate).toLocaleDateString()}</p>
-          </div>
-          <p className={styles.description}>{trail.description}</p>
+          {isEditing ? (
+            <form onSubmit={handleEditSubmit} className={styles.editForm}>
+              <div className={styles.formGroup}>
+                <label>{t("name")}</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData?.name || ""}
+                  onChange={handleEditChange}
+                  className={styles.editInput}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>{t("length")}</label>
+                <input
+                  type="number"
+                  name="length"
+                  value={formData?.length || ""}
+                  onChange={handleEditChange}
+                  className={styles.editInput}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>{t("difficulty")}</label>
+                <select
+                  name="difficulty"
+                  value={formData?.difficulty || ""}
+                  onChange={handleEditChange}
+                  className={styles.editSelect}>
+                  {Object.values(Difficulty).map((diff) => (
+                    <option key={diff} value={diff}>
+                      {t(diff)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>{t("description")}</label>
+                <textarea
+                  name="description"
+                  value={formData?.description || ""}
+                  onChange={handleEditChange}
+                  className={styles.editTextarea}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label>{t("location")}</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData?.location || ""}
+                  onChange={handleEditChange}
+                  className={styles.editInput}
+                />
+              </div>
+
+              <div className={styles.dateGroup}>
+                <div className={styles.formGroup}>
+                  <label>{t("startDate")}</label>
+                  <input
+                    type="date"
+                    name="hikeDate"
+                    value={formData?.hikeDate?.split("T")[0] || ""}
+                    onChange={handleEditChange}
+                    className={styles.editInput}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>{t("endDate")}</label>
+                  <input
+                    type="date"
+                    name="hikeEndDate"
+                    value={formData?.hikeEndDate?.split("T")[0] || ""}
+                    onChange={handleEditChange}
+                    className={styles.editInput}
+                  />
+                </div>
+              </div>
+
+              <div className={styles.editButtons}>
+                <button type="submit" className={styles.saveButton}>
+                  {t("save")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className={styles.cancelButton}>
+                  {t("cancel")}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className={styles.basicInfo}>
+              <p>{trail.length} km</p>
+              <p>{t(trail.difficulty)}</p>
+              <p>
+                {t("location")}: {trail.location}
+              </p>
+              <p>
+                {t("dates")}: {new Date(trail.hikeDate).toLocaleDateString()} -{" "}
+                {new Date(trail.hikeEndDate).toLocaleDateString()}
+              </p>
+              <p className={styles.description}>{trail.description}</p>
+              <button
+                onClick={() => setIsEditing(true)}
+                className={styles.editButton}>
+                {t("edit")}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Packlista */}
@@ -418,7 +591,7 @@ const SingleTrail = () => {
                     </div>
                   </div>
 
-                  {/* Add Item */}
+                  {/* Lägg till item */}
                   <div className={styles.addPackingItem}>
                     <input
                       type="text"

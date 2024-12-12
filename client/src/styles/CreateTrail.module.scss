@@ -205,14 +205,18 @@ label {
   margin-top: 1rem;
   margin-bottom: 6rem;
 }
+.createTrailContainer {
+  position: relative;
+  z-index: 1;
 
-:global(.pac-container) {
-  z-index: 1000;
-  width: 100%;
-  //   position: absolute !important;
-  //   left: 0 !important;
-  //   right: 0 !important;
-  //   width: 100% !important;
+  :global(.pac-container) {
+    z-index: 1000;
+    margin-top: 2px;
+    border-radius: 4px;
+    border: 1px solid var(--color-grey-light);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
 }
 
 .autocompleteWrapper {

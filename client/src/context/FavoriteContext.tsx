@@ -1,12 +1,15 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import LoadingScreen from "../components/LoadingScreen"; // Anpassa sökvägen för din loading-skärm
 
 const FavoriteContext = createContext<{
   favorites: Set<string>;
   toggleFavorite: (trailId: string) => Promise<void>;
+  isLoading: boolean;
 }>({
   favorites: new Set(),
   toggleFavorite: async () => Promise.resolve(),
+  isLoading: false,
 });
 
 export const FavoriteProvider = ({
@@ -14,86 +17,86 @@ export const FavoriteProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const { isAuthenticated } = useAuth0();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [isLoading, setIsLoading] = useState(false);
+
+  const loadFavorites = useCallback(async () => {
+    if (!isAuthenticated) {
+      setFavorites(new Set());
+      return;
+    }
+
+    setIsLoading(true); // Aktivera loading state
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const favoriteTrails = await response.json();
+      if (Array.isArray(favoriteTrails)) {
+        setFavorites(new Set(favoriteTrails.map((trail) => trail._id)));
+      }
+    } catch (err) {
+      console.error("Error fetching favorites:", err);
+    } finally {
+      setIsLoading(false); // Stäng av loading state
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    const loadFavorites = async () => {
-      if (!isAuthenticated) {
-        setFavorites(new Set());
-        return;
-      }
-
-      try {
-        // const token = await getAccessTokenSilently();
-        console.log("Försöker hämta favoriter...");
-
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
-          {
-            method: "GET",
-            credentials: "include", // Skicka session-cookie
-          }
-        );
-        console.log("Response status:", response.status);
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Server response:", errorText);
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const favoriteTrails = await response.json();
-        console.log("Hämtade favoriter:", favoriteTrails);
-
-        // Kontrollera om favoriteTrails är en array innan vi använder map
-        if (Array.isArray(favoriteTrails)) {
-          setFavorites(new Set(favoriteTrails.map((trail) => trail._id)));
-        } else {
-          console.error("Oväntad datastruktur:", favoriteTrails);
-        }
-      } catch (err) {
-        console.error("Fel vid hämtning av favoriter:", err);
-      }
-    };
-
     loadFavorites();
-  }, [isAuthenticated, getAccessTokenSilently]);
+  }, [loadFavorites]);
 
-  // In FavoriteContext.tsx
   const toggleFavorite = async (trailId: string) => {
     if (!isAuthenticated) {
       console.log("User must be logged in to manage favorites");
       return;
     }
 
+    setIsLoading(true);
+
     try {
+      const newFavorites = new Set(favorites);
+      if (newFavorites.has(trailId)) {
+        newFavorites.delete(trailId);
+      } else {
+        newFavorites.add(trailId);
+      }
+      setFavorites(newFavorites);
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/favorites/toggle/${trailId}`,
         {
           method: "POST",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Server error:", errorData);
-        throw new Error(errorData.message);
-      }
+      if (!response.ok) throw new Error("Failed to toggle favorite");
 
       const data = await response.json();
       setFavorites(new Set(data.favorites));
     } catch (error) {
       console.error("Error toggling favorite:", error);
+      await loadFavorites();
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <FavoriteContext.Provider value={{ favorites, toggleFavorite }}>
+    <FavoriteContext.Provider value={{ favorites, toggleFavorite, isLoading }}>
+      {isLoading && <LoadingScreen />}
       {children}
     </FavoriteContext.Provider>
   );

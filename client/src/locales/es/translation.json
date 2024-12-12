@@ -32,6 +32,7 @@
     "protectedPageDescription": "Esta página solo está disponible para usuarios autenticados.",
     "startPlanning": "Comienza a planificar",
     "landingAfterLogin": "Aquí llegas después de iniciar sesión",
+    "confirmRemoveFavorite": "¿Estás seguro de que quieres eliminar favorito?",
     "trailName": "Nombre del sendero",
     "length": "Longitud (km)",
     "difficulty": "Seleccionar dificultad",

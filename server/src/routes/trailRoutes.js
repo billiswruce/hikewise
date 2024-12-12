@@ -9,6 +9,7 @@ import {
   addComment,
   updateComment,
   deleteComment,
+  updateTrail,
 } from "../controllers/trailController.js";
 
 const router = express.Router();
@@ -22,5 +23,6 @@ router.patch("/:id/packing-list/:itemId", updatePackingListItem);
 router.post("/:id/comments", addComment);
 router.patch("/:id/comments/:commentId", updateComment);
 router.delete("/:id/comments/:commentId", deleteComment);
+router.put("/:id", updateTrail);
 
 export default router;

@@ -32,6 +32,7 @@
   "protectedPageDescription": "このページは認証されたユーザーのみがアクセスできます。",
   "startPlanning": "計画を始める",
   "landingAfterLogin": "ここはログイン後に到着する場所です",
+  "confirmRemoveFavorite": "このお気に入りのトレイルを削除しますか？",
   "trailName": "トレイル名",
   "length": "距離 (km)",
   "difficulty": "難易度を選択",
