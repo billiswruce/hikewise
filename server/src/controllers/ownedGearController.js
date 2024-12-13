@@ -1,4 +1,4 @@
-import OwnedGear from "../models/OwnedGear.js";
+import OwnedGear from "../models/ownedGear.js";
 
 // Hämta alla gear-items för en användare
 export const getOwnedGear = async (req, res) => {

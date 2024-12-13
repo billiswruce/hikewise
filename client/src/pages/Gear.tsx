@@ -208,45 +208,64 @@ export const Gear = () => {
   return (
     <>
       {isLoading && <LoadingScreen />}
-      <div>
-        <h1>{t("gear")}</h1>
+      <div className={styles.gearContainer}>
+        <h1>{t("myGear.title")}</h1>
 
-        {/* Typval */}
-        <div>
-          <button onClick={() => setType("Clothing")}>{t("clothing")}</button>
-          <button onClick={() => setType("Equipment")}>{t("equipment")}</button>
-          <button onClick={() => setType("Food")}>{t("food")}</button>
+        {/* Type selection */}
+        <div className={styles.typeButtons}>
+          <button
+            onClick={() => setType("Clothing")}
+            className={type === "Clothing" ? styles.active : ""}>
+            {t("myGear.clothing")}
+          </button>
+          <button
+            onClick={() => setType("Equipment")}
+            className={type === "Equipment" ? styles.active : ""}>
+            {t("myGear.equipment")}
+          </button>
+          <button
+            onClick={() => setType("Food")}
+            className={type === "Food" ? styles.active : ""}>
+            {t("myGear.food")}
+          </button>
         </div>
 
-        {/* Dropdown för kategori */}
+        {/* Category selection */}
         <select
           value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}>
-          <option value="">{t("allCategories")}</option>
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          className={styles.categorySelect}>
+          <option value="">{t("myGear.categories.label")}</option>
           {Object.entries(CATEGORIES[type]).map(([subcategory, items]) => (
-            <optgroup key={subcategory} label={t(subcategory.toLowerCase())}>
+            <optgroup
+              key={subcategory}
+              label={t(`myGear.categories.${subcategory.toLowerCase()}`)}>
               {items.map((category) => (
                 <option key={category} value={category}>
-                  {t(category.toLowerCase())}
+                  {t(
+                    `myGear.categories.${category
+                      .toLowerCase()
+                      .replace(/\s+/g, "")}`
+                  )}
                 </option>
               ))}
             </optgroup>
           ))}
         </select>
 
-        {/* Lista över gear */}
-        <ul>
+        {/* Gear list */}
+        <ul className={styles.gearList}>
           {gearItems.map((item) => (
-            <li key={item._id}>
+            <li key={item._id} className={styles.gearItem}>
               {editingItem?._id === item._id ? (
-                // Redigeringsformulär
-                <div>
+                <div className={styles.editForm}>
                   <input
                     type="text"
                     value={editingItem.name}
                     onChange={(e) =>
                       setEditingItem({ ...editingItem, name: e.target.value })
                     }
+                    placeholder={t("myGear.name")}
                   />
                   <input
                     type="number"
@@ -257,6 +276,7 @@ export const Gear = () => {
                         quantity: Number(e.target.value),
                       })
                     }
+                    placeholder={t("myGear.quantity")}
                   />
                   <select
                     value={editingItem.condition}
@@ -266,49 +286,70 @@ export const Gear = () => {
                         condition: e.target.value,
                       })
                     }>
-                    <option value="New">{t("new")}</option>
-                    <option value="Good">{t("good")}</option>
-                    <option value="Fair">{t("fair")}</option>
-                    <option value="Poor">{t("poor")}</option>
+                    <option value="New">{t("myGear.condition.new")}</option>
+                    <option value="Good">{t("myGear.condition.good")}</option>
+                    <option value="Fair">{t("myGear.condition.fair")}</option>
+                    <option value="Poor">{t("myGear.condition.poor")}</option>
                   </select>
-                  <button
-                    onClick={() => updateGearItem(item._id, editingItem)}
-                    className={styles.saveButton}>
-                    {t("save")}
-                  </button>
-                  <button
-                    onClick={() => setEditingItem(null)}
-                    className={styles.cancelButton}>
-                    {t("cancel")}
-                  </button>
+                  <select
+                    value={editingItem.categories[0] || ""}
+                    onChange={(e) =>
+                      setEditingItem({
+                        ...editingItem,
+                        categories: [e.target.value],
+                      })
+                    }
+                    className={styles.categorySelect}>
+                    <option value="">{t("myGear.categories.label")}</option>
+                    {Object.entries(CATEGORIES[editingItem.type]).map(
+                      ([subcategory, items]) => (
+                        <optgroup
+                          key={subcategory}
+                          label={t(
+                            `myGear.categories.${subcategory.toLowerCase()}`
+                          )}>
+                          {items.map((category) => (
+                            <option key={category} value={category}>
+                              {t(
+                                `myGear.categories.${category
+                                  .toLowerCase()
+                                  .replace(/\s+/g, "")}`
+                              )}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )
+                    )}
+                  </select>
+                  <div className={styles.editButtons}>
+                    <button
+                      onClick={() => updateGearItem(item._id, editingItem)}>
+                      {t("myGear.actions.save")}
+                    </button>
+                    <button onClick={() => setEditingItem(null)}>
+                      {t("myGear.actions.cancel")}
+                    </button>
+                  </div>
                 </div>
               ) : (
-                // Visningsläge
-                <div className={styles.gearItem}>
-                  <div className={styles.gearInfo}>
-                    <span>{item.name}</span>
-                    <span>{item.quantity}</span>
-                    <span>{t(item.condition.toLowerCase())}</span>
-                    {item.brand && <span>{item.brand}</span>}
-                    {item.color && <span>{item.color}</span>}
-                  </div>
+                <div className={styles.gearInfo}>
+                  <span className={styles.gearName}>{item.name}</span>
+                  <span className={styles.gearQuantity}>{item.quantity}</span>
+                  <span className={styles.gearCondition}>
+                    {t(`myGear.condition.${item.condition.toLowerCase()}`)}
+                  </span>
+                  {item.brand && (
+                    <span className={styles.gearBrand}>{item.brand}</span>
+                  )}
+                  {item.color && (
+                    <span className={styles.gearColor}>{item.color}</span>
+                  )}
                   <div className={styles.gearActions}>
-                    <input
-                      type="checkbox"
-                      checked={item.packed}
-                      onChange={() =>
-                        updateGearItem(item._id, { packed: !item.packed })
-                      }
-                    />
-                    <button
-                      onClick={() => setEditingItem(item)}
-                      className={styles.editButton}>
-                      {t("edit")}
+                    <button onClick={() => setEditingItem(item)}>
+                      {t("myGear.actions.edit")}
                     </button>
-                    <button
-                      onClick={() => deleteGearItem(item._id)}
-                      className={styles.deleteButton}>
-                      {t("delete")}
+                    <button onClick={() => deleteGearItem(item._id)}>
+                      {t("myGear.actions.delete")}
                     </button>
                   </div>
                 </div>
@@ -317,67 +358,79 @@ export const Gear = () => {
           ))}
         </ul>
 
-        {/* Formulär för ny gear */}
-        <h2>{t("addGear")}</h2>
-        <input
-          type="text"
-          placeholder={t("name")}
-          value={newItem.name}
-          onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-        />
-        <input
-          type="number"
-          min="1"
-          placeholder={t("quantity")}
-          value={newItem.quantity}
-          onChange={(e) =>
-            setNewItem({ ...newItem, quantity: Number(e.target.value) })
-          }
-        />
-        <input
-          type="text"
-          placeholder={t("brand")}
-          value={newItem.brand}
-          onChange={(e) => setNewItem({ ...newItem, brand: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder={t("color")}
-          value={newItem.color}
-          onChange={(e) => setNewItem({ ...newItem, color: e.target.value })}
-        />
-        <select
-          value={newItem.condition}
-          onChange={(e) =>
-            setNewItem({ ...newItem, condition: e.target.value })
-          }>
-          <option value="Good">{t("good")}</option>
-          <option value="Fair">{t("fair")}</option>
-          <option value="Poor">{t("poor")}</option>
-        </select>
-        <div>
-          <h4>{t("selectCategories")}</h4>
-          {Object.values(CATEGORIES[type])
-            .flat()
-            .map((category: string) => (
-              <label key={category}>
-                <input
-                  type="checkbox"
-                  checked={newItem.categories.includes(category)}
-                  onChange={() =>
-                    setNewItem((prev) => ({
-                      ...prev,
-                      categories: prev.categories.includes(category)
-                        ? prev.categories.filter((c) => c !== category)
-                        : [...prev.categories, category],
-                    }))
-                  }
-                />
-                {t(category.toLowerCase())}
-              </label>
+        {/* Add new gear form */}
+        <div className={styles.addGearForm}>
+          <h2>{t("myGear.addGear")}</h2>
+          <input
+            type="text"
+            placeholder={t("myGear.name")}
+            value={newItem.name}
+            onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+          />
+          <input
+            type="number"
+            placeholder={t("myGear.quantity")}
+            value={newItem.quantity}
+            onChange={(e) =>
+              setNewItem({ ...newItem, quantity: Number(e.target.value) })
+            }
+          />
+          <input
+            type="text"
+            placeholder={t("myGear.brand")}
+            value={newItem.brand}
+            onChange={(e) => setNewItem({ ...newItem, brand: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder={t("myGear.color")}
+            value={newItem.color}
+            onChange={(e) => setNewItem({ ...newItem, color: e.target.value })}
+          />
+
+          <select
+            value={selectedCategory}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setNewItem({
+                ...newItem,
+                categories: [e.target.value],
+                type: type,
+              });
+            }}
+            className={styles.categorySelect}>
+            <option value="">{t("myGear.categories.label")}</option>
+            {Object.entries(CATEGORIES[type]).map(([subcategory, items]) => (
+              <optgroup
+                key={subcategory}
+                label={t(`myGear.categories.${subcategory.toLowerCase()}`)}>
+                {items.map((category) => (
+                  <option key={category} value={category}>
+                    {t(
+                      `myGear.categories.${category
+                        .toLowerCase()
+                        .replace(/\s+/g, "")}`
+                    )}
+                  </option>
+                ))}
+              </optgroup>
             ))}
+          </select>
+
+          <select
+            value={newItem.condition}
+            onChange={(e) =>
+              setNewItem({ ...newItem, condition: e.target.value })
+            }>
+            <option value="New">{t("myGear.condition.new")}</option>
+            <option value="Good">{t("myGear.condition.good")}</option>
+            <option value="Fair">{t("myGear.condition.fair")}</option>
+            <option value="Poor">{t("myGear.condition.poor")}</option>
+          </select>
+          <button onClick={addGearItem} className={styles.addButton}>
+            {t("myGear.actions.add")}
+          </button>
         </div>
-        <button onClick={addGearItem}>{t("add")}</button>
       </div>
     </>
   );

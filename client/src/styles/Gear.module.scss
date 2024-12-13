@@ -11,11 +11,11 @@
 
   button {
     padding: 0.5rem 1rem;
-    border: 1px solid var(--color-primary);
+    border: 1px solid var(--color-green);
     border-radius: 4px;
     background: none;
     cursor: pointer;
-
+    color: var(--color-white);
     &.active {
       background: var(--color-primary);
       color: white;
@@ -97,7 +97,7 @@
 .addButton {
   width: 100%;
   padding: 0.75rem;
-  background-color: var(--color-primary);
+  background-color: var(--color-green);
   color: white;
   border: none;
   border-radius: 4px;
