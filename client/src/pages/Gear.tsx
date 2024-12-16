@@ -9,7 +9,6 @@ interface GearItem {
   name: string;
   quantity: number;
   condition: string;
-  packed: boolean;
   categories: string[];
   brand?: string;
   color?: string;
@@ -22,17 +21,20 @@ interface EditingGearItem extends GearItem {
 
 const CATEGORIES = {
   Clothing: {
+    All: ["All"],
     UpperBody: ["Jackets", "Base Layers"],
     LowerBody: ["Pants", "Socks"],
     Accessories: ["Rain Gear", "Gloves", "Hats", "Shoes"],
   },
   Equipment: {
+    All: ["All"],
     Shelter: ["Tents", "Sleeping Bags", "Sleeping Pads"],
     Tools: ["Backpacks", "Cooking Equipment", "Water Filtration"],
     Navigation: ["Navigation", "Lighting", "Tools"],
     Safety: ["First Aid", "Electronics"],
   },
   Food: {
+    All: ["All"],
     Meals: ["Freeze-Dried Meals", "Canned Food", "Instant Noodles"],
     Snacks: ["Trail Mix", "Energy Bars", "Dried Fruit"],
     Drinks: ["Instant Coffee", "Powdered Drink Mix", "Tea"],
@@ -42,8 +44,8 @@ const CATEGORIES = {
 export const Gear = () => {
   const { t } = useTranslation();
   const [gearItems, setGearItems] = useState<GearItem[]>([]);
-  const [type, setType] = useState<"Clothing" | "Equipment" | "Food">(
-    "Clothing"
+  const [type, setType] = useState<"All" | "Clothing" | "Equipment" | "Food">(
+    "All"
   );
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,15 +67,19 @@ export const Gear = () => {
     if (isFirstLoading) setIsLoading(true);
 
     try {
-      const queryParams = new URLSearchParams({
-        type,
-        category: selectedCategory,
-      });
+      const queryParams = new URLSearchParams();
+      queryParams.append("type", type);
 
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/owned-gear/filter?${queryParams}`,
-        { credentials: "include" }
-      );
+      const endpoint =
+        type === "All"
+          ? `${import.meta.env.VITE_API_URL}/api/owned-gear`
+          : `${
+              import.meta.env.VITE_API_URL
+            }/api/owned-gear/filter?${queryParams}`;
+
+      const response = await fetch(endpoint, {
+        credentials: "include",
+      });
 
       if (!response.ok) throw new Error("Failed to fetch data");
 
@@ -85,7 +91,7 @@ export const Gear = () => {
       setIsLoading(false);
       setIsFirstLoading(false);
     }
-  }, [type, selectedCategory, isFirstLoading]);
+  }, [type, isFirstLoading]);
 
   useEffect(() => {
     fetchGear();
@@ -154,7 +160,10 @@ export const Gear = () => {
 
   // Update type when it changes
   useEffect(() => {
-    setNewItem((prev) => ({ ...prev, type }));
+    setNewItem((prev) => ({
+      ...prev,
+      type: type as "Clothing" | "Equipment" | "Food",
+    }));
   }, [type]);
 
   const deleteGearItem = async (itemId: string) => {
@@ -209,6 +218,33 @@ export const Gear = () => {
     }
   };
 
+  const fetchGearByCategory = async (category: string) => {
+    setIsLoading(true);
+    try {
+      if (category === "All") {
+        await fetchGear();
+        return;
+      }
+
+      const queryParams = new URLSearchParams({ category });
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/owned-gear/filter-by-category?${queryParams}`,
+        { credentials: "include" }
+      );
+
+      if (!response.ok) throw new Error("Failed to fetch gear by category");
+
+      const data = await response.json();
+      setGearItems(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Error fetching gear by category:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       {/* Banner */}
@@ -230,6 +266,14 @@ export const Gear = () => {
 
           {/* Tabs */}
           <div className={styles.tabs}>
+            <button
+              type="button"
+              onClick={() => setType("All")}
+              className={`${styles.tab} ${
+                type === "All" ? styles.active : ""
+              }`}>
+              {t("myGear.all")}
+            </button>
             <button
               type="button"
               onClick={() => setType("Clothing")}
@@ -257,27 +301,38 @@ export const Gear = () => {
           </div>
 
           {/* Category selection */}
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className={styles.categorySelect}>
-            <option value="">{t("myGear.categories.label")}</option>
-            {Object.entries(CATEGORIES[type]).map(([subcategory, items]) => (
-              <optgroup
-                key={subcategory}
-                label={t(`myGear.categories.${subcategory.toLowerCase()}`)}>
-                {items.map((category) => (
-                  <option key={category} value={category}>
-                    {t(
-                      `myGear.categories.${category
-                        .toLowerCase()
-                        .replace(/\s+/g, "")}`
-                    )}
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
+          {type !== "All" ? (
+            <>
+              <select
+                value={selectedCategory}
+                onChange={(e) => {
+                  setSelectedCategory(e.target.value);
+                  fetchGearByCategory(e.target.value);
+                }}
+                className={styles.categorySelect}>
+                <option value="">{t("myGear.selectCategory")}</option>
+                {Object.entries(CATEGORIES[type]).map(
+                  ([subcategory, items]) => (
+                    <optgroup
+                      key={subcategory}
+                      label={t(
+                        `myGear.categories.${subcategory.toLowerCase()}`
+                      )}>
+                      {items.map((category) => (
+                        <option key={category} value={category}>
+                          {t(
+                            `myGear.categories.${category
+                              .toLowerCase()
+                              .replace(/\s+/g, "")}`
+                          )}
+                        </option>
+                      ))}
+                    </optgroup>
+                  )
+                )}
+              </select>
+            </>
+          ) : null}
 
           {/* Laddningsindikator under dataladdning */}
           {isLoading ? (
@@ -431,6 +486,39 @@ export const Gear = () => {
                     setNewItem({ ...newItem, color: e.target.value })
                   }
                 />
+                {/* Välj kategori */}
+                <select
+                  value={newItem.categories[0] || ""}
+                  onChange={(e) =>
+                    setNewItem({
+                      ...newItem,
+                      categories: [e.target.value],
+                    })
+                  }
+                  className={styles.categorySelect}>
+                  <option value="">{t("myGear.selectCategory")}</option>
+                  {type !== "All" &&
+                    Object.entries(CATEGORIES[type]).map(
+                      ([subcategory, items]) => (
+                        <optgroup
+                          key={subcategory}
+                          label={t(
+                            `myGear.categories.${subcategory.toLowerCase()}`
+                          )}>
+                          {items.map((category) => (
+                            <option key={category} value={category}>
+                              {t(
+                                `myGear.categories.${category
+                                  .toLowerCase()
+                                  .replace(/\s+/g, "")}`
+                              )}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )
+                    )}
+                </select>
+
                 <select
                   value={newItem.condition}
                   onChange={(e) =>

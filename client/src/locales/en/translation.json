@@ -21,6 +21,7 @@
     "quantity": "Quantity",
     "brand": "Brand",
     "color": "Color (optional)",
+    "selectCategory": "Select Category",
     "condition": {
       "label": "Condition",
       "new": "New",
@@ -29,7 +30,8 @@
       "poor": "Poor"
     },
     "categories": {
-      "label": "Select Categories",
+      "label": "Filter by category",
+      "all": "All",
       "upperbody": "Upper Body",
       "lowerbody": "Lower Body",
       "accessories": "Accessories",
@@ -82,7 +84,8 @@
       "errorUpdating": "Error updating gear",
       "errorDeleting": "Error deleting gear",
       "invalidGearType": "Invalid gear type"
-    }
+    },
+    "all": "All"
   },
   "food": "Food",
   "journal": "Journal",

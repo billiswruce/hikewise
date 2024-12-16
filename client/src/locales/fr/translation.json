@@ -21,6 +21,7 @@
     "quantity": "Quantité",
     "brand": "Marque",
     "color": "Couleur (optionnel)",
+    "selectCategory": "Sélectionner une catégorie",
     "condition": {
       "label": "État",
       "new": "Neuf",
@@ -29,7 +30,8 @@
       "poor": "Mauvais"
     },
       "categories": {
-        "label": "Sélectionnez des catégories",
+        "label": "Filtrer par catégorie",
+        "all": "Tous",
         "upperbody": "Haut du corps",
         "lowerbody": "Bas du corps",
         "accessories": "Accessoires",
@@ -82,7 +84,8 @@
       "errorAdding": "Erreur lors de l'ajout de l'équipement",
       "errorUpdating": "Erreur lors de la mise à jour de l'équipement",
       "errorDeleting": "Erreur lors de la suppression de l'équipement"
-    }
+    },
+    "all": "Tous"
   },
   "food": "Nourriture",
   "journal": "Journal",

@@ -21,6 +21,7 @@
     "quantity": "数量",
     "brand": "ブランド",
     "color": "色 (オプション)",
+    "selectCategory": "カテゴリーを選択",
     "condition": {
       "label": "状態",
       "new": "新品",
@@ -30,6 +31,7 @@
     },
     "categories": {
       "label": "カテゴリーを選択",
+      "all": "すべて",
       "upperbody": "上半身",
       "lowerbody": "下半身",
       "accessories": "アクセサリー",
@@ -80,7 +82,9 @@
       "errorAdding": "装備の追加中にエラーが発生しました",
       "errorUpdating": "装備の更新中にエラーが発生しました",
       "errorDeleting": "装備の削除中にエラーが発生しました"
-    }
+    },
+    "all": "すべて"
+
   },
   "food": "食べ物",
   "journal": "日記",

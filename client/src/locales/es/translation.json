@@ -21,6 +21,7 @@
     "quantity": "Cantidad",
     "brand": "Marca",
     "color": "Color (opcional)",
+    "selectCategory": "Seleccionar categoría",
     "condition": {
       "label": "Condición",
       "new": "Nuevo",
@@ -29,7 +30,8 @@
       "poor": "Malo"
     },
         "categories": {
-          "label": "Seleccionar categorías",
+          "label": "Filtrar por categoría",
+          "all": "Todos",
           "upperbody": "Parte superior",
           "lowerbody": "Parte inferior",
           "accessories": "Accesorios",
@@ -81,7 +83,8 @@
       "errorAdding": "Error al añadir equipamiento",
       "errorUpdating": "Error al actualizar el equipamiento",
       "errorDeleting": "Error al eliminar el equipamiento"
-    }
+    },
+    "all": "Todos"
   },
   "food": "Comida",
   "journal": "Diario",

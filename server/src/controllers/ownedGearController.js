@@ -4,27 +4,13 @@ import OwnedGear from "../models/ownedGear.js";
 export const getOwnedGear = async (req, res) => {
   try {
     const userId = req.user.id;
-    const ownedGear = await OwnedGear.findOne({ userId }).populate("userId");
+    const ownedGear = await OwnedGear.findOne({ userId });
 
     if (!ownedGear) {
-      return res
-        .status(404)
-        .json({ message: "No gear found for the specified user." });
+      return res.status(200).json([]);
     }
 
-    const clothingItems = ownedGear.items.filter(
-      (item) => item.type === "Clothing"
-    );
-    const equipmentItems = ownedGear.items.filter(
-      (item) => item.type === "Equipment"
-    );
-    const foodItems = ownedGear.items.filter((item) => item.type === "Food");
-
-    res.status(200).json({
-      clothing: clothingItems,
-      equipment: equipmentItems,
-      food: foodItems,
-    });
+    res.status(200).json(ownedGear.items);
   } catch (error) {
     console.error("Error fetching gear:", error);
     res.status(500).json({ message: "Error fetching gear items" });
@@ -161,18 +147,43 @@ export const getGearByType = async (req, res) => {
     if (!type)
       return res.status(400).json({ message: "Type parameter is required" });
 
-    const allowedTypes = ["Clothing", "Equipment", "Food"];
-    if (!allowedTypes.includes(type)) {
-      return res.status(400).json({ message: "Invalid type parameter" });
-    }
-
     const ownedGear = await OwnedGear.findOne({ userId });
     if (!ownedGear) return res.status(200).json([]);
+
+    if (type === "All") {
+      return res.status(200).json(ownedGear.items);
+    }
 
     const filteredItems = ownedGear.items.filter((item) => item.type === type);
     res.status(200).json(filteredItems);
   } catch (error) {
     console.error("Error fetching gear by type:", error);
+    res.status(500).json({ message: "Error fetching filtered gear items" });
+  }
+};
+
+export const getGearByCategory = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    const { category } = req.query;
+
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    if (!category) {
+      return res
+        .status(400)
+        .json({ message: "Category parameter is required" });
+    }
+
+    const ownedGear = await OwnedGear.findOne({ userId });
+    if (!ownedGear) return res.status(200).json([]);
+
+    const filteredItems = ownedGear.items.filter((item) =>
+      item.categories.includes(category)
+    );
+
+    res.status(200).json(filteredItems);
+  } catch (error) {
+    console.error("Error fetching gear by category:", error);
     res.status(500).json({ message: "Error fetching filtered gear items" });
   }
 };

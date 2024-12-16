@@ -21,6 +21,7 @@
     "quantity": "Antal",
     "brand": "Märke",
     "color": "Färg (valfritt)",
+    "selectCategory": "Välj kategori",
     "condition": {
       "label": "Skick",
       "new": "Nytt",
@@ -29,7 +30,8 @@
       "poor": "Dåligt"
     },
     "categories": {
-      "label": "Välj kategorier",
+      "label": "Filtrera efter kategori",
+      "all": "Alla",
       "upperbody": "Överkropp",
       "lowerbody": "Underkropp",
       "accessories": "Tillbehör",
@@ -82,7 +84,8 @@
       "errorUpdating": "Fel vid uppdatering av utrustning",
       "errorDeleting": "Fel vid borttagning av utrustning",
       "invalidGearType": "Ogiltig utrustningstyp"
-    }
+    },
+    "all": "Alla"
   },
   "food": "Mat",
   "journal": "Dagbok",
