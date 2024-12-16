@@ -2,6 +2,9 @@
   padding: 1rem;
   max-width: 1200px;
   margin: 0 auto;
+  border-radius: 25px 25px 0 0;
+  background-color: var(--color-white);
+  margin-top: -50px;
 }
 
 .typeFilter {
@@ -102,6 +105,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-bottom: 5rem;
 
   &:hover {
     opacity: 0.9;
@@ -122,3 +126,45 @@
     border-radius: 4px;
   }
 }
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+
+  .tab {
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-size: 1rem;
+    color: #777;
+
+    &:hover {
+      color: #333;
+    }
+
+    &.active {
+      border-bottom: 2px solid #333;
+      font-weight: bold;
+      color: #000;
+    }
+  }
+}
+
+.banner {
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+}
+
+// .loading {
+//   text-align: center;
+//   padding: 2rem;
+//   font-size: 1.5rem;
+//   color: var(--color-grey-dark);
+// }
+
+// .gearContent {
+//   min-height: 200px;
+// }

@@ -17,10 +17,10 @@
     "equipment": "Equipment",
     "food": "Food",
     "addGear": "Add Gear",
-    "name": "Name",
+    "name": "Name of product",
     "quantity": "Quantity",
     "brand": "Brand",
-    "color": "Color",
+    "color": "Color (optional)",
     "condition": {
       "label": "Condition",
       "new": "New",

@@ -17,10 +17,10 @@
     "equipment": "Équipement",
     "food": "Nourriture",
     "addGear": "Ajouter un équipement",
-    "name": "Nom",
+    "name": "Nom de produit",
     "quantity": "Quantité",
     "brand": "Marque",
-    "color": "Couleur",
+    "color": "Couleur (optionnel)",
     "condition": {
       "label": "État",
       "new": "Neuf",

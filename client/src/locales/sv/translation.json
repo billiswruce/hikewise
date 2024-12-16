@@ -17,10 +17,10 @@
     "equipment": "Utrustning",
     "food": "Mat",
     "addGear": "Lägg till utrustning",
-    "name": "Namn",
+    "name": "Namn på produkt",
     "quantity": "Antal",
     "brand": "Märke",
-    "color": "Färg",
+    "color": "Färg (valfritt)",
     "condition": {
       "label": "Skick",
       "new": "Nytt",
