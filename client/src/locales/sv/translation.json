@@ -163,5 +163,8 @@
   "packingList": "Packlista",
   "remove": "Ta bort",
   "addItem": "Lägg till objekt",
-  "adding...": "Lägger till..."
+  "adding...": "Lägger till...",
+  "gearInfo": "Organisera din utrustning och se vad du har och vad som saknas inför nästa äventyr.",
+  "createTrailInfo": "Skapa en vandringsled du har vandrat eller planerar att vandra. Lägg till detaljer som distans, svårighetsgrad, datum och beskriving för att förenkla planeringen. Du kan redigera och ta bort leder senare.",
+  "trailsInfo": "Här hittar du dina planerade och genomförda vandringsleder. Favorisera leder, Gå in på en led och lägg till packlista och anteckningar."
 }

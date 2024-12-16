@@ -163,5 +163,8 @@
   "packingList": "Packing List",
   "remove": "Remove",
   "addItem": "Add Item",
-  "adding...": "Adding..."
+  "adding...": "Adding...",
+  "gearInfo": "Organize your gear and see what you have and what you need for your next adventure.",
+  "createTrailInfo": "Create a trail you have hiked or plan to hike. Add details like distance, difficulty, date, and description to simplify planning. You can edit and delete trails later.",
+  "trailsInfo": "Here you will find all your trails created and here you can add and see your favorites. Go to a trail and create your packing lists! You can edit and delete trails later."
 }

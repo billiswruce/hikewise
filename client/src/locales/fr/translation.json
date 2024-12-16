@@ -14,8 +14,8 @@
   "myGear": {
     "title": "Équipement",
     "clothing": "Vêtements",
-    "equipment": "Équipement",
-    "food": "Nourriture",
+    "equipment": "Matos",
+    "food": "Bouffe",
     "addGear": "Ajouter un équipement",
     "name": "Nom de produit",
     "quantity": "Quantité",
@@ -87,7 +87,7 @@
     },
     "all": "Tous"
   },
-  "food": "Nourriture",
+  "food": "Bouffe",
   "journal": "Journal",
   "edit": "Modifier",
   "delete": "Supprimer",
@@ -163,5 +163,8 @@
   "packingList": "Liste d'équipement",
   "remove": "Supprimer",
   "addItem": "Ajouter un élément",
-  "adding...": "Ajout en cours..."
+  "adding...": "Ajout en cours...",
+  "gearInfo": "Organisez votre équipement et voyez ce que vous avez et ce qui manque pour votre prochaine aventure.",
+  "createTrailInfo": "Créez un sentier que vous avez parcouru ou que vous planifiez de parcourir. Ajoutez des détails comme la distance, la difficulté, la date et une description pour simplifier la planification. Vous pouvez modifier et supprimer les sentiers plus tard.", 
+  "trailsInfo": "Ici, vous trouverez tous vos sentiers créés et ici vous pouvez ajouter et voir vos favoris. Allez sur un sentier et créez votre liste d'équipement! Vous pouvez modifier et supprimer les sentiers plus tard."
 }

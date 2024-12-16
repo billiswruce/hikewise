@@ -162,5 +162,8 @@
   "packingList": "Lista de equipamiento",
   "remove": "Eliminar",
   "addItem": "Añadir elemento",
-  "adding...": "Añadiendo..."
+  "adding...": "Añadiendo...",
+  "gearInfo": "Organiza tu equipo y mira qué tienes y qué te falta para tu próxima aventura.",
+  "createTrailInfo": "Crea un sendero que has recorrido o que planeas recorrer. Añade detalles como la distancia, la dificultad, la fecha y una descripción para simplificar la planificación. Puedes editar y eliminar los senderos más tarde.",
+  "trailsInfo": "Aquí encontrarás todos tus senderos creados y aquí puedes añadir y ver tus favoritos. Ve a un sendero y crea tu lista de equipamiento! Puedes editar y eliminar senderos más tarde."
 }

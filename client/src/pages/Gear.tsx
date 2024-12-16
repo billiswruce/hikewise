@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 // import LoadingScreen from "../components/LoadingScreen";
 import styles from "../styles/Gear.module.scss";
 import backgroundImage from "../assets/gearPlaceholder.jpg";
+import LoadingScreen from "../components/LoadingScreen";
 
 interface GearItem {
   _id: string;
@@ -259,10 +260,46 @@ export const Gear = () => {
 
       {/* Första laddningsskärmen */}
       {isFirstLoading ? (
-        <div className={styles.loading}>Laddar innehåll...</div>
+        <div className={styles.loading}>{LoadingScreen()}</div>
       ) : (
         <div className={styles.gearContainer}>
           <h1>{t("myGear.title")}</h1>
+          <h4>{t("gearInfo")}</h4>
+
+          {/* Filter Container */}
+          <div className={styles.filterContainer}>
+            {type !== "All" && (
+              <label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    fetchGearByCategory(e.target.value);
+                  }}>
+                  <option value="">{t("myGear.selectCategory")}</option>
+                  {Object.entries(CATEGORIES[type]).map(
+                    ([subcategory, items]) => (
+                      <optgroup
+                        key={subcategory}
+                        label={t(
+                          `myGear.categories.${subcategory.toLowerCase()}`
+                        )}>
+                        {items.map((category) => (
+                          <option key={category} value={category}>
+                            {t(
+                              `myGear.categories.${category
+                                .toLowerCase()
+                                .replace(/\s+/g, "")}`
+                            )}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )
+                  )}
+                </select>
+              </label>
+            )}
+          </div>
 
           {/* Tabs */}
           <div className={styles.tabs}>
@@ -300,43 +337,9 @@ export const Gear = () => {
             </button>
           </div>
 
-          {/* Category selection */}
-          {type !== "All" ? (
-            <>
-              <select
-                value={selectedCategory}
-                onChange={(e) => {
-                  setSelectedCategory(e.target.value);
-                  fetchGearByCategory(e.target.value);
-                }}
-                className={styles.categorySelect}>
-                <option value="">{t("myGear.selectCategory")}</option>
-                {Object.entries(CATEGORIES[type]).map(
-                  ([subcategory, items]) => (
-                    <optgroup
-                      key={subcategory}
-                      label={t(
-                        `myGear.categories.${subcategory.toLowerCase()}`
-                      )}>
-                      {items.map((category) => (
-                        <option key={category} value={category}>
-                          {t(
-                            `myGear.categories.${category
-                              .toLowerCase()
-                              .replace(/\s+/g, "")}`
-                          )}
-                        </option>
-                      ))}
-                    </optgroup>
-                  )
-                )}
-              </select>
-            </>
-          ) : null}
-
           {/* Laddningsindikator under dataladdning */}
           {isLoading ? (
-            <div className={styles.loading}>Laddar data...</div>
+            <div className={styles.loading}>{LoadingScreen()}</div>
           ) : (
             <>
               {/* Gear List */}
@@ -423,20 +426,20 @@ export const Gear = () => {
                     ) : (
                       <div className={styles.gearInfo}>
                         <span className={styles.gearName}>{item.name}</span>
-                        <span className={styles.gearQuantity}>
-                          {item.quantity}
-                        </span>
-                        <span className={styles.gearCondition}>
-                          {t(
-                            `myGear.condition.${item.condition.toLowerCase()}`
-                          )}
-                        </span>
                         {item.brand && (
                           <span className={styles.gearBrand}>{item.brand}</span>
                         )}
                         {item.color && (
                           <span className={styles.gearColor}>{item.color}</span>
                         )}
+                        <span className={styles.gearCondition}>
+                          {t(
+                            `myGear.condition.${item.condition.toLowerCase()}`
+                          )}
+                        </span>
+                        <span className={styles.gearQuantity}>
+                          {item.quantity}
+                        </span>
                         <div className={styles.gearActions}>
                           <button onClick={() => setEditingItem(item)}>
                             {t("myGear.actions.edit")}
@@ -451,7 +454,7 @@ export const Gear = () => {
                 ))}
               </ul>
 
-              {/* Add new gear form */}
+              {/* Add New Gear Form */}
               <div className={styles.addGearForm}>
                 <h2>{t("myGear.addGear")}</h2>
                 <input
@@ -475,7 +478,10 @@ export const Gear = () => {
                   placeholder={t("myGear.quantity")}
                   value={newItem.quantity}
                   onChange={(e) =>
-                    setNewItem({ ...newItem, quantity: Number(e.target.value) })
+                    setNewItem({
+                      ...newItem,
+                      quantity: Number(e.target.value),
+                    })
                   }
                 />
                 <input
@@ -486,7 +492,6 @@ export const Gear = () => {
                     setNewItem({ ...newItem, color: e.target.value })
                   }
                 />
-                {/* Välj kategori */}
                 <select
                   value={newItem.categories[0] || ""}
                   onChange={(e) =>
@@ -518,23 +523,17 @@ export const Gear = () => {
                       )
                     )}
                 </select>
-
                 <select
                   value={newItem.condition}
                   onChange={(e) =>
-                    setNewItem({
-                      ...newItem,
-                      condition: e.target.value,
-                    })
+                    setNewItem({ ...newItem, condition: e.target.value })
                   }>
                   <option value="New">{t("myGear.condition.new")}</option>
                   <option value="Good">{t("myGear.condition.good")}</option>
                   <option value="Fair">{t("myGear.condition.fair")}</option>
                   <option value="Poor">{t("myGear.condition.poor")}</option>
                 </select>
-                <button onClick={addGearItem} className={styles.addButton}>
-                  {t("myGear.actions.add")}
-                </button>
+                <button onClick={addGearItem}>{t("myGear.actions.add")}</button>
               </div>
             </>
           )}
