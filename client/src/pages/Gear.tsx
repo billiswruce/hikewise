@@ -291,36 +291,6 @@ export const Gear = () => {
                     <option value="Fair">{t("myGear.condition.fair")}</option>
                     <option value="Poor">{t("myGear.condition.poor")}</option>
                   </select>
-                  <select
-                    value={editingItem.categories[0] || ""}
-                    onChange={(e) =>
-                      setEditingItem({
-                        ...editingItem,
-                        categories: [e.target.value],
-                      })
-                    }
-                    className={styles.categorySelect}>
-                    <option value="">{t("myGear.categories.label")}</option>
-                    {Object.entries(CATEGORIES[editingItem.type]).map(
-                      ([subcategory, items]) => (
-                        <optgroup
-                          key={subcategory}
-                          label={t(
-                            `myGear.categories.${subcategory.toLowerCase()}`
-                          )}>
-                          {items.map((category) => (
-                            <option key={category} value={category}>
-                              {t(
-                                `myGear.categories.${category
-                                  .toLowerCase()
-                                  .replace(/\s+/g, "")}`
-                              )}
-                            </option>
-                          ))}
-                        </optgroup>
-                      )
-                    )}
-                  </select>
                   <div className={styles.editButtons}>
                     <button
                       onClick={() => updateGearItem(item._id, editingItem)}>
