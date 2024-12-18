@@ -1,71 +1,71 @@
-import OwnedGear from "../models/OwnedGear.js";
+import OwnedGear from "../models/ownedGear.js";
 
+// Hämta alla gear-items för en användare
 export const getOwnedGear = async (req, res) => {
   try {
     const userId = req.user.id;
-    const ownedGear = await OwnedGear.findOne({ userId }).populate("userId");
+    const ownedGear = await OwnedGear.findOne({ userId });
 
     if (!ownedGear) {
-      return res
-        .status(404)
-        .json({ message: "No gear found for the specified user." });
+      return res.status(200).json([]);
     }
 
-    const gearItems = ownedGear.items.filter((item) => item.type === "Gear");
-    const foodItems = ownedGear.items.filter((item) => item.type === "Food");
-
-    res.status(200).json({
-      gear: gearItems,
-      food: foodItems,
-    });
+    res.status(200).json(ownedGear.items);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error fetching gear and food items" });
+    console.error("Error fetching gear:", error);
+    res.status(500).json({ message: "Error fetching gear items" });
   }
 };
 
+// Lägg till ett nytt gear-item
 export const addGearItem = async (req, res) => {
   try {
     const userId = req.user?.id;
-    console.log("Received userId:", userId); // Logga userId
-    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const { name, quantity, condition, categories, type, brand, color } =
+      req.body;
 
-    const { name, quantity, condition, categories, brand, color } = req.body;
-    console.log("Received item data:", req.body); // Logga inkommande data
+    if (!userId || !name || !type || !categories) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const allowedTypes = ["Clothing", "Equipment", "Food"];
+    if (!allowedTypes.includes(type)) {
+      return res.status(400).json({ message: "Invalid gear type" });
+    }
 
     let ownedGear = await OwnedGear.findOne({ userId });
     if (!ownedGear) {
-      console.log("Creating new OwnedGear document for userId:", userId);
       ownedGear = new OwnedGear({ userId, items: [] });
     }
 
-    ownedGear.items.push({
+    const newItem = {
       name,
-      quantity,
-      type: "Gear",
-      condition,
-      categories,
+      quantity: quantity || 1,
+      type,
+      condition: condition || "Good",
+      categories: categories.length > 0 ? categories : [type],
       packed: false,
-      brand,
-      color,
-    });
+      brand: brand || "",
+      color: color || "",
+    };
 
-    console.log("OwnedGear before save:", ownedGear); // Före .save()
+    ownedGear.items.push(newItem);
     await ownedGear.save();
-    console.log("OwnedGear after save:", ownedGear); // Efter .save()
 
     res.status(201).json({
       message: "Gear item added successfully",
       item: ownedGear.items[ownedGear.items.length - 1],
     });
   } catch (error) {
-    console.error("Error in addGearItem:", error);
+    console.error("Error adding gear item:", error);
     res.status(500).json({ message: "Error adding gear item" });
   }
 };
 
+// Uppdatera ett gear-item
 export const updateGearItem = async (req, res) => {
-  const { name, quantity, condition, packed, type, categories } = req.body;
+  const { name, quantity, condition, packed, type, categories, brand, color } =
+    req.body;
   const userId = req.user.id;
 
   try {
@@ -76,27 +76,41 @@ export const updateGearItem = async (req, res) => {
         .json({ message: "No gear found for the specified user." });
     }
 
-    const item = ownedGear.items.id(req.params.itemId);
-    if (!item) {
+    const itemIndex = ownedGear.items.findIndex(
+      (item) => item._id.toString() === req.params.itemId
+    );
+    if (itemIndex === -1) {
       return res.status(404).json({ message: "Gear item not found" });
     }
 
-    if (name) item.name = name;
-    if (quantity) item.quantity = quantity;
-    if (condition) item.condition = condition;
-    if (packed !== undefined) item.packed = packed;
-    if (type) item.type = type;
-    if (categories) item.categories = categories;
+    // Update only the provided fields
+    const updatedItem = {
+      ...ownedGear.items[itemIndex].toObject(),
+      ...(name && { name }),
+      ...(quantity && { quantity }),
+      ...(condition && { condition }),
+      ...(packed !== undefined && { packed }),
+      ...(type && { type }),
+      ...(categories && { categories }),
+      ...(brand && { brand }),
+      ...(color && { color }),
+    };
 
+    ownedGear.items[itemIndex] = updatedItem;
     await ownedGear.save();
 
-    res.status(200).json({ message: "Gear item updated successfully", item });
+    res
+      .status(200)
+      .json({ message: "Gear item updated successfully", item: updatedItem });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error updating gear item" });
+    console.error("Error updating gear item:", error);
+    res
+      .status(500)
+      .json({ message: "Error updating gear item", error: error.message });
   }
 };
 
+// Ta bort ett gear-item
 export const deleteGearItem = async (req, res) => {
   const userId = req.user.id;
 
@@ -108,55 +122,68 @@ export const deleteGearItem = async (req, res) => {
         .json({ message: "No gear found for the specified user." });
     }
 
-    const item = ownedGear.items.id(req.params.itemId);
-    if (!item) {
-      return res.status(404).json({ message: "Gear item not found" });
-    }
+    // Filter out the item to be deleted
+    ownedGear.items = ownedGear.items.filter(
+      (item) => item._id.toString() !== req.params.itemId
+    );
 
-    item.remove();
     await ownedGear.save();
-
     res.status(200).json({ message: "Gear item removed successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error deleting gear item" });
+    console.error("Error deleting gear item:", error);
+    res
+      .status(500)
+      .json({ message: "Error deleting gear item", error: error.message });
   }
 };
 
+// Hämta gear efter typ (Clothing, Equipment, Food)
 export const getGearByType = async (req, res) => {
   try {
     const userId = req.user?.id;
-    if (!userId) {
-      console.error("No user ID found in request");
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     const { type } = req.query;
-    if (!type) {
-      console.error("No type provided in query");
-      return res.status(400).json({ message: "Type parameter is required" });
-    }
 
-    console.log(`Fetching gear for user ${userId} with type ${type}`);
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    if (!type)
+      return res.status(400).json({ message: "Type parameter is required" });
 
     const ownedGear = await OwnedGear.findOne({ userId });
-    console.log("Found owned gear:", ownedGear);
+    if (!ownedGear) return res.status(200).json([]);
 
-    if (!ownedGear) {
-      return res.status(200).json([]);
+    if (type === "All") {
+      return res.status(200).json(ownedGear.items);
     }
 
+    const filteredItems = ownedGear.items.filter((item) => item.type === type);
+    res.status(200).json(filteredItems);
+  } catch (error) {
+    console.error("Error fetching gear by type:", error);
+    res.status(500).json({ message: "Error fetching filtered gear items" });
+  }
+};
+
+export const getGearByCategory = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    const { category } = req.query;
+
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    if (!category) {
+      return res
+        .status(400)
+        .json({ message: "Category parameter is required" });
+    }
+
+    const ownedGear = await OwnedGear.findOne({ userId });
+    if (!ownedGear) return res.status(200).json([]);
+
     const filteredItems = ownedGear.items.filter((item) =>
-      item.categories.includes(type)
+      item.categories.includes(category)
     );
-    console.log("Filtered items:", filteredItems);
 
     res.status(200).json(filteredItems);
   } catch (error) {
-    console.error("Error in getGearByType:", error);
-    res.status(500).json({
-      message: "Error fetching filtered gear items.",
-      error: error.message,
-    });
+    console.error("Error fetching gear by category:", error);
+    res.status(500).json({ message: "Error fetching filtered gear items" });
   }
 };

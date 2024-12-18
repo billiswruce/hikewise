@@ -100,7 +100,10 @@ const TrailForm = ({
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      <h1 className={styles.title}>{t("createTrail")}</h1>
+      <div className={styles.infoContainer}>
+        <h1 className={styles.title}>{t("createTrail")}</h1>
+        <h4 className={styles.info}> {t("createTrailInfo")}</h4>
+      </div>
       <input
         className={styles.input}
         type="text"

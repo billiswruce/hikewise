@@ -84,7 +84,10 @@ const Trails = () => {
         />
       )}
       <div>
-        <h2 className={styles.heading}>{t("trails")}</h2>
+        <div className={styles.infoContainer}>
+          <h1 className={styles.heading}>{t("trails")}</h1>
+          <h4 className={styles.info}>{t("trailsInfo")}</h4>
+        </div>
         <nav className={styles.tabNavigation}>
           <Link
             to="hiking"

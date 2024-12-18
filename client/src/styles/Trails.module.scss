@@ -5,12 +5,6 @@
   margin: 0 auto;
 }
 
-.heading {
-  font-size: var(--h3-font-size);
-  color: var(--color-primary);
-  margin-left: 20px;
-}
-
 .tabNavigation {
   display: flex;
   border-bottom: 2px solid var(--color-border);
@@ -22,13 +16,13 @@
   padding: 12px 24px;
   text-decoration: none;
   color: var(--color-text);
-  background-color: var(--color-grey-light);
+  background-color: var(--color-white);
   border: none;
   border-radius: 15px 15px 0 0;
   transition: all 0.3s ease;
 
   &.active {
-    background-color: var(--color-grey-dark);
+    background-color: var(--color-grey-light);
     color: var(--color-black);
   }
 }
@@ -53,4 +47,8 @@
 .tabContent {
   position: relative;
   min-height: 200px;
+}
+
+.infoContainer {
+  padding: 20px;
 }
