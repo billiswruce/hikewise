@@ -492,6 +492,26 @@ export const Gear = () => {
                     setNewItem({ ...newItem, color: e.target.value })
                   }
                 />
+                {type === "All" && (
+                  <select
+                    value={newItem.type}
+                    onChange={(e) =>
+                      setNewItem({
+                        ...newItem,
+                        type: e.target.value as
+                          | "Clothing"
+                          | "Equipment"
+                          | "Food",
+                        categories: [], // Reset categories when type changes
+                      })
+                    }
+                    className={styles.categorySelect}>
+                    <option value="">{t("myGear.selectType")}</option>
+                    <option value="Clothing">{t("myGear.clothing")}</option>
+                    <option value="Equipment">{t("myGear.equipment")}</option>
+                    <option value="Food">{t("myGear.food")}</option>
+                  </select>
+                )}
                 <select
                   value={newItem.categories[0] || ""}
                   onChange={(e) =>
@@ -502,26 +522,30 @@ export const Gear = () => {
                   }
                   className={styles.categorySelect}>
                   <option value="">{t("myGear.selectCategory")}</option>
-                  {type !== "All" &&
-                    Object.entries(CATEGORIES[type]).map(
-                      ([subcategory, items]) => (
-                        <optgroup
-                          key={subcategory}
-                          label={t(
-                            `myGear.categories.${subcategory.toLowerCase()}`
-                          )}>
-                          {items.map((category) => (
-                            <option key={category} value={category}>
-                              {t(
-                                `myGear.categories.${category
-                                  .toLowerCase()
-                                  .replace(/\s+/g, "")}`
-                              )}
-                            </option>
-                          ))}
-                        </optgroup>
-                      )
-                    )}
+                  {(type === "All"
+                    ? CATEGORIES[newItem.type]
+                    : CATEGORIES[type]) &&
+                    Object.entries(
+                      type === "All"
+                        ? CATEGORIES[newItem.type]
+                        : CATEGORIES[type]
+                    ).map(([subcategory, items]) => (
+                      <optgroup
+                        key={subcategory}
+                        label={t(
+                          `myGear.categories.${subcategory.toLowerCase()}`
+                        )}>
+                        {items.map((category) => (
+                          <option key={category} value={category}>
+                            {t(
+                              `myGear.categories.${category
+                                .toLowerCase()
+                                .replace(/\s+/g, "")}`
+                            )}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
                 </select>
                 <select
                   value={newItem.condition}

@@ -4,13 +4,19 @@ import Navigation from "./TopNavigation";
 import useWindowSize from "../hooks/WindowSize";
 import BackButton from "./BackButton";
 import { useLocation } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Header = () => {
   const { i18n } = useTranslation();
   const { width } = useWindowSize();
   const location = useLocation();
+  const { isAuthenticated } = useAuth0();
   const isDesktop = width >= 768;
   const showBackButton = location.pathname !== "/";
+
+  if (!isAuthenticated) return null;
+
+  if (location.pathname === "/" && !isAuthenticated) return null;
 
   const handleLanguageChange = (
     event: React.ChangeEvent<HTMLSelectElement>

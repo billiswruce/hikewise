@@ -85,7 +85,8 @@
       "errorDeleting": "Error deleting gear",
       "invalidGearType": "Invalid gear type"
     },
-    "all": "All"
+    "all": "All",
+    "selectType": "Select Type"
   },
   "food": "Food",
   "journal": "Journal",
@@ -103,7 +104,6 @@
   "registerLogin": "Here you register and log in",
   "map": "Map",
   "myProfile": "My Profile",
-  "notFound": "Not Found",
   "protectedPage": "Protected Page",
   "protectedPageDescription": "This page is only accessible to authenticated users.",
   "startPlanning": "Start Planning",
@@ -166,5 +166,9 @@
   "adding...": "Adding...",
   "gearInfo": "Organize your gear and see what you have and what you need for your next adventure.",
   "createTrailInfo": "Create a trail you have hiked or plan to hike. Add details like distance, difficulty, date, and description to simplify planning. You can edit and delete trails later.",
-  "trailsInfo": "Here you will find all your trails created and here you can add and see your favorites. Go to a trail and create your packing lists! You can edit and delete trails later."
+  "trailsInfo": "Here you will find all your trails created and here you can add and see your favorites. Go to a trail and create your packing lists! You can edit and delete trails later.",
+  "notFound": "The trail is gone! It looks like the path you were following has vanished into the mist. Go back to the main trail.",
+  "Confirmation": "Your hiking trail has been created! You can find all your trails in your profile. Head there to create your packing list and keep planning your next big adventure!",
+  "homeInfo": "Hey Hiker! Let's get started! Click the button to register/login and start planning your next hike!",
+  "slogan": "Plan wisely, hike confidently."
 }

@@ -85,7 +85,8 @@
       "errorUpdating": "Erreur lors de la mise à jour de l'équipement",
       "errorDeleting": "Erreur lors de la suppression de l'équipement"
     },
-    "all": "Tous"
+    "all": "Tous",
+    "selectType": "Sélectionner un type"
   },
   "food": "Bouffe",
   "journal": "Journal",
@@ -103,7 +104,6 @@
   "registerLogin": "Ici, vous vous inscrivez et vous connectez",
   "map": "Carte",
   "myProfile": "Mon profil",
-  "notFound": "Non trouvé",
   "protectedPage": "Page protégée",
   "protectedPageDescription": "Cette page est uniquement accessible aux utilisateurs authentifiés.",
   "startPlanning": "Commencez à planifier",
@@ -166,5 +166,9 @@
   "adding...": "Ajout en cours...",
   "gearInfo": "Organisez votre équipement et voyez ce que vous avez et ce qui manque pour votre prochaine aventure.",
   "createTrailInfo": "Créez un sentier que vous avez parcouru ou que vous planifiez de parcourir. Ajoutez des détails comme la distance, la difficulté, la date et une description pour simplifier la planification. Vous pouvez modifier et supprimer les sentiers plus tard.", 
-  "trailsInfo": "Ici, vous trouverez tous vos sentiers créés et ici vous pouvez ajouter et voir vos favoris. Allez sur un sentier et créez votre liste d'équipement! Vous pouvez modifier et supprimer les sentiers plus tard."
+  "trailsInfo": "Ici, vous trouverez tous vos sentiers créés et ici vous pouvez ajouter et voir vos favoris. Allez sur un sentier et créez votre liste d'équipement! Vous pouvez modifier et supprimer les sentiers plus tard.",
+  "notFound": "404 : Le sentier a disparu ! Il semble que le chemin que vous suiviez se soit perdu dans le brouillard. Retournez sur le sentier principal.",
+  "Confirmation": "Votre sentier est créé ! Vous pouvez trouver tous vos sentiers dans votre profil. Allez-y pour créer votre liste d'équipement et planifier votre prochaine aventure !",
+  "homeInfo": "Bonjour Hiker! On commence ! Cliquez sur le bouton pour vous inscrire/vous connecter et commencer à planifier votre prochaine randonnée !",
+  "slogan": "Planifiez intelligemment, réussissez avec confiance."
 }

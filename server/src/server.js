@@ -61,6 +61,10 @@ app.use(session(sessionArguments));
 // const __dirname = path.resolve();
 // app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/", (req, res) => {
+  res.json({ message: "Välkommen till HikeWise API" });
+});
+
 (async () => {
   try {
     console.log("Initializing MongoDB connection...");

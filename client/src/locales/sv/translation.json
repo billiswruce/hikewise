@@ -85,7 +85,8 @@
       "errorDeleting": "Fel vid borttagning av utrustning",
       "invalidGearType": "Ogiltig utrustningstyp"
     },
-    "all": "Alla"
+    "all": "Alla",
+    "selectType": "Välj typ"
   },
   "food": "Mat",
   "journal": "Dagbok",
@@ -103,7 +104,6 @@
   "registerLogin": "Här registrerar du dig och loggar in",
   "map": "Karta",
   "myProfile": "Min profil",
-  "notFound": "Hittades inte",
   "protectedPage": "Skyddad sida",
   "protectedPageDescription": "Denna sida är endast tillgänglig för autentiserade användare.",
   "startPlanning": "Börja planera",
@@ -166,5 +166,9 @@
   "adding...": "Lägger till...",
   "gearInfo": "Organisera din utrustning och se vad du har och vad som saknas inför nästa äventyr.",
   "createTrailInfo": "Skapa en vandringsled du har vandrat eller planerar att vandra. Lägg till detaljer som distans, svårighetsgrad, datum och beskriving för att förenkla planeringen. Du kan redigera och ta bort leder senare.",
-  "trailsInfo": "Här hittar du dina planerade och genomförda vandringsleder. Favorisera leder, Gå in på en led och lägg till packlista och anteckningar."
+  "trailsInfo": "Här hittar du dina planerade och genomförda vandringsleder. Favorisera leder, Gå in på en led och lägg till packlista och anteckningar.",
+  "notFound":  "404: Stigen är borta! Det ser ut som om leden du följde har försvunnit i dimman. Gå tillbaks till huvudleden.",
+  "Confirmation": "Din vandringsled är skapad! Du hittar alla dina leder under vandringsleder i din profil. Gå dit för att skapa din packlista och fortsätta planera ditt nästa stora äventyr!",
+  "homeInfo": "Hej Äventyrare! Låt oss sätta igång! Klicka på knappen för att registrera dig/logga in och börja planera din nästa vandring!",
+  "slogan": "Planera med förnuft, vandra med självförtroende."
 }

@@ -84,7 +84,8 @@
       "errorUpdating": "Error al actualizar el equipamiento",
       "errorDeleting": "Error al eliminar el equipamiento"
     },
-    "all": "Todos"
+    "all": "Todos",
+    "selectType": "Seleccionar tipo"
   },
   "food": "Comida",
   "journal": "Diario",
@@ -102,7 +103,6 @@
   "registerLogin": "Aquí te registras e inicias sesión",
   "map": "Mapa",
   "myProfile": "Mi perfil",
-  "notFound": "No encontrado",
   "protectedPage": "Página protegida",
   "protectedPageDescription": "Esta página solo está disponible para usuarios autenticados.",
   "startPlanning": "Comienza a planificar",
@@ -165,5 +165,9 @@
   "adding...": "Añadiendo...",
   "gearInfo": "Organiza tu equipo y mira qué tienes y qué te falta para tu próxima aventura.",
   "createTrailInfo": "Crea un sendero que has recorrido o que planeas recorrer. Añade detalles como la distancia, la dificultad, la fecha y una descripción para simplificar la planificación. Puedes editar y eliminar los senderos más tarde.",
-  "trailsInfo": "Aquí encontrarás todos tus senderos creados y aquí puedes añadir y ver tus favoritos. Ve a un sendero y crea tu lista de equipamiento! Puedes editar y eliminar senderos más tarde."
+  "trailsInfo": "Aquí encontrarás todos tus senderos creados y aquí puedes añadir y ver tus favoritos. Ve a un sendero y crea tu lista de equipamiento! Puedes editar y eliminar senderos más tarde.",
+  "notFound": "404: ¡El sendero ha desaparecido! Parece que el camino que seguías se ha perdido en la niebla. Vuelve al sendero principal.",
+  "Confirmation": "¡Tu ruta de senderismo ha sido creada! Puedes encontrar todas tus rutas en tu perfil. Ve allí para crear tu lista de equipaje y seguir planificando tu próxima gran aventura.",
+  "homeInfo": "¡Hola Hiker! ¡Vamos a empezar! Hazclic en el botón para registrarte/iniciar sesión y empezar a planificar tu próxima aventura.",
+  "slogan": "Planifica con sabiduría, disfruta con confianza."
 }
