@@ -170,5 +170,8 @@
   "notFound":  "404: Stigen är borta! Det ser ut som om leden du följde har försvunnit i dimman. Gå tillbaks till huvudleden.",
   "Confirmation": "Din vandringsled är skapad! Du hittar alla dina leder under vandringsleder i din profil. Gå dit för att skapa din packlista och fortsätta planera ditt nästa stora äventyr!",
   "homeInfo": "Hej Äventyrare! Låt oss sätta igång! Klicka på knappen för att registrera dig/logga in och börja planera din nästa vandring!",
-  "slogan": "Planera med förnuft, vandra med självförtroende."
+  "slogan": "Planera med förnuft, vandra med självförtroende.",
+  "trailCreatedInfo": "Din vandringsled är skapad! Du hittar alla dina leder under vandringsleder i din profil. Gå dit för att skapa din packlista och fortsätta planera ditt nästa stora äventyr!",
+  "goToTrails": "Gå till vandringsleder",
+  "stayOnPage": "Stanna på sidan"
 }

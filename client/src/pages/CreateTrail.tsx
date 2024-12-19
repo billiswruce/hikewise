@@ -2,13 +2,16 @@ import { useState } from "react";
 import { LoadScript, Libraries } from "@react-google-maps/api";
 import { useTranslation } from "react-i18next";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/CreateTrail.module.scss";
 import backgroundImage from "../assets/bg.webp";
 import TrailForm from "../components/trail/TrailForm";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 const CreateTrail = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth0();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     length: "",
@@ -25,6 +28,7 @@ const CreateTrail = () => {
       food: [],
     },
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const libraries: Libraries = ["places"];
 
@@ -111,7 +115,7 @@ const CreateTrail = () => {
 
       if (response.ok) {
         const data = await response.json();
-        alert(t("trailCreatedSuccessfully"));
+        setIsModalOpen(true);
         console.log("Trail saved:", data);
       } else {
         const errorData = await response.json();
@@ -144,6 +148,12 @@ const CreateTrail = () => {
               handleChange={handleChange}
               handleImageUpload={handleImageUpload}
               handleSubmit={handleSubmit}
+            />
+            <ConfirmationModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              onNavigate={() => navigate("/trails")}
+              message={t("trailCreatedSuccessfully")}
             />
           </div>
 
