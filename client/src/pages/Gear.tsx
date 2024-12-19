@@ -83,11 +83,6 @@ export const Gear = () => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          // Om du använder en custom domain, lägg till:
-          Origin:
-            process.env.NODE_ENV === "production"
-              ? "https://hikewise.vercel.app"
-              : "http://localhost:5173",
         },
       });
 
