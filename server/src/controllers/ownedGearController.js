@@ -1,10 +1,18 @@
-import OwnedGear from "../models/ownedGear.js";
+import OwnedGear from "../models/OwnedGear.js";
 
 // Hämta alla gear-items för en användare
 export const getOwnedGear = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user?.id;
+    console.log("Getting gear for userId:", userId);
+
+    if (!userId) {
+      console.log("No userId found in request");
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
     const ownedGear = await OwnedGear.findOne({ userId });
+    console.log("Found gear:", ownedGear);
 
     if (!ownedGear) {
       return res.status(200).json([]);

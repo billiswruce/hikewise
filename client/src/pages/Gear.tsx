@@ -80,9 +80,21 @@ export const Gear = () => {
 
       const response = await fetch(endpoint, {
         credentials: "include",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          // Om du använder en custom domain, lägg till:
+          Origin:
+            process.env.NODE_ENV === "production"
+              ? "https://hikewise.vercel.app"
+              : "http://localhost:5173",
+        },
       });
 
-      if (!response.ok) throw new Error("Failed to fetch data");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch data");
+      }
 
       const data = await response.json();
       setGearItems(Array.isArray(data) ? data : []);

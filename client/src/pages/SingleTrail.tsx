@@ -384,7 +384,7 @@ const SingleTrail = () => {
               className={styles.editInput}
             />
           ) : (
-            <h1>{trail.name}</h1>
+            <h2>{trail.name}</h2>
           )}
           <div className={styles.weatherInfo}>
             <FontAwesomeIcon
