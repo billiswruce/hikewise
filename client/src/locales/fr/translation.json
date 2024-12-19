@@ -170,5 +170,8 @@
   "notFound": "404 : Le sentier a disparu ! Il semble que le chemin que vous suiviez se soit perdu dans le brouillard. Retournez sur le sentier principal.",
   "Confirmation": "Votre sentier est créé ! Vous pouvez trouver tous vos sentiers dans votre profil. Allez-y pour créer votre liste d'équipement et planifier votre prochaine aventure !",
   "homeInfo": "Bonjour Hiker! On commence ! Cliquez sur le bouton pour vous inscrire/vous connecter et commencer à planifier votre prochaine randonnée !",
-  "slogan": "Planifiez intelligemment, réussissez avec confiance."
+  "slogan": "Planifiez intelligemment, réussissez avec confiance.",
+  "trailCreatedInfo": "Votre sentier est créé ! Vous pouvez trouver tous vos sentiers dans votre profil. Allez-y pour créer votre liste d'équipement et planifier votre prochaine aventure !",
+  "goToTrails": "Aller à sentiers",
+  "stayOnPage": "Restez sur la page"
 }

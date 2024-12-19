@@ -170,5 +170,9 @@
   "notFound": "The trail is gone! It looks like the path you were following has vanished into the mist. Go back to the main trail.",
   "Confirmation": "Your hiking trail has been created! You can find all your trails in your profile. Head there to create your packing list and keep planning your next big adventure!",
   "homeInfo": "Hey Hiker! Let's get started! Click the button to register/login and start planning your next hike!",
-  "slogan": "Plan wisely, hike confidently."
+  "slogan": "Plan wisely, hike confidently.",
+  "trailCreatedInfo": "Your hiking trail has been created! You can find all your trails in your profile. Head there to create your packing list and keep planning your next big adventure!",
+  "goToTrails": "Go to Trails",
+  "stayOnPage": "Stay on Page"
+
 }
