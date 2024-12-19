@@ -3,39 +3,68 @@
 .container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   min-height: 100vh;
   background-size: cover;
   background-position: center;
   background-color: var(--color-white);
-  padding-top: 5rem;
+  padding: 2rem;
+
+  // @media (min-width: globals.$md-screen) {
+  // }
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  background-color: var(--color-white);
+  border-radius: 25px;
+  padding: 2rem;
+  max-width: 500px;
+  text-align: center;
+  min-width: 300px;
 }
 
 .hero {
-  text-align: center;
-  padding: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .title {
   font-size: 3rem;
   font-weight: bold;
-  margin-bottom: 1.5rem;
   font-family: "IBM Plex Sans", sans-serif;
   color: var(--color-black);
 }
 
-@media (min-width: globals.$md-screen) {
-  .hero {
-    padding: 2rem;
-    max-width: 50%;
-  }
+.description {
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: var(--color-dark-gray);
+}
 
+.logo {
+  width: 100px;
+  height: auto;
+  margin: 1rem 0;
+}
+
+.buttonContainer {
+  margin-top: 1.5rem;
+}
+
+@media (min-width: globals.$md-screen) {
+  .card {
+    max-width: 600px;
+  }
   .title {
     font-size: 3rem;
-  }
-
-  .registerButton,
-  .loginButton {
-    font-size: 1.1rem;
   }
 }

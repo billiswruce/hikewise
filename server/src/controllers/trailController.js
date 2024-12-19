@@ -18,7 +18,10 @@ export const createTrail = async (req, res) => {
     packingList,
   } = req.body;
 
-  const placeholderImage = "/trailPlaceholder.webp";
+  const placeholderImage =
+    process.env.NODE_ENV === "production"
+      ? `${process.env.FRONTEND_URL}/trailPlaceholder.webp`
+      : "http://localhost:5173/trailPlaceholder.webp";
 
   try {
     const weatherResponse = await axios.get(

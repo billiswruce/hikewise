@@ -1,11 +1,25 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+import styles from "../styles/NotFound.module.scss";
 
-const NotFound = () => {
+export const NotFound = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <h1>{t("notFound")}</h1>
+    <div
+      className={styles.notFoundContainer}
+      style={{
+        backgroundImage: `url('/HikersMist.png')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}>
+      <div className={styles.content}>
+        <h1>404</h1>
+        <p>{t("notFound")}</p>
+        <Link to="/" className={styles.homeLink}>
+          {t("homePage")}
+        </Link>
+      </div>
     </div>
   );
 };

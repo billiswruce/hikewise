@@ -2,10 +2,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/Navigation.module.scss";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth0();
+
+  if (!isAuthenticated) return null;
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
