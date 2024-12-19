@@ -14,10 +14,6 @@ const Header = () => {
   const isDesktop = width >= 768;
   const showBackButton = location.pathname !== "/";
 
-  if (!isAuthenticated) return null;
-
-  if (location.pathname === "/" && !isAuthenticated) return null;
-
   const handleLanguageChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -28,7 +24,7 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.topBar}>
         <div className={styles.leftSection}>
-          {showBackButton && <BackButton />}
+          {showBackButton && isAuthenticated && <BackButton />}
         </div>
         <div className={styles.rightSection}>
           <select
@@ -42,7 +38,7 @@ const Header = () => {
             <option value="es">Español</option>
           </select>
         </div>
-        {isDesktop && <Navigation />}
+        {isDesktop && isAuthenticated && <Navigation />}
       </div>
     </header>
   );

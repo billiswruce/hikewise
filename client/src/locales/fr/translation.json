@@ -173,5 +173,13 @@
   "slogan": "Planifiez intelligemment, réussissez avec confiance.",
   "trailCreatedInfo": "Votre sentier est créé ! Vous pouvez trouver tous vos sentiers dans votre profil. Allez-y pour créer votre liste d'équipement et planifier votre prochaine aventure !",
   "goToTrails": "Aller à sentiers",
-  "stayOnPage": "Restez sur la page"
+  "stayOnPage": "Restez sur la page", 
+  "modal": {
+    "step1": "Créer un sentier",
+    "step2": "Ajouter votre équipement",
+    "step3": "Gérer votre liste d'équipement",
+    "next": "Suivant",
+    "prev": "Précédent",
+    "close": "Aller !"
+  }
 }

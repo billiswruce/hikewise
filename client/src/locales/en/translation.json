@@ -173,6 +173,13 @@
   "slogan": "Plan wisely, hike confidently.",
   "trailCreatedInfo": "Your hiking trail has been created! You can find all your trails in your profile. Head there to create your packing list and keep planning your next big adventure!",
   "goToTrails": "Go to Trails",
-  "stayOnPage": "Stay on Page"
-
+  "stayOnPage": "Stay on Page",
+    "modal": {
+      "step1": "Create a trail",
+      "step2": "Add your gear",
+      "step3": "Manage your trail packlist",
+      "next": "Next",
+      "prev": "Prev",
+    "close": "Let's go!"
+  }
 }

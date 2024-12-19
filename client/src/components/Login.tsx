@@ -1,13 +1,15 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/Login.module.scss";
+import LoginModal from "../components/LoginModal";
 
 const Login = () => {
   const { loginWithRedirect, isAuthenticated, user } = useAuth0();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const loginToBackend = async () => {
@@ -19,9 +21,7 @@ const Login = () => {
           `${import.meta.env.VITE_API_URL}/api/auth/login`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             credentials: "include",
             body: JSON.stringify({
               auth0Id: user.sub,
@@ -34,7 +34,7 @@ const Login = () => {
         if (response.ok) {
           const data = await response.json();
           console.log("Användare sparad på backend:", data);
-          navigate("/my-profile");
+          setShowModal(true); // Visa modalen
         } else {
           console.error("Server error:", response.statusText);
         }
@@ -44,7 +44,7 @@ const Login = () => {
     };
 
     loginToBackend();
-  }, [isAuthenticated, user, navigate]);
+  }, [isAuthenticated, user]);
 
   return (
     <div>
@@ -53,6 +53,8 @@ const Login = () => {
           {t("startPlanning")}
         </button>
       )}
+
+      <LoginModal isOpen={showModal} onClose={() => navigate("/my-profile")} />
     </div>
   );
 };
