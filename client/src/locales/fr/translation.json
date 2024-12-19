@@ -175,11 +175,14 @@
   "goToTrails": "Aller à sentiers",
   "stayOnPage": "Restez sur la page", 
   "modal": {
-    "step1": "Créer un sentier",
-    "step2": "Ajouter votre équipement",
-    "step3": "Gérer votre liste d'équipement",
+    "howItWorks": "Bienvenue aventurier ! Voici quelques étapes rapides pour vous aider à commencer.",
+    "step1": "1. Créer un sentier",
+    "step2": "2.Ajouter votre équipement",
+    "step3": "3.Gérer votre liste d'équipement",
     "next": "Suivant",
     "prev": "Précédent",
-    "close": "Aller !"
+    "close": "Aller !",
+    "finished": "4. C'est parti !",
+    "finishedButton": "Aller !"
   }
 }

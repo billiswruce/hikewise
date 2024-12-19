@@ -174,11 +174,14 @@
   "goToTrails": "Ir a senderos",
   "stayOnPage": "Permanecer en la página",
   "modal": {
-    "step1": "Crear un sendero",
-    "step2": "Añadir tu equipo",
-    "step3": "Gestionar tu lista de equipaje",
+    "howItWorks": "¡Bienvenido aventurero! Aquí tienes unos pasos rápidos para empezar.",
+    "step1": "1. Crear un sendero",
+    "step2": "2.Añadir tu equipo",
+    "step3": "3.Gestionar tu lista de equipaje",
     "next": "Siguiente",
     "prev": "Anterior",
-    "close": "¡Vamos!"
+    "close": "¡Vamos!",
+    "finished": "4. ¡Es hora de aventura!",
+    "finishedButton": "¡Vamos!"
   }
 }

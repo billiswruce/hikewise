@@ -175,11 +175,13 @@
   "goToTrails": "Gå till vandringsleder",
   "stayOnPage": "Stanna på sidan",
   "modal": {
-    "step1": "Skapa en vandringsled",
-    "step2": "Lägg till din utrustning",
-    "step3": "Hantera din packlista",
+    "howItWorks": "Välkommen äventyrare! Här är några snabba steg för att komma igång.",
+    "step1": "1. Skapa en vandringsled",
+    "step2": "2. Lägg till din utrustning",
+    "step3": "3.Hantera din packlista",
     "next": "Nästa",
     "prev": "Föregående",
-    "close": "Låt oss börja!"
+    "finished": "4. Ut och hajka!",
+    "close": "Kör igång!"
   }
 }
