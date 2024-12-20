@@ -173,5 +173,15 @@
   "slogan": "Planera med förnuft, vandra med självförtroende.",
   "trailCreatedInfo": "Din vandringsled är skapad! Du hittar alla dina leder under vandringsleder i din profil. Gå dit för att skapa din packlista och fortsätta planera ditt nästa stora äventyr!",
   "goToTrails": "Gå till vandringsleder",
-  "stayOnPage": "Stanna på sidan"
+  "stayOnPage": "Stanna på sidan",
+  "modal": {
+    "howItWorks": "Välkommen äventyrare! Här är några snabba steg för att komma igång.",
+    "step1": "1. Skapa en vandringsled",
+    "step2": "2. Lägg till din utrustning",
+    "step3": "3.Hantera din packlista",
+    "next": "Nästa",
+    "prev": "Föregående",
+    "finished": "4. Ut och hajka!",
+    "close": "Kör igång!"
+  }
 }

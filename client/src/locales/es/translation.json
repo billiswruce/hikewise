@@ -172,5 +172,16 @@
   "slogan": "Planifica con sabiduría, disfruta con confianza.",
   "trailCreatedInfo": "¡Tu ruta de senderismo ha sido creada! Puedes encontrar todas tus rutas en tu perfil. Ve allí para crear tu lista de equipaje y seguir planificando tu próxima gran aventura!",
   "goToTrails": "Ir a senderos",
-  "stayOnPage": "Permanecer en la página"
+  "stayOnPage": "Permanecer en la página",
+  "modal": {
+    "howItWorks": "¡Bienvenido aventurero! Aquí tienes unos pasos rápidos para empezar.",
+    "step1": "1. Crear un sendero",
+    "step2": "2.Añadir tu equipo",
+    "step3": "3.Gestionar tu lista de equipaje",
+    "next": "Siguiente",
+    "prev": "Anterior",
+    "close": "¡Vamos!",
+    "finished": "4. ¡Es hora de aventura!",
+    "finishedButton": "¡Vamos!"
+  }
 }

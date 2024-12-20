@@ -8,10 +8,7 @@
   background-size: cover;
   background-position: center;
   background-color: var(--color-white);
-  padding: 2rem;
-
-  // @media (min-width: globals.$md-screen) {
-  // }
+  box-sizing: border-box;
 }
 
 h1 {
@@ -23,18 +20,20 @@ p {
   margin: 0;
   padding: 0;
 }
-
 .card {
   background-color: var(--color-white);
   border-radius: 25px;
-  padding: 2rem;
   max-width: 500px;
+  width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  min-width: 300px;
-}
-
-.hero {
-  margin-bottom: 1rem;
+  box-sizing: border-box;
+  padding: 1rem;
+  gap: 1rem;
 }
 
 .title {
@@ -42,18 +41,20 @@ p {
   font-weight: bold;
   font-family: "IBM Plex Sans", sans-serif;
   color: var(--color-black);
+  margin: 0;
 }
 
 .description {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 1rem 0;
-  font-size: 1rem;
-  color: var(--color-dark-gray);
 }
 
 .logo {
   width: 100px;
   height: auto;
-  margin: 1rem 0;
 }
 
 .buttonContainer {
