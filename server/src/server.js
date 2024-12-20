@@ -23,6 +23,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
   "https://hikewise.vercel.app",
+  "https://hikewise-backend.vercel.app",
 ];
 
 const sessionConfig = {
@@ -40,7 +41,6 @@ const sessionConfig = {
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 24 * 60 * 60 * 1000,
-    domain: process.env.NODE_ENV === "production" ? ".vercel.app" : undefined,
   },
   name: "connect.sid",
 };
@@ -49,17 +49,16 @@ app.use(session(sessionConfig));
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.indexOf(origin) === -1) {
-      return callback(new Error("CORS not allowed"));
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
     }
-    return callback(null, true);
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-  exposedHeaders: ["Set-Cookie"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept", "Cookie"],
+  exposedHeaders: ["Set-Cookie", "Authorization"],
 };
 
 app.use(cors(corsOptions));
@@ -73,6 +72,7 @@ app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   console.log("Session:", req.session);
   console.log("Headers:", req.headers);
+  res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
 
