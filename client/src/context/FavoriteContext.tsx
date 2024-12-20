@@ -27,7 +27,7 @@ export const FavoriteProvider = ({
       return;
     }
 
-    setIsLoading(true); // Aktivera loading state
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
@@ -48,7 +48,7 @@ export const FavoriteProvider = ({
     } catch (err) {
       console.error("Error fetching favorites:", err);
     } finally {
-      setIsLoading(false); // Stäng av loading state
+      setIsLoading(false);
     }
   }, [isAuthenticated]);
 
@@ -62,17 +62,15 @@ export const FavoriteProvider = ({
       return;
     }
 
-    setIsLoading(true);
+    const newFavorites = new Set(favorites);
+    if (newFavorites.has(trailId)) {
+      newFavorites.delete(trailId);
+    } else {
+      newFavorites.add(trailId);
+    }
+    setFavorites(newFavorites);
 
     try {
-      const newFavorites = new Set(favorites);
-      if (newFavorites.has(trailId)) {
-        newFavorites.delete(trailId);
-      } else {
-        newFavorites.add(trailId);
-      }
-      setFavorites(newFavorites);
-
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/favorites/toggle/${trailId}`,
         {
@@ -82,15 +80,15 @@ export const FavoriteProvider = ({
         }
       );
 
-      if (!response.ok) throw new Error("Failed to toggle favorite");
+      if (!response.ok) {
+        throw new Error("Failed to toggle favorite");
+      }
 
       const data = await response.json();
       setFavorites(new Set(data.favorites));
     } catch (error) {
       console.error("Error toggling favorite:", error);
       await loadFavorites();
-    } finally {
-      setIsLoading(false);
     }
   };
 

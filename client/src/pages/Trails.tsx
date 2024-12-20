@@ -1,10 +1,11 @@
 import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth0 } from "@auth0/auth0-react";
 import styles from "../styles/Trails.module.scss";
 import { Trail } from "../models/Trail";
 import LoadingScreen from "../components/LoadingScreen";
+import { FavoriteContext } from "../context/FavoriteContext";
 
 const Trails = () => {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ const Trails = () => {
   const [loading, setLoading] = useState(true);
   const initialTab = location.state?.activeTab || "default-tab";
   const [activeTab, setActiveTab] = useState(initialTab);
+  const { favorites, toggleFavorite } = useContext(FavoriteContext);
 
   useEffect(() => {
     const fetchTrails = async () => {
@@ -75,6 +77,12 @@ const Trails = () => {
     location.state = null;
   };
 
+  const handleFavoriteClick = async (e: React.MouseEvent, trailId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await toggleFavorite(trailId);
+  };
+
   return (
     <div className={styles.trailsContainer}>
       {location.pathname === "/trails" && (
@@ -119,6 +127,8 @@ const Trails = () => {
             context={{
               upcomingTrails,
               hikedTrails,
+              favorites,
+              handleFavoriteClick,
             }}
           />
         </div>
