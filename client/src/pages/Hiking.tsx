@@ -19,7 +19,7 @@ const Hiking = () => {
   const sortedTrails = useTrailSort(upcomingTrails, sortOption);
   const navigate = useNavigate();
 
-  console.log("Trail object:", upcomingTrails);
+  console.log("Trail object:", upcomingTrails, JSON.stringify(upcomingTrails));
 
   const handleTrailClick = (trailId: string, event: React.MouseEvent) => {
     if ((event.target as HTMLElement).closest(`.${styles.favoriteButton}`)) {

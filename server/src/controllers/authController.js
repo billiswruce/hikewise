@@ -4,6 +4,7 @@ export const login = async (req, res) => {
   const { auth0Id, email, name } = req.body;
 
   console.log("Inkommande data från frontend:", { auth0Id, email, name });
+  console.log("Session före login:", req.session);
 
   try {
     if (!auth0Id) {
@@ -19,16 +20,18 @@ export const login = async (req, res) => {
       await user.save();
 
       req.session.userId = user._id;
-      console.log("Session userId satt till:", req.session.userId);
+      console.log("Session efter userId set:", req.session);
 
       return req.session.save((err) => {
         if (err) {
           console.error("Fel vid session.save():", err);
           return res.status(500).json({ message: "Failed to save session" });
         }
+        console.log("Session sparad framgångsrikt:", req.session);
         res.status(200).json({
           message: "Användare inloggad!",
           user,
+          sessionId: req.session.id,
         });
       });
     } else {

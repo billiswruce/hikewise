@@ -52,3 +52,33 @@
 .infoContainer {
   padding: 20px;
 }
+
+.favoriteButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 2;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: var(--color-white);
+    stroke-width: 2;
+    transition: all 0.3s ease;
+  }
+
+  &.active svg {
+    fill: var(--color-red);
+    stroke: var(--color-red);
+  }
+
+  &:hover svg {
+    fill: var(--color-red);
+    stroke: var(--color-red);
+  }
+}

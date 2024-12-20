@@ -8,6 +8,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 export const App = () => {
   const [apiData, setApiData] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  //   Gör ett anrop till vercel, för att se om vi är inloggade (inga parametrar som användarnamn eller lösenord, förlitar oss på cookien) /getme
+  // när vi får svar, om svaret innehåller användardataså är användaren inloggad, annars går vi vidare med useAuth0,
+  // när vi får svar från useAuth0, så anropa login på server med andändarnamn och lösenord
   const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
@@ -15,6 +18,9 @@ export const App = () => {
       setIsLoading(true);
       fetch(`${import.meta.env.VITE_API_URL}/`, {
         credentials: "include",
+        headers: {
+          Accept: "application/json",
+        },
       })
         .then((res) => res.json())
         .then((data) => {
@@ -25,16 +31,18 @@ export const App = () => {
         .finally(() => setIsLoading(false));
     }
   }, [isAuthenticated]);
-
+  console.log(isAuthenticated);
   return (
     <>
       {isLoading && <LoadingScreen />}
-      <FavoriteProvider>
-        <RouterProvider router={router} />
-        {isAuthenticated && apiData && (
-          <p style={{ textAlign: "center" }}>Backend säger: {apiData}</p>
-        )}
-      </FavoriteProvider>
+      {!isLoading && (
+        <FavoriteProvider>
+          <RouterProvider router={router} />
+          {isAuthenticated && apiData && (
+            <p style={{ textAlign: "center" }}>Backend säger: {apiData}</p>
+          )}
+        </FavoriteProvider>
+      )}
     </>
   );
 };

@@ -26,14 +26,15 @@ const Login = () => {
   useEffect(() => {
     const loginToBackend = async () => {
       if (!isAuthenticated || !user) return;
-      console.log("Auth0 User data:", user);
-      console.log("Inlogg till backend");
       try {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/auth/login`,
           {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
             credentials: "include",
             body: JSON.stringify({
               auth0Id: user.sub,
@@ -46,9 +47,9 @@ const Login = () => {
         if (response.ok) {
           const data = await response.json();
           console.log("Användare sparad på backend:", data);
-          setShowModal(true); // Visa modalen
+          setTimeout(() => setShowModal(true), 500);
         } else {
-          console.error("Server error:", response.statusText);
+          console.error("Server error:", await response.text());
         }
       } catch (error) {
         console.error("Fel vid inloggning på backend:", error);

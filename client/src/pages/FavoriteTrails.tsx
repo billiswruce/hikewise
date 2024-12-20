@@ -45,6 +45,7 @@ const FavoriteTrails = () => {
   // Hämta favorit-trails vid inladdning
   const fetchFavoriteTrails = async () => {
     try {
+      console.log("Fetching favorite trails");
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
         {
