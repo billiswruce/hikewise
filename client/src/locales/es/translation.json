@@ -183,5 +183,9 @@
     "close": "¡Vamos!",
     "finished": "4. ¡Es hora de aventura!",
     "finishedButton": "¡Vamos!"
+  },
+  "cookieConsent": {
+    "message": "Utilizamos cookies para mejorar tu experiencia. Al continuar usando este sitio, aceptas nuestro uso de cookies.",
+    "accept": "Aceptar cookies"
   }
 }

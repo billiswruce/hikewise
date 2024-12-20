@@ -1,0 +1,39 @@
+@use "../styles/globals.scss";
+
+.cookieBanner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  padding: 1rem;
+  z-index: 1000;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+
+    @media (min-width: globals.$md-screen) {
+      flex-direction: row;
+      text-align: left;
+      max-width: 1200px;
+      margin: 0 auto;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  .acceptButton {
+    background-color: var(--color-green);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+  }
+}

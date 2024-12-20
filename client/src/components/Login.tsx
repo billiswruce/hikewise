@@ -4,23 +4,36 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/Login.module.scss";
 import LoginModal from "../components/LoginModal";
+import CookieBanner from "./CookieBanner";
 
 const Login = () => {
   const { loginWithRedirect, isAuthenticated, user } = useAuth0();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [cookiesAccepted, setCookiesAccepted] = useState(false);
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem("selectedLanguage");
+    const hasAcceptedCookies = localStorage.getItem("cookiesAccepted");
     if (savedLanguage) {
       i18n.changeLanguage(savedLanguage);
+    }
+    if (hasAcceptedCookies) {
+      setCookiesAccepted(true);
     }
   }, [i18n]);
 
   const handleLogin = () => {
+    if (!cookiesAccepted) {
+      return;
+    }
     localStorage.setItem("selectedLanguage", i18n.language);
     loginWithRedirect();
+  };
+
+  const handleCookieAccept = () => {
+    setCookiesAccepted(true);
   };
 
   useEffect(() => {
@@ -62,9 +75,17 @@ const Login = () => {
   return (
     <div>
       {!isAuthenticated && (
-        <button onClick={handleLogin} className={styles.button}>
-          {t("startPlanning")}
-        </button>
+        <>
+          <button
+            onClick={handleLogin}
+            className={`${styles.button} ${
+              !cookiesAccepted ? styles.disabled : ""
+            }`}
+            disabled={!cookiesAccepted}>
+            {t("startPlanning")}
+          </button>
+          <CookieBanner onAccept={handleCookieAccept} />
+        </>
       )}
 
       <LoginModal isOpen={showModal} onClose={() => navigate("/my-profile")} />

@@ -184,5 +184,9 @@
     "close": "Aller !",
     "finished": "4. C'est parti !",
     "finishedButton": "Aller !"
-  }
+  },
+  "cookieConsent": {
+    "message": "Nous utilisons des cookies pour améliorer votre expérience. En continuant à utiliser ce site, vous acceptez notre utilisation des cookies.",
+    "accept": "Accepter les cookies"
+  } 
 }
