@@ -18,10 +18,13 @@ export const App = () => {
       setIsLoading(true);
       fetch(`${import.meta.env.VITE_API_URL}/`, {
         credentials: "include",
+        headers: {
+          Accept: "application/json",
+        },
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("Fetched data:", data, JSON.stringify(data));
+          console.log("Fetched data:", data);
           setApiData(data.message);
         })
         .catch((error) => console.error("Error fetching data:", error))
