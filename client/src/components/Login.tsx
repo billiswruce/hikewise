@@ -7,9 +7,21 @@ import LoginModal from "../components/LoginModal";
 
 const Login = () => {
   const { loginWithRedirect, isAuthenticated, user } = useAuth0();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("selectedLanguage");
+    if (savedLanguage) {
+      i18n.changeLanguage(savedLanguage);
+    }
+  }, [i18n]);
+
+  const handleLogin = () => {
+    localStorage.setItem("selectedLanguage", i18n.language);
+    loginWithRedirect();
+  };
 
   useEffect(() => {
     const loginToBackend = async () => {
@@ -49,7 +61,7 @@ const Login = () => {
   return (
     <div>
       {!isAuthenticated && (
-        <button onClick={() => loginWithRedirect()} className={styles.button}>
+        <button onClick={handleLogin} className={styles.button}>
           {t("startPlanning")}
         </button>
       )}

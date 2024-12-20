@@ -14,10 +14,9 @@ const Header = () => {
   const isDesktop = width >= 768;
   const showBackButton = location.pathname !== "/";
 
-  const handleLanguageChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    i18n.changeLanguage(event.target.value);
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language);
+    localStorage.setItem("selectedLanguage", language);
   };
 
   return (
@@ -29,7 +28,7 @@ const Header = () => {
         <div className={styles.rightSection}>
           <select
             value={i18n.language}
-            onChange={handleLanguageChange}
+            onChange={(event) => changeLanguage(event.target.value)}
             className={styles.languageSelect}>
             <option value="en">English</option>
             <option value="sv">Svenska</option>
