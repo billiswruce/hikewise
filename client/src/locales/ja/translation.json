@@ -130,7 +130,7 @@
   "autocompletePlaceholder": "場所を入力",
   "dateFormat": "yyyy-MM-dd",
   "uploadImage": "画像をアップロード",
-  "removeImage": "画像を削除",
+  "removeImage": "��像を削除",
   "uploadImageError": "画像をアップロードできませんでした。",
   "uploadedImage": "アップロードした画像",
   "placeholderImage": "場所の画像",
@@ -182,5 +182,9 @@
     "prev": "前へ",
     "finished": "4. 冒険の時間！",
     "close": "始めましょう！"
+  },
+  "cookieConsent": {
+    "message": "当サイトではより良いサービスを提供するためにCookieを使用しています。サイトの利用を続けることで、Cookieの使用に同意したことになります。",
+    "accept": "同意する"
   }
 }
