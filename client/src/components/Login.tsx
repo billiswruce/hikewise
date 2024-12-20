@@ -26,7 +26,7 @@ const Login = () => {
   useEffect(() => {
     const loginToBackend = async () => {
       if (!isAuthenticated || !user) return;
-      console.log("Auth0 User data:", user);
+      console.log("Auth0 User data:", user, JSON.stringify(user));
       console.log("Inlogg till backend");
       try {
         const response = await fetch(
@@ -45,7 +45,11 @@ const Login = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Användare sparad på backend:", data);
+          console.log(
+            "Användare sparad på backend:",
+            data,
+            JSON.stringify(data)
+          );
           setShowModal(true); // Visa modalen
         } else {
           console.error("Server error:", response.statusText);
