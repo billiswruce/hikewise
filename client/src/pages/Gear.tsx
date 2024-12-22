@@ -1,9 +1,18 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
-// import LoadingScreen from "../components/LoadingScreen";
 import styles from "../styles/Gear.module.scss";
 import backgroundImage from "../assets/gearPlaceholder.jpg";
 import LoadingScreen from "../components/LoadingScreen";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEdit,
+  faTrash,
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { COLORS, RAINBOW_GRADIENT } from "../models/constants";
+import { CirclePicker, ColorResult } from "react-color";
+import buttonStyles from "../styles/Buttons.module.scss";
 
 interface GearItem {
   _id: string;
@@ -12,7 +21,7 @@ interface GearItem {
   condition: string;
   categories: string[];
   brand?: string;
-  color?: string;
+  color?: string | "rainbow";
   type: "Clothing" | "Equipment" | "Food";
 }
 
@@ -62,6 +71,39 @@ export const Gear = () => {
     categories: [] as string[],
     type: "Clothing" as "Clothing" | "Equipment" | "Food",
   });
+
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+
+  const checkScrollButtons = useCallback(() => {
+    if (tabsRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabsRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkScrollButtons();
+    window.addEventListener("resize", checkScrollButtons);
+    return () => window.removeEventListener("resize", checkScrollButtons);
+  }, [checkScrollButtons]);
+
+  const scroll = (direction: "left" | "right") => {
+    if (tabsRef.current) {
+      const scrollAmount = 200;
+      const newScrollLeft =
+        tabsRef.current.scrollLeft +
+        (direction === "left" ? -scrollAmount : scrollAmount);
+      tabsRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth",
+      });
+    }
+  };
 
   // Hämta gear
   const fetchGear = useCallback(async () => {
@@ -203,13 +245,19 @@ export const Gear = () => {
     updatedItem: Partial<GearItem>
   ) => {
     try {
+      // Ensure color is included in the update
+      const itemToUpdate = {
+        ...updatedItem,
+        color: updatedItem.color || null, // Make sure color is explicitly set, even if empty
+      };
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/owned-gear/${itemId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(updatedItem),
+          body: JSON.stringify(itemToUpdate),
         }
       );
 
@@ -220,6 +268,7 @@ export const Gear = () => {
 
       await fetchGear();
       setEditingItem(null);
+      setIsColorPickerOpen(false); // Close color picker after save
     } catch (error) {
       console.error("Error updating item:", error);
       alert(t("errorUpdatingItem"));
@@ -273,6 +322,63 @@ export const Gear = () => {
           <h1>{t("myGear.title")}</h1>
           <h4>{t("gearInfo")}</h4>
 
+          {/* Tabs */}
+          <div className={styles.tabs}>
+            <button
+              className={`${styles.scrollButton} ${styles.left} ${
+                !showLeftArrow ? styles.hidden : ""
+              }`}
+              onClick={() => scroll("left")}
+              aria-label="Scroll left">
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </button>
+            <div
+              className={styles.tabsWrapper}
+              ref={tabsRef}
+              onScroll={checkScrollButtons}>
+              <button
+                type="button"
+                onClick={() => setType("All")}
+                className={`${styles.tab} ${
+                  type === "All" ? styles.active : ""
+                }`}>
+                {t("myGear.all")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setType("Clothing")}
+                className={`${styles.tab} ${
+                  type === "Clothing" ? styles.active : ""
+                }`}>
+                {t("myGear.clothing")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setType("Equipment")}
+                className={`${styles.tab} ${
+                  type === "Equipment" ? styles.active : ""
+                }`}>
+                {t("myGear.equipment")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setType("Food")}
+                className={`${styles.tab} ${
+                  type === "Food" ? styles.active : ""
+                }`}>
+                {t("myGear.food")}
+              </button>
+            </div>
+            <button
+              className={`${styles.scrollButton} ${styles.right} ${
+                !showRightArrow ? styles.hidden : ""
+              }`}
+              onClick={() => scroll("right")}
+              aria-label="Scroll right">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </button>
+          </div>
+
           {/* Filter Container */}
           <div className={styles.filterContainer}>
             {type !== "All" && (
@@ -308,42 +414,6 @@ export const Gear = () => {
             )}
           </div>
 
-          {/* Tabs */}
-          <div className={styles.tabs}>
-            <button
-              type="button"
-              onClick={() => setType("All")}
-              className={`${styles.tab} ${
-                type === "All" ? styles.active : ""
-              }`}>
-              {t("myGear.all")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("Clothing")}
-              className={`${styles.tab} ${
-                type === "Clothing" ? styles.active : ""
-              }`}>
-              {t("myGear.clothing")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("Equipment")}
-              className={`${styles.tab} ${
-                type === "Equipment" ? styles.active : ""
-              }`}>
-              {t("myGear.equipment")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("Food")}
-              className={`${styles.tab} ${
-                type === "Food" ? styles.active : ""
-              }`}>
-              {t("myGear.food")}
-            </button>
-          </div>
-
           {/* Laddningsindikator under dataladdning */}
           {isLoading ? (
             <div className={styles.loading}>{LoadingScreen()}</div>
@@ -368,24 +438,62 @@ export const Gear = () => {
                         />
                         <input
                           type="text"
-                          value={editingItem.brand}
+                          value={editingItem.brand || ""}
                           onChange={(e) =>
                             setEditingItem({
                               ...editingItem,
                               brand: e.target.value,
                             })
                           }
+                          placeholder={t("myGear.brand")}
                         />
-                        <input
-                          type="text"
-                          value={editingItem.color}
-                          onChange={(e) =>
-                            setEditingItem({
-                              ...editingItem,
-                              color: e.target.value,
-                            })
-                          }
-                        />
+                        <div className={styles.colorPickerContainer}>
+                          <label>{t("myGear.color")}</label>
+                          <div className={styles.colorAccordion}>
+                            <div
+                              className={styles.selectedColor}
+                              onClick={() =>
+                                setIsColorPickerOpen(!isColorPickerOpen)
+                              }>
+                              <span
+                                className={styles.colorPreview}
+                                data-color={
+                                  editingItem.color === "rainbow"
+                                    ? "rainbow"
+                                    : undefined
+                                }
+                                style={{
+                                  backgroundColor:
+                                    editingItem.color &&
+                                    editingItem.color !== "rainbow"
+                                      ? editingItem.color
+                                      : undefined,
+                                }}
+                              />
+                              <span>{t("myGear.selectColor")}</span>
+                            </div>
+                            <div
+                              className={`${styles.colorOptions} ${
+                                isColorPickerOpen ? styles.open : ""
+                              }`}>
+                              <div className={styles.colorPickerWrapper}>
+                                <CirclePicker
+                                  colors={[...COLORS, RAINBOW_GRADIENT.type]}
+                                  color={editingItem.color}
+                                  onChange={(color: ColorResult) =>
+                                    setEditingItem({
+                                      ...editingItem,
+                                      color:
+                                        color.hex === RAINBOW_GRADIENT.type
+                                          ? RAINBOW_GRADIENT.type
+                                          : color.hex,
+                                    })
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         <input
                           type="number"
                           value={editingItem.quantity}
@@ -396,6 +504,7 @@ export const Gear = () => {
                             })
                           }
                           placeholder={t("myGear.quantity")}
+                          min="1"
                         />
                         <select
                           value={editingItem.condition}
@@ -418,42 +527,74 @@ export const Gear = () => {
                             {t("myGear.condition.poor")}
                           </option>
                         </select>
-                        <div className={styles.editButtons}>
+                        <div className={buttonStyles.editButtons}>
                           <button
+                            className={buttonStyles.saveButton}
                             onClick={() =>
                               updateGearItem(item._id, editingItem)
                             }>
                             {t("myGear.actions.save")}
                           </button>
-                          <button onClick={() => setEditingItem(null)}>
+                          <button
+                            className={buttonStyles.cancelButton}
+                            onClick={() => setEditingItem(null)}>
                             {t("myGear.actions.cancel")}
                           </button>
                         </div>
                       </div>
                     ) : (
                       <div className={styles.gearInfo}>
-                        <span className={styles.gearName}>{item.name}</span>
-                        {item.brand && (
-                          <span className={styles.gearBrand}>{item.brand}</span>
-                        )}
-                        {item.color && (
-                          <span className={styles.gearColor}>{item.color}</span>
-                        )}
-                        <span className={styles.gearCondition}>
-                          {t(
-                            `myGear.condition.${item.condition.toLowerCase()}`
+                        <div className={styles.gearHeader}>
+                          <span className={styles.gearName}>{item.name}</span>
+                          {item.brand && (
+                            <span className={styles.gearBrand}>
+                              {" "}
+                              {item.brand}
+                            </span>
                           )}
-                        </span>
-                        <span className={styles.gearQuantity}>
-                          {item.quantity}
-                        </span>
-                        <div className={styles.gearActions}>
-                          <button onClick={() => setEditingItem(item)}>
-                            {t("myGear.actions.edit")}
-                          </button>
-                          <button onClick={() => deleteGearItem(item._id)}>
-                            {t("myGear.actions.delete")}
-                          </button>
+                          <div className={styles.gearActions}>
+                            <button
+                              onClick={() => setEditingItem(item)}
+                              aria-label={t("myGear.actions.edit")}>
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button
+                              onClick={() => deleteGearItem(item._id)}
+                              aria-label={t("myGear.actions.delete")}>
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          </div>
+                        </div>
+                        <div className={styles.gearDetails}>
+                          {item.color && (
+                            <span className={styles.gearDetail}>
+                              <span
+                                className={`${styles.colorDot} ${
+                                  item.color === "rainbow" ? styles.rainbow : ""
+                                }`}
+                                data-color={
+                                  item.color === "rainbow"
+                                    ? "rainbow"
+                                    : undefined
+                                }
+                                style={{
+                                  backgroundColor:
+                                    item.color && item.color !== "rainbow"
+                                      ? item.color
+                                      : undefined,
+                                }}
+                              />
+                            </span>
+                          )}
+                          <span className={styles.gearDetail}>
+                            {t("myGear.condition.label")}:{" "}
+                            {t(
+                              `myGear.condition.${item.condition.toLowerCase()}`
+                            )}
+                          </span>
+                          <span className={styles.gearDetail}>
+                            {t("myGear.quantity")}: {item.quantity}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -491,14 +632,47 @@ export const Gear = () => {
                     })
                   }
                 />
-                <input
-                  type="text"
-                  placeholder={t("myGear.color")}
-                  value={newItem.color}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, color: e.target.value })
-                  }
-                />
+                <div className={styles.colorPickerContainer}>
+                  <div className={styles.colorAccordion}>
+                    <div
+                      className={styles.selectedColor}
+                      onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}>
+                      <span
+                        className={styles.colorPreview}
+                        data-color={
+                          newItem.color === "rainbow" ? "rainbow" : undefined
+                        }
+                        style={{
+                          backgroundColor:
+                            newItem.color !== "rainbow"
+                              ? newItem.color
+                              : undefined,
+                        }}
+                      />
+                      <span>{t("myGear.selectColor")}</span>
+                    </div>
+                    <div
+                      className={`${styles.colorOptions} ${
+                        isColorPickerOpen ? styles.open : ""
+                      }`}>
+                      <div className={styles.colorPickerWrapper}>
+                        <CirclePicker
+                          colors={[...COLORS, RAINBOW_GRADIENT.type]}
+                          color={newItem.color}
+                          onChange={(color: ColorResult) =>
+                            setNewItem({
+                              ...newItem,
+                              color:
+                                color.hex === RAINBOW_GRADIENT.type
+                                  ? RAINBOW_GRADIENT.type
+                                  : color.hex,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 {type === "All" && (
                   <select
                     value={newItem.type}
@@ -509,7 +683,7 @@ export const Gear = () => {
                           | "Clothing"
                           | "Equipment"
                           | "Food",
-                        categories: [], // Reset categories when type changes
+                        categories: [],
                       })
                     }
                     className={styles.categorySelect}>
@@ -564,7 +738,11 @@ export const Gear = () => {
                   <option value="Fair">{t("myGear.condition.fair")}</option>
                   <option value="Poor">{t("myGear.condition.poor")}</option>
                 </select>
-                <button onClick={addGearItem}>{t("myGear.actions.add")}</button>
+                <button
+                  onClick={addGearItem}
+                  className={buttonStyles.submitButton}>
+                  {t("myGear.actions.add")}
+                </button>
               </div>
             </>
           )}

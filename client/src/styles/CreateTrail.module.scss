@@ -55,14 +55,14 @@
   padding: 10px;
   font-size: 16px;
   font-family: "IBM Plex Sans", sans-serif;
-  border: 1px solid var(--color-grey-dark);
-  border-radius: 4px;
+  border: 1px solid var(--color-grey-light-dark);
+  border-radius: 25px;
   outline: none;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
 
   &:focus {
-    border-color: var(--color-green-dark);
+    border-color: var(--color-grey-dark);
   }
 }
 
@@ -73,12 +73,14 @@
   padding-right: 10px;
   background-size: 10px;
   font-size: 14px;
+  color: var(--color-grey-dark);
 }
 
 .textarea {
   height: 80px;
   font-size: 16px;
   font-family: "IBM Plex Sans", sans-serif;
+  border-radius: 10px;
 
   &::placeholder {
     font-size: 14px;
@@ -97,7 +99,7 @@
   width: 120px;
   height: 120px;
   object-fit: cover;
-  border: 2px solid var(--color-grey-dark);
+  border: 2px solid var(--color-grey-light-dark);
   border-radius: 4px;
 }
 
@@ -120,12 +122,13 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  // color: var(--color-grey-dark);
 
   label {
-    background: #fff;
+    background: var(--color-white);
     padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid var(--color-grey-light);
+    border-radius: 25px;
     cursor: pointer;
   }
 
@@ -157,19 +160,20 @@ label {
 .dateInputContainer {
   position: relative;
   padding: 10px;
-  border: 1px solid var(--color-grey-dark);
-  border-radius: 4px;
+  border: 1px solid var(--color-grey-light-dark);
+  border-radius: 25px;
   display: flex;
   align-items: center;
   box-sizing: border-box;
   font-size: 14px;
+  color: var(--color-grey-dark);
 
   &:hover {
-    border-color: var(--color-green-dark);
+    border-color: var(--color-grey-dark);
   }
 
   &:focus-within {
-    border-color: var(--color-green-dark);
+    border-color: var(--color-grey-dark);
   }
 
   span {
@@ -190,10 +194,17 @@ label {
     width: 100%;
     padding: 5px 0;
     background: transparent;
+    border-radius: 25px;
     cursor: pointer;
 
     &:focus {
       outline: none;
+    }
+
+    color: var(--color-grey-dark);
+
+    &:not([value=""]) {
+      color: var(--color-black);
     }
   }
 }
@@ -213,7 +224,7 @@ label {
     z-index: 1000;
     margin-top: 2px;
     border-radius: 4px;
-    border: 1px solid var(--color-grey-light);
+    border: 1px solid var(--color-grey-light-dark);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     background-color: white;
   }
@@ -231,8 +242,8 @@ label {
   width: 100%;
   padding: 10px;
   font-size: 14px;
-  border: 1px solid var(--color-grey-dark);
-  border-radius: 4px;
+  border: 1px solid var(--color-grey-light-dark);
+  border-radius: 25px;
 }
 
 /* Större skärmar */
@@ -282,12 +293,13 @@ label {
   position: relative;
 
   label {
-    background: #fff;
+    background: var(--color-white);
     padding: 8px 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid var(--color-grey-light-dark);
+    border-radius: 25px;
     cursor: pointer;
     display: inline-block;
+    color: var(--color-grey-dark);
   }
 
   input[type="file"] {
@@ -304,13 +316,18 @@ label {
 .fileStatus {
   color: var(--color-grey-dark);
   font-size: 14px;
+
+  &:not(:empty) {
+    color: var(--color-black);
+  }
 }
 
-// :global(.pac-container) {
-//   z-index: 9999 !important;
-//   margin-top: 0 !important;
-//   position: absolute !important;
-//   left: 0 !important;
-//   right: 0 !important;
-//   width: 100% !important;
-// }
+input[type="date"] {
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+
+  &:not([value=""]) {
+    color: var(--color-black);
+  }
+}

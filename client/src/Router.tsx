@@ -11,7 +11,6 @@ import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./ProtectedRoute";
 import SingleTrail from "./pages/SingleTrail";
-import Confirmation from "./pages/Confirmation";
 
 export const router = createBrowserRouter([
   {
@@ -31,10 +30,6 @@ export const router = createBrowserRouter([
       {
         path: "/gear",
         element: <ProtectedRoute element={<Gear />} />,
-      },
-      {
-        path: "/confirmation",
-        element: <ProtectedRoute element={<Confirmation />} />,
       },
       {
         path: "/trails",

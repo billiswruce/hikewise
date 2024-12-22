@@ -8,7 +8,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 export const App = () => {
   const [apiData, setApiData] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  //   Gör ett anrop till vercel, för att se om vi är inloggade (inga parametrar som användarnamn eller lösenord, förlitar oss på cookien) /getme
+  // Gör ett anrop till vercel, för att se om vi är inloggade (inga parametrar som användarnamn eller lösenord, förlitar oss på cookien) /getme
   // när vi får svar, om svaret innehåller användardataså är användaren inloggad, annars går vi vidare med useAuth0,
   // när vi får svar från useAuth0, så anropa login på server med andändarnamn och lösenord
   const { isAuthenticated } = useAuth0();
