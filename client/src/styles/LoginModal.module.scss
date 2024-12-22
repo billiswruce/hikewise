@@ -14,7 +14,7 @@
 }
 
 .modalContent {
-  margin-top: 100px;
+  margin-top: 30px;
   background: var(--color-white);
   width: 400px;
   height: 400px;
@@ -87,12 +87,15 @@
 }
 
 .closeButton {
+  width: 100px;
+  height: 40px;
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
+  font-size: 1rem;
   background-color: var(--color-green);
   color: var(--color-white);
   border: none;
-  border-radius: 4px;
+  font-weight: semi-bold;
+  border-radius: 50px;
   cursor: pointer;
 
   &:hover {
