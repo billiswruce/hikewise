@@ -191,5 +191,7 @@
   "cookieConsent": {
     "message": "Nous utilisons des cookies pour améliorer votre expérience. En continuant à utiliser ce site, vous acceptez notre utilisation des cookies.",
     "accept": "Accepter les cookies"
-  } 
+  },
+  "confirmDeleteTrail": "Êtes-vous sûr de vouloir supprimer ce sentier ?",
+  "errorDeletingTrail": "Erreur lors de la suppression du sentier"
 }

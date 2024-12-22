@@ -133,7 +133,7 @@
   "autocompletePlaceholder": "場所を入力",
   "dateFormat": "yyyy-MM-dd",
   "uploadImage": "画像をアップロード",
-  "removeImage": "��像を削除",
+  "removeImage": "画像を削除",
   "uploadImageError": "画像をアップロードできませんでした。",
   "uploadedImage": "アップロードした画像",
   "placeholderImage": "場所の画像",
@@ -189,5 +189,7 @@
   "cookieConsent": {
     "message": "当サイトではより良いサービスを提供するためにCookieを使用しています。サイトの利用を続けることで、Cookieの使用に同意したことになります。",
     "accept": "同意する"
-  }
+  },
+  "confirmDeleteTrail": "このトレイルを削除してもよろしいですか？",
+  "errorDeletingTrail": "トレイルの削除中にエラーが発生しました"
 }

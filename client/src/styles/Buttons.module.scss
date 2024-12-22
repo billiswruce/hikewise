@@ -27,14 +27,14 @@
 // Login/Get Started button
 .loginButton {
   @extend .button;
-  font-weight: bold;
+  font-weight: semi-bold;
 }
 
 // Submit button (for forms)
 .submitButton {
   @extend .button;
   margin-bottom: 3rem;
-  font-weight: bold;
+  font-weight: semi-bold;
 }
 
 // Add button (for gear, trails etc)
@@ -69,7 +69,6 @@
   }
 }
 
-// Small button variant
 .smallButton {
   @extend .button;
   padding: 0.4rem 1rem;
@@ -77,9 +76,30 @@
   min-width: unset;
 }
 
-// Button group
 .buttonGroup {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.profileButton {
+  background-color: var(--color-green);
+  color: var(--color-white);
+  padding: 0.5rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }

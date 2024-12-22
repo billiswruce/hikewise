@@ -190,5 +190,7 @@
   "cookieConsent": {
     "message": "Vi använder cookies för att förbättra din upplevelse. Genom att fortsätta använda denna webbplats godkänner du vår användning av cookies.",
     "accept": "Acceptera cookies"
-  }
+  },
+  "confirmDeleteTrail": "Är du säker på att du vill radera denna vandringsled?",
+  "errorDeletingTrail": "Ett fel uppstod när vandringsleden skulle raderas"
 }

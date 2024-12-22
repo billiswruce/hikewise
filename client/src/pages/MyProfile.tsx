@@ -7,7 +7,6 @@ import gearPlaceholder from "../assets/gearPlaceholder.jpg";
 import trailPlaceholder from "../assets/trailPlaceholder.webp";
 import favoritesPlaceholder from "../assets/favoritesPlaceholder.jpg";
 import profilePlaceholder from "../assets/profilePlaceholder.png";
-import buttonStyles from "../styles/Buttons.module.scss";
 import clsx from "clsx";
 
 const MyProfile = () => {
@@ -40,9 +39,9 @@ const MyProfile = () => {
             alt="Profile"
             className={styles.profileImage}
           />
-          <div className={buttonStyles.buttons}>
+          <div className={styles.buttons}>
             <button
-              className={clsx(buttonStyles.button, styles.createTrailButton)}
+              className={clsx(styles.button, styles.createTrailButton)}
               onClick={handleNavigate}>
               {t("createTrail")}
             </button>
