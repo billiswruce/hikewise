@@ -60,6 +60,7 @@
   outline: none;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
+  color: var(--color-black);
 
   &:focus {
     border-color: var(--color-green-dark);
@@ -73,6 +74,7 @@
   padding-right: 10px;
   background-size: 10px;
   font-size: 14px;
+  color: var(--color-black);
 }
 
 .textarea {
@@ -120,6 +122,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  color: var(--color-black);
 
   label {
     background: #fff;
@@ -163,6 +166,7 @@ label {
   align-items: center;
   box-sizing: border-box;
   font-size: 14px;
+  color: var(--color-black);
 
   &:hover {
     border-color: var(--color-green-dark);
@@ -314,3 +318,13 @@ label {
 //   right: 0 !important;
 //   width: 100% !important;
 // }
+
+input[type="date"] {
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+
+  &:not([value=""]) {
+    color: var(--color-primary);
+  }
+}
