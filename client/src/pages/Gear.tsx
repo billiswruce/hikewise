@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 // import LoadingScreen from "../components/LoadingScreen";
 import styles from "../styles/Gear.module.scss";
@@ -62,6 +62,37 @@ export const Gear = () => {
     categories: [] as string[],
     type: "Clothing" as "Clothing" | "Equipment" | "Food",
   });
+
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const checkScrollButtons = useCallback(() => {
+    if (tabsRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = tabsRef.current;
+      setShowLeftArrow(scrollLeft > 0);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkScrollButtons();
+    window.addEventListener("resize", checkScrollButtons);
+    return () => window.removeEventListener("resize", checkScrollButtons);
+  }, [checkScrollButtons]);
+
+  const scroll = (direction: "left" | "right") => {
+    if (tabsRef.current) {
+      const scrollAmount = 200;
+      const newScrollLeft =
+        tabsRef.current.scrollLeft +
+        (direction === "left" ? -scrollAmount : scrollAmount);
+      tabsRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth",
+      });
+    }
+  };
 
   // Hämta gear
   const fetchGear = useCallback(async () => {
@@ -273,6 +304,63 @@ export const Gear = () => {
           <h1>{t("myGear.title")}</h1>
           <h4>{t("gearInfo")}</h4>
 
+          {/* Tabs */}
+          <div className={styles.tabs}>
+            <button
+              className={`${styles.scrollButton} ${styles.left} ${
+                !showLeftArrow ? styles.hidden : ""
+              }`}
+              onClick={() => scroll("left")}
+              aria-label="Scroll left">
+              ←
+            </button>
+            <div
+              className={styles.tabsWrapper}
+              ref={tabsRef}
+              onScroll={checkScrollButtons}>
+              <button
+                type="button"
+                onClick={() => setType("All")}
+                className={`${styles.tab} ${
+                  type === "All" ? styles.active : ""
+                }`}>
+                {t("myGear.all")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setType("Clothing")}
+                className={`${styles.tab} ${
+                  type === "Clothing" ? styles.active : ""
+                }`}>
+                {t("myGear.clothing")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setType("Equipment")}
+                className={`${styles.tab} ${
+                  type === "Equipment" ? styles.active : ""
+                }`}>
+                {t("myGear.equipment")}
+              </button>
+              <button
+                type="button"
+                onClick={() => setType("Food")}
+                className={`${styles.tab} ${
+                  type === "Food" ? styles.active : ""
+                }`}>
+                {t("myGear.food")}
+              </button>
+            </div>
+            <button
+              className={`${styles.scrollButton} ${styles.right} ${
+                !showRightArrow ? styles.hidden : ""
+              }`}
+              onClick={() => scroll("right")}
+              aria-label="Scroll right">
+              →
+            </button>
+          </div>
+
           {/* Filter Container */}
           <div className={styles.filterContainer}>
             {type !== "All" && (
@@ -306,42 +394,6 @@ export const Gear = () => {
                 </select>
               </label>
             )}
-          </div>
-
-          {/* Tabs */}
-          <div className={styles.tabs}>
-            <button
-              type="button"
-              onClick={() => setType("All")}
-              className={`${styles.tab} ${
-                type === "All" ? styles.active : ""
-              }`}>
-              {t("myGear.all")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("Clothing")}
-              className={`${styles.tab} ${
-                type === "Clothing" ? styles.active : ""
-              }`}>
-              {t("myGear.clothing")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("Equipment")}
-              className={`${styles.tab} ${
-                type === "Equipment" ? styles.active : ""
-              }`}>
-              {t("myGear.equipment")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("Food")}
-              className={`${styles.tab} ${
-                type === "Food" ? styles.active : ""
-              }`}>
-              {t("myGear.food")}
-            </button>
           </div>
 
           {/* Laddningsindikator under dataladdning */}
