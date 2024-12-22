@@ -9,7 +9,6 @@ const Home = () => {
       className={styles.container}
       style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className={styles.card}>
-        {" "}
         <img src={logo} alt="logo" className={styles.logo} />
         <div className={styles.content}>
           <h1 className={styles.title}>HikeWise</h1>

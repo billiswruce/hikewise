@@ -1,17 +1,22 @@
 @use "../styles/globals.scss";
 
+// Base button styles
 .button {
   background-color: var(--color-green);
   color: var(--color-white);
-  padding: 0.4rem 1rem;
+  padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 25px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  align-self: flex-start;
 
   &:hover {
     transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   }
 
   &:active {
@@ -19,31 +24,62 @@
   }
 }
 
-.buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+// Login/Get Started button
+.loginButton {
+  @extend .button;
+  font-weight: bold;
 }
 
+// Submit button (for forms)
 .submitButton {
   @extend .button;
   margin-bottom: 3rem;
-  font-size: 1rem;
   font-weight: bold;
-  padding: 0.6rem 1.5rem;
-  background-color: var(--color-green);
-  // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease, transform 0.2s ease,
-    box-shadow 0.2s ease;
+}
 
-  &:hover {
-    background-color: var(--color-green);
-    transform: scale(1.1);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+// Add button (for gear, trails etc)
+.addButton {
+  @extend .button;
+  margin-bottom: 5rem;
+}
+
+// Edit buttons container
+.editButtons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+
+  .saveButton {
+    @extend .button;
+    flex: 1;
+    min-width: unset;
   }
 
-  &:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  .cancelButton {
+    @extend .button;
+    flex: 1;
+    min-width: unset;
+    background-color: var(--color-grey-light);
+    color: var(--color-black);
+
+    &:hover {
+      background-color: var(--color-grey-dark);
+      color: var(--color-white);
+    }
   }
+}
+
+// Small button variant
+.smallButton {
+  @extend .button;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  min-width: unset;
+}
+
+// Button group
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { COLORS, RAINBOW_GRADIENT } from "../models/constants";
 import { CirclePicker, ColorResult } from "react-color";
+import buttonStyles from "../styles/Buttons.module.scss";
 
 interface GearItem {
   _id: string;
@@ -244,13 +245,19 @@ export const Gear = () => {
     updatedItem: Partial<GearItem>
   ) => {
     try {
+      // Ensure color is included in the update
+      const itemToUpdate = {
+        ...updatedItem,
+        color: updatedItem.color || null, // Make sure color is explicitly set, even if empty
+      };
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/owned-gear/${itemId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(updatedItem),
+          body: JSON.stringify(itemToUpdate),
         }
       );
 
@@ -261,6 +268,7 @@ export const Gear = () => {
 
       await fetchGear();
       setEditingItem(null);
+      setIsColorPickerOpen(false); // Close color picker after save
     } catch (error) {
       console.error("Error updating item:", error);
       alert(t("errorUpdatingItem"));
@@ -449,11 +457,17 @@ export const Gear = () => {
                               }>
                               <span
                                 className={styles.colorPreview}
+                                data-color={
+                                  editingItem.color === "rainbow"
+                                    ? "rainbow"
+                                    : undefined
+                                }
                                 style={{
-                                  background:
-                                    editingItem.color === "rainbow"
-                                      ? RAINBOW_GRADIENT.gradient
-                                      : editingItem.color || "#fff",
+                                  backgroundColor:
+                                    editingItem.color &&
+                                    editingItem.color !== "rainbow"
+                                      ? editingItem.color
+                                      : undefined,
                                 }}
                               />
                               <span>{t("myGear.selectColor")}</span>
@@ -513,14 +527,17 @@ export const Gear = () => {
                             {t("myGear.condition.poor")}
                           </option>
                         </select>
-                        <div className={styles.editButtons}>
+                        <div className={buttonStyles.editButtons}>
                           <button
+                            className={buttonStyles.saveButton}
                             onClick={() =>
                               updateGearItem(item._id, editingItem)
                             }>
                             {t("myGear.actions.save")}
                           </button>
-                          <button onClick={() => setEditingItem(null)}>
+                          <button
+                            className={buttonStyles.cancelButton}
+                            onClick={() => setEditingItem(null)}>
                             {t("myGear.actions.cancel")}
                           </button>
                         </div>
@@ -555,9 +572,14 @@ export const Gear = () => {
                                 className={`${styles.colorDot} ${
                                   item.color === "rainbow" ? styles.rainbow : ""
                                 }`}
+                                data-color={
+                                  item.color === "rainbow"
+                                    ? "rainbow"
+                                    : undefined
+                                }
                                 style={{
                                   backgroundColor:
-                                    item.color !== "rainbow"
+                                    item.color && item.color !== "rainbow"
                                       ? item.color
                                       : undefined,
                                 }}
@@ -611,18 +633,20 @@ export const Gear = () => {
                   }
                 />
                 <div className={styles.colorPickerContainer}>
-                  <label>{t("myGear.color")}</label>
                   <div className={styles.colorAccordion}>
                     <div
                       className={styles.selectedColor}
                       onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}>
                       <span
                         className={styles.colorPreview}
+                        data-color={
+                          newItem.color === "rainbow" ? "rainbow" : undefined
+                        }
                         style={{
-                          background:
-                            newItem.color === "rainbow"
-                              ? RAINBOW_GRADIENT.gradient
-                              : newItem.color || "#fff",
+                          backgroundColor:
+                            newItem.color !== "rainbow"
+                              ? newItem.color
+                              : undefined,
                         }}
                       />
                       <span>{t("myGear.selectColor")}</span>
@@ -714,7 +738,11 @@ export const Gear = () => {
                   <option value="Fair">{t("myGear.condition.fair")}</option>
                   <option value="Poor">{t("myGear.condition.poor")}</option>
                 </select>
-                <button onClick={addGearItem}>{t("myGear.actions.add")}</button>
+                <button
+                  onClick={addGearItem}
+                  className={buttonStyles.submitButton}>
+                  {t("myGear.actions.add")}
+                </button>
               </div>
             </>
           )}

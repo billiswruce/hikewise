@@ -1,13 +1,13 @@
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 
-const Confirmation = () => {
-  const { t } = useTranslation();
+// const Confirmation = () => {
+//   const { t } = useTranslation();
 
-  return (
-    <div>
-      <h1>{t("Confirmation")}</h1>
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       <h1>{t("Confirmation")}</h1>
+//     </div>
+//   );
+// };
 
-export default Confirmation;
+// export default Confirmation;

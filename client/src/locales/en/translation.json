@@ -21,7 +21,7 @@
     "quantity": "Quantity",
     "brand": "Brand",
     "color": "Color (optional)",
-    "selectColor": "Select Color",
+    "selectColor": "Select Color (optional)",
     "multicolor": "Multicolor",
     "rainbow": "Rainbow",
     "selectCategory": "Select Category",

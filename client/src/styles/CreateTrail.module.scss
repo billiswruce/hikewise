@@ -60,7 +60,6 @@
   outline: none;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
-  color: var(--color-black);
 
   &:focus {
     border-color: var(--color-grey-dark);
@@ -74,7 +73,7 @@
   padding-right: 10px;
   background-size: 10px;
   font-size: 14px;
-  color: var(--color-black);
+  color: var(--color-grey-dark);
 }
 
 .textarea {
@@ -123,12 +122,12 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  color: var(--color-black);
+  // color: var(--color-grey-dark);
 
   label {
-    background: #fff;
+    background: var(--color-white);
     padding: 8px 15px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-grey-light);
     border-radius: 25px;
     cursor: pointer;
   }
@@ -167,7 +166,7 @@ label {
   align-items: center;
   box-sizing: border-box;
   font-size: 14px;
-  color: var(--color-black);
+  color: var(--color-grey-dark);
 
   &:hover {
     border-color: var(--color-grey-dark);
@@ -200,6 +199,12 @@ label {
 
     &:focus {
       outline: none;
+    }
+
+    color: var(--color-grey-dark);
+
+    &:not([value=""]) {
+      color: var(--color-black);
     }
   }
 }
@@ -294,6 +299,7 @@ label {
     border-radius: 25px;
     cursor: pointer;
     display: inline-block;
+    color: var(--color-grey-dark);
   }
 
   input[type="file"] {
@@ -310,6 +316,10 @@ label {
 .fileStatus {
   color: var(--color-grey-dark);
   font-size: 14px;
+
+  &:not(:empty) {
+    color: var(--color-black);
+  }
 }
 
 input[type="date"] {

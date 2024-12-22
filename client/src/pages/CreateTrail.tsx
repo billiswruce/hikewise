@@ -156,30 +156,6 @@ const CreateTrail = () => {
               message={t("trailCreatedSuccessfully")}
             />
           </div>
-
-          <button
-            type="button"
-            className={styles.resetButton}
-            onClick={() =>
-              setFormData({
-                name: "",
-                length: "",
-                difficulty: "",
-                description: "",
-                latitude: 57.7089,
-                longitude: 11.9746,
-                location: "Göteborg, Sweden",
-                hikeDate: "",
-                hikeEndDate: "",
-                image: "",
-                packingList: {
-                  gear: [],
-                  food: [],
-                },
-              })
-            }>
-            {t("reset")}
-          </button>
         </div>
       </LoadScript>
     </>
