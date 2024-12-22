@@ -427,23 +427,25 @@ export const Gear = () => {
                         />
                         <input
                           type="text"
-                          value={editingItem.brand}
+                          value={editingItem.brand || ""}
                           onChange={(e) =>
                             setEditingItem({
                               ...editingItem,
                               brand: e.target.value,
                             })
                           }
+                          placeholder={t("myGear.brand")}
                         />
                         <input
                           type="text"
-                          value={editingItem.color}
+                          value={editingItem.color || ""}
                           onChange={(e) =>
                             setEditingItem({
                               ...editingItem,
                               color: e.target.value,
                             })
                           }
+                          placeholder={t("myGear.color")}
                         />
                         <input
                           type="number"
@@ -455,6 +457,7 @@ export const Gear = () => {
                             })
                           }
                           placeholder={t("myGear.quantity")}
+                          min="1"
                         />
                         <select
                           value={editingItem.condition}
