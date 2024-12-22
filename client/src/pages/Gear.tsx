@@ -10,7 +10,7 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { COLORS } from "../models/constants";
+import { COLORS, RAINBOW_GRADIENT } from "../models/constants";
 import { CirclePicker, ColorResult } from "react-color";
 
 interface GearItem {
@@ -74,6 +74,8 @@ export const Gear = () => {
   const tabsRef = useRef<HTMLDivElement>(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   const checkScrollButtons = useCallback(() => {
     if (tabsRef.current) {
@@ -440,39 +442,41 @@ export const Gear = () => {
                         <div className={styles.colorPickerContainer}>
                           <label>{t("myGear.color")}</label>
                           <div className={styles.colorAccordion}>
-                            <div className={styles.selectedColor}>
+                            <div
+                              className={styles.selectedColor}
+                              onClick={() =>
+                                setIsColorPickerOpen(!isColorPickerOpen)
+                              }>
                               <span
                                 className={styles.colorPreview}
                                 style={{
                                   background:
                                     editingItem.color === "rainbow"
-                                      ? "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)"
+                                      ? RAINBOW_GRADIENT.gradient
                                       : editingItem.color || "#fff",
                                 }}
                               />
                               <span>{t("myGear.selectColor")}</span>
                             </div>
-                            <div className={styles.colorOptions}>
-                              <CirclePicker
-                                colors={COLORS}
-                                color={editingItem.color}
-                                onChange={(color: ColorResult) =>
-                                  setEditingItem({
-                                    ...editingItem,
-                                    color: color.hex,
-                                  })
-                                }
-                              />
-                              <div
-                                className={styles.rainbowCircle}
-                                onClick={() =>
-                                  setEditingItem({
-                                    ...editingItem,
-                                    color: "rainbow",
-                                  })
-                                }
-                                title={t("myGear.multicolor")}
-                              />
+                            <div
+                              className={`${styles.colorOptions} ${
+                                isColorPickerOpen ? styles.open : ""
+                              }`}>
+                              <div className={styles.colorPickerWrapper}>
+                                <CirclePicker
+                                  colors={[...COLORS, RAINBOW_GRADIENT.type]}
+                                  color={editingItem.color}
+                                  onChange={(color: ColorResult) =>
+                                    setEditingItem({
+                                      ...editingItem,
+                                      color:
+                                        color.hex === RAINBOW_GRADIENT.type
+                                          ? RAINBOW_GRADIENT.type
+                                          : color.hex,
+                                    })
+                                  }
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -609,33 +613,39 @@ export const Gear = () => {
                 <div className={styles.colorPickerContainer}>
                   <label>{t("myGear.color")}</label>
                   <div className={styles.colorAccordion}>
-                    <div className={styles.selectedColor}>
+                    <div
+                      className={styles.selectedColor}
+                      onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}>
                       <span
                         className={styles.colorPreview}
                         style={{
                           background:
                             newItem.color === "rainbow"
-                              ? "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)"
+                              ? RAINBOW_GRADIENT.gradient
                               : newItem.color || "#fff",
                         }}
                       />
                       <span>{t("myGear.selectColor")}</span>
                     </div>
-                    <div className={styles.colorOptions}>
-                      <CirclePicker
-                        colors={COLORS}
-                        color={newItem.color}
-                        onChange={(color: ColorResult) =>
-                          setNewItem({ ...newItem, color: color.hex })
-                        }
-                      />
-                      <div
-                        className={styles.rainbowCircle}
-                        onClick={() =>
-                          setNewItem({ ...newItem, color: "rainbow" })
-                        }
-                        title={t("myGear.multicolor")}
-                      />
+                    <div
+                      className={`${styles.colorOptions} ${
+                        isColorPickerOpen ? styles.open : ""
+                      }`}>
+                      <div className={styles.colorPickerWrapper}>
+                        <CirclePicker
+                          colors={[...COLORS, RAINBOW_GRADIENT.type]}
+                          color={newItem.color}
+                          onChange={(color: ColorResult) =>
+                            setNewItem({
+                              ...newItem,
+                              color:
+                                color.hex === RAINBOW_GRADIENT.type
+                                  ? RAINBOW_GRADIENT.type
+                                  : color.hex,
+                            })
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
