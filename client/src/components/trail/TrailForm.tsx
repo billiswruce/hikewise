@@ -146,18 +146,18 @@ const TrailForm = ({
           value={formData.hikeDate}
           onChange={handleChange}
         />
-        <span>{t("hikeDate")}</span>
+        <span>{t("startDate")}</span>
       </label>
 
       <label className={styles.dateInputContainer}>
         <input
           className={styles.dateInput}
           type="date"
-          name="hikeEndDate"
+          name="endDate"
           value={formData.hikeEndDate}
           onChange={handleChange}
         />
-        <span>{t("hikeEndDate")}</span>
+        <span>{t("endDate")}</span>
       </label>
 
       <div className={styles.fileInputWrapper}>
