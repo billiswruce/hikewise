@@ -21,6 +21,9 @@
     "quantity": "Quantité",
     "brand": "Marque",
     "color": "Couleur (optionnel)",
+    "selectColor": "Sélectionner une couleur",
+    "multicolor": "Multicolore",
+    "rainbow": "Arc-en-ciel", 
     "selectCategory": "Sélectionner une catégorie",
     "condition": {
       "label": "État",

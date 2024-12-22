@@ -21,6 +21,9 @@
     "quantity": "Antal",
     "brand": "Märke",
     "color": "Färg (valfritt)",
+    "selectColor": "Välj färg",
+    "multicolor": "Multifärg",
+    "rainbow": "Regnbåge",
     "selectCategory": "Välj kategori",
     "condition": {
       "label": "Skick",

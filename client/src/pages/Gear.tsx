@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
-// import LoadingScreen from "../components/LoadingScreen";
 import styles from "../styles/Gear.module.scss";
 import backgroundImage from "../assets/gearPlaceholder.jpg";
 import LoadingScreen from "../components/LoadingScreen";
@@ -11,6 +10,8 @@ import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { COLORS } from "../models/constants";
+import { CirclePicker, ColorResult } from "react-color";
 
 interface GearItem {
   _id: string;
@@ -19,7 +20,7 @@ interface GearItem {
   condition: string;
   categories: string[];
   brand?: string;
-  color?: string;
+  color?: string | "rainbow";
   type: "Clothing" | "Equipment" | "Food";
 }
 
@@ -436,17 +437,45 @@ export const Gear = () => {
                           }
                           placeholder={t("myGear.brand")}
                         />
-                        <input
-                          type="text"
-                          value={editingItem.color || ""}
-                          onChange={(e) =>
-                            setEditingItem({
-                              ...editingItem,
-                              color: e.target.value,
-                            })
-                          }
-                          placeholder={t("myGear.color")}
-                        />
+                        <div className={styles.colorPickerContainer}>
+                          <label>{t("myGear.color")}</label>
+                          <div className={styles.colorAccordion}>
+                            <div className={styles.selectedColor}>
+                              <span
+                                className={styles.colorPreview}
+                                style={{
+                                  background:
+                                    editingItem.color === "rainbow"
+                                      ? "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)"
+                                      : editingItem.color || "#fff",
+                                }}
+                              />
+                              <span>{t("myGear.selectColor")}</span>
+                            </div>
+                            <div className={styles.colorOptions}>
+                              <CirclePicker
+                                colors={COLORS}
+                                color={editingItem.color}
+                                onChange={(color: ColorResult) =>
+                                  setEditingItem({
+                                    ...editingItem,
+                                    color: color.hex,
+                                  })
+                                }
+                              />
+                              <div
+                                className={styles.rainbowCircle}
+                                onClick={() =>
+                                  setEditingItem({
+                                    ...editingItem,
+                                    color: "rainbow",
+                                  })
+                                }
+                                title={t("myGear.multicolor")}
+                              />
+                            </div>
+                          </div>
+                        </div>
                         <input
                           type="number"
                           value={editingItem.quantity}
@@ -518,7 +547,17 @@ export const Gear = () => {
                         <div className={styles.gearDetails}>
                           {item.color && (
                             <span className={styles.gearDetail}>
-                              {item.color}
+                              <span
+                                className={`${styles.colorDot} ${
+                                  item.color === "rainbow" ? styles.rainbow : ""
+                                }`}
+                                style={{
+                                  backgroundColor:
+                                    item.color !== "rainbow"
+                                      ? item.color
+                                      : undefined,
+                                }}
+                              />
                             </span>
                           )}
                           <span className={styles.gearDetail}>
@@ -567,14 +606,39 @@ export const Gear = () => {
                     })
                   }
                 />
-                <input
-                  type="text"
-                  placeholder={t("myGear.color")}
-                  value={newItem.color}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, color: e.target.value })
-                  }
-                />
+                <div className={styles.colorPickerContainer}>
+                  <label>{t("myGear.color")}</label>
+                  <div className={styles.colorAccordion}>
+                    <div className={styles.selectedColor}>
+                      <span
+                        className={styles.colorPreview}
+                        style={{
+                          background:
+                            newItem.color === "rainbow"
+                              ? "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)"
+                              : newItem.color || "#fff",
+                        }}
+                      />
+                      <span>{t("myGear.selectColor")}</span>
+                    </div>
+                    <div className={styles.colorOptions}>
+                      <CirclePicker
+                        colors={COLORS}
+                        color={newItem.color}
+                        onChange={(color: ColorResult) =>
+                          setNewItem({ ...newItem, color: color.hex })
+                        }
+                      />
+                      <div
+                        className={styles.rainbowCircle}
+                        onClick={() =>
+                          setNewItem({ ...newItem, color: "rainbow" })
+                        }
+                        title={t("myGear.multicolor")}
+                      />
+                    </div>
+                  </div>
+                </div>
                 {type === "All" && (
                   <select
                     value={newItem.type}
