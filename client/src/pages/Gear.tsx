@@ -4,6 +4,13 @@ import { useTranslation } from "react-i18next";
 import styles from "../styles/Gear.module.scss";
 import backgroundImage from "../assets/gearPlaceholder.jpg";
 import LoadingScreen from "../components/LoadingScreen";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEdit,
+  faTrash,
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface GearItem {
   _id: string;
@@ -312,7 +319,7 @@ export const Gear = () => {
               }`}
               onClick={() => scroll("left")}
               aria-label="Scroll left">
-              ←
+              <FontAwesomeIcon icon={faChevronLeft} />
             </button>
             <div
               className={styles.tabsWrapper}
@@ -357,7 +364,7 @@ export const Gear = () => {
               }`}
               onClick={() => scroll("right")}
               aria-label="Scroll right">
-              →
+              <FontAwesomeIcon icon={faChevronRight} />
             </button>
           </div>
 
@@ -484,28 +491,42 @@ export const Gear = () => {
                       </div>
                     ) : (
                       <div className={styles.gearInfo}>
-                        <span className={styles.gearName}>{item.name}</span>
-                        {item.brand && (
-                          <span className={styles.gearBrand}>{item.brand}</span>
-                        )}
-                        {item.color && (
-                          <span className={styles.gearColor}>{item.color}</span>
-                        )}
-                        <span className={styles.gearCondition}>
-                          {t(
-                            `myGear.condition.${item.condition.toLowerCase()}`
+                        <div className={styles.gearHeader}>
+                          <span className={styles.gearName}>{item.name}</span>
+                          {item.brand && (
+                            <span className={styles.gearBrand}>
+                              {" "}
+                              {item.brand}
+                            </span>
                           )}
-                        </span>
-                        <span className={styles.gearQuantity}>
-                          {item.quantity}
-                        </span>
-                        <div className={styles.gearActions}>
-                          <button onClick={() => setEditingItem(item)}>
-                            {t("myGear.actions.edit")}
-                          </button>
-                          <button onClick={() => deleteGearItem(item._id)}>
-                            {t("myGear.actions.delete")}
-                          </button>
+                          <div className={styles.gearActions}>
+                            <button
+                              onClick={() => setEditingItem(item)}
+                              aria-label={t("myGear.actions.edit")}>
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button
+                              onClick={() => deleteGearItem(item._id)}
+                              aria-label={t("myGear.actions.delete")}>
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          </div>
+                        </div>
+                        <div className={styles.gearDetails}>
+                          {item.color && (
+                            <span className={styles.gearDetail}>
+                              {item.color}
+                            </span>
+                          )}
+                          <span className={styles.gearDetail}>
+                            {t("myGear.condition.label")}:{" "}
+                            {t(
+                              `myGear.condition.${item.condition.toLowerCase()}`
+                            )}
+                          </span>
+                          <span className={styles.gearDetail}>
+                            {t("myGear.quantity")}: {item.quantity}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -561,7 +582,7 @@ export const Gear = () => {
                           | "Clothing"
                           | "Equipment"
                           | "Food",
-                        categories: [], // Reset categories when type changes
+                        categories: [],
                       })
                     }
                     className={styles.categorySelect}>
