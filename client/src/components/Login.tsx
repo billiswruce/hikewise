@@ -25,9 +25,7 @@ const Login = () => {
   }, [i18n]);
 
   const handleLogin = () => {
-    if (!cookiesAccepted) {
-      return;
-    }
+    if (!cookiesAccepted) return;
     localStorage.setItem("selectedLanguage", i18n.language);
     loginWithRedirect();
   };
@@ -44,11 +42,10 @@ const Login = () => {
           `${import.meta.env.VITE_API_URL}/api/auth/login`,
           {
             method: "POST",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              Accept: "application/json",
             },
-            credentials: "include",
             body: JSON.stringify({
               auth0Id: user.sub,
               email: user.email,
@@ -60,15 +57,6 @@ const Login = () => {
         if (response.ok) {
           const data = await response.json();
           console.log("Session established:", data);
-
-          const sessionCheck = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/auth/check-session`,
-            {
-              credentials: "include",
-            }
-          );
-          console.log("Session check:", await sessionCheck.json());
-
           setTimeout(() => setShowModal(true), 500);
         }
       } catch (error) {

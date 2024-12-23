@@ -21,7 +21,7 @@ app.set("trust proxy", 1);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:3000",
+  "http://localhost:3001",
   "https://hikewise.vercel.app",
   "https://hikewise-backend.vercel.app",
 ];
@@ -52,9 +52,12 @@ app.use(session(sessionConfig));
 
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log("Request origin:", origin);
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, origin);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
@@ -66,8 +69,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-app.options("*", cors(corsOptions));
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
@@ -123,15 +124,6 @@ app.use((err, req, res, next) => {
         ? err.message
         : "Internal server error",
   });
-});
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, Cookie"
-  );
-  next();
 });
 
 const PORT = process.env.PORT || 3001;

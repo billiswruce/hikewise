@@ -6,44 +6,60 @@ import LoadingScreen from "./components/LoadingScreen";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const App = () => {
-  const [apiData, setApiData] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  // Gör ett anrop till vercel, för att se om vi är inloggade (inga parametrar som användarnamn eller lösenord, förlitar oss på cookien) /getme
-  // när vi får svar, om svaret innehåller användardataså är användaren inloggad, annars går vi vidare med useAuth0,
-  // när vi får svar från useAuth0, så anropa login på server med andändarnamn och lösenord
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    const checkSession = async () => {
+      if (!isAuthenticated) return;
+
       setIsLoading(true);
-      fetch(`${import.meta.env.VITE_API_URL}/`, {
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Fetched data:", data);
-          setApiData(data.message);
-        })
-        .catch((error) => console.error("Error fetching data:", error))
-        .finally(() => setIsLoading(false));
+      try {
+        const sessionResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/auth/check-session`,
+          {
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
+
+        const sessionData = await sessionResponse.json();
+        if (!sessionData.sessionActive) {
+          const token = await getAccessTokenSilently();
+          await fetch(
+            `${import.meta.env.VITE_API_URL}/api/auth/refresh-session`,
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (isAuthenticated) {
+      checkSession();
     }
-  }, [isAuthenticated]);
-  console.log(isAuthenticated);
+  }, [isAuthenticated, getAccessTokenSilently]);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <>
-      {isLoading && <LoadingScreen />}
-      {!isLoading && (
-        <FavoriteProvider>
-          <RouterProvider router={router} />
-          {isAuthenticated && apiData && (
-            <p style={{ textAlign: "center" }}>Backend säger: {apiData}</p>
-          )}
-        </FavoriteProvider>
-      )}
-    </>
+    <FavoriteProvider>
+      <RouterProvider router={router} />
+    </FavoriteProvider>
   );
 };
 

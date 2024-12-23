@@ -1,5 +1,10 @@
 import express from "express";
-import { login, getMe, logout } from "../controllers/authController.js";
+import {
+  login,
+  getMe,
+  logout,
+  refreshSession,
+} from "../controllers/authController.js";
 
 const router = express.Router();
 
@@ -17,5 +22,6 @@ router.get("/check-session", (req, res) => {
     sessionId: req.session?.id,
   });
 });
+router.post("/refresh-session", refreshSession);
 
 export default router;

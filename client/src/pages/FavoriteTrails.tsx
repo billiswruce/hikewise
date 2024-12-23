@@ -68,6 +68,8 @@ const FavoriteTrails = () => {
     fetchFavoriteTrails();
   }, []);
 
+  console.log("Favorite trails:", JSON.stringify(favoriteTrails));
+
   return (
     <div className={styles.hikingContainer}>
       <div className={styles.headerSection}>
