@@ -13,6 +13,7 @@ import {
 import { COLORS, RAINBOW_GRADIENT } from "../models/constants";
 import { CirclePicker, ColorResult } from "react-color";
 import buttonStyles from "../styles/Buttons.module.scss";
+import ConfirmationDialog from "../components/ConfirmationDialog";
 
 interface GearItem {
   _id: string;
@@ -77,6 +78,11 @@ export const Gear = () => {
   const [showRightArrow, setShowRightArrow] = useState(true);
 
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+
+  const [itemToDelete, setItemToDelete] = useState<{
+    id: string;
+    isFood: boolean;
+  } | null>(null);
 
   const checkScrollButtons = useCallback(() => {
     if (tabsRef.current) {
@@ -216,12 +222,16 @@ export const Gear = () => {
     }));
   }, [type]);
 
-  const deleteGearItem = async (itemId: string) => {
-    if (!window.confirm(t("confirmDelete"))) return;
+  const deleteGearItem = async (itemId: string, isFood: boolean) => {
+    setItemToDelete({ id: itemId, isFood });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!itemToDelete) return;
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/owned-gear/${itemId}`,
+        `${import.meta.env.VITE_API_URL}/api/owned-gear/${itemToDelete.id}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -237,6 +247,8 @@ export const Gear = () => {
     } catch (error) {
       console.error("Error deleting item:", error);
       alert(t("errorDeletingItem"));
+    } finally {
+      setItemToDelete(null);
     }
   };
 
@@ -559,7 +571,9 @@ export const Gear = () => {
                               <FontAwesomeIcon icon={faEdit} />
                             </button>
                             <button
-                              onClick={() => deleteGearItem(item._id)}
+                              onClick={() =>
+                                deleteGearItem(item._id, item.type === "Food")
+                              }
                               aria-label={t("myGear.actions.delete")}>
                               <FontAwesomeIcon icon={faTrash} />
                             </button>
@@ -748,6 +762,13 @@ export const Gear = () => {
           )}
         </div>
       )}
+
+      <ConfirmationDialog
+        isOpen={!!itemToDelete}
+        message={t("myGear.messages.confirmDelete")}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setItemToDelete(null)}
+      />
     </>
   );
 };

@@ -198,6 +198,7 @@
   },
   "confirmDeleteTrail": "Êtes-vous sûr de vouloir supprimer ce sentier ?",
   "errorDeletingTrail": "Erreur lors de la suppression du sentier",
+  "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?",
   "alerts": {
     "noPlaceDataFound": "Aucune donnée de lieu trouvée",
     "uploadImageError": "Impossible de télécharger l'image",
@@ -213,5 +214,6 @@
     "errorUpdatingTrail": "Erreur lors de la mise à jour du sentier",
     "pleaseLogin": "Veuillez vous connecter pour continuer",
     "errorDeletingTrail": "Erreur lors de la suppression du sentier"
-  }
+  },
+  "confirm": "OK"
 }

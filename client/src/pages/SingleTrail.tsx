@@ -15,6 +15,7 @@ import {
   faBolt,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth0 } from "@auth0/auth0-react";
+import ConfirmationDialog from "../components/ConfirmationDialog";
 
 interface PackingItem {
   _id?: string;
@@ -80,6 +81,7 @@ const SingleTrail = () => {
   const [formData, setFormData] = useState<Trail | null>(null);
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth0();
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     if (trail?.image) {
@@ -345,7 +347,6 @@ const SingleTrail = () => {
       const updatedTrail = await response.json();
       setTrail(updatedTrail);
       setIsEditing(false);
-      alert(t("trailUpdatedSuccessfully"));
     } catch (error) {
       console.error("Error updating trail:", error);
       alert(t("errorUpdatingTrail"));
@@ -357,52 +358,29 @@ const SingleTrail = () => {
       alert(t("pleaseLogIn"));
       return;
     }
-    if (!window.confirm(t("confirmDeleteTrail"))) return;
+    setShowDeleteConfirmation(true);
+  };
 
+  const confirmDelete = async () => {
     try {
-      const url = `${import.meta.env.VITE_API_URL}/api/trails/${id}`;
-      console.log("Delete request:", { url, id });
-
-      const sessionCheck = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/auth/check-session`,
-        { credentials: "include" }
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
       );
-      console.log("Session status:", await sessionCheck.json());
-
-      const response = await fetch(url, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-
-      console.log("Response status:", response.status);
-      const responseText = await response.text();
-      console.log("Raw response:", responseText);
-
-      let data;
-      try {
-        data = JSON.parse(responseText);
-        console.log("Parsed response:", data);
-      } catch (e) {
-        console.error("Failed to parse response:", e);
-        throw new Error("Invalid server response");
-      }
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to delete trail");
+        throw new Error("Failed to delete trail");
       }
 
       navigate("/trails");
-    } catch (error: unknown) {
+    } catch (error) {
       console.error("Delete error:", error);
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert(t("errorDeletingTrail"));
-      }
+      alert(t("errorDeletingTrail"));
+    } finally {
+      setShowDeleteConfirmation(false);
     }
   };
 
@@ -769,6 +747,13 @@ const SingleTrail = () => {
           </div>
         </div>
       </div>
+
+      <ConfirmationDialog
+        isOpen={showDeleteConfirmation}
+        message={t("confirmDeleteTrail")}
+        onConfirm={confirmDelete}
+        onCancel={() => setShowDeleteConfirmation(false)}
+      />
     </div>
   );
 };

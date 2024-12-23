@@ -406,10 +406,6 @@
   background-color: var(--color-green);
   color: white;
   border-radius: 25px;
-
-  &:hover {
-    background-color: var(--color-green-dark);
-  }
 }
 
 .cancelButton {
@@ -455,7 +451,7 @@
 }
 
 .deleteButton {
-  background-color: red;
+  background-color: rgb(150, 28, 28);
   color: var(--color-white);
   font-weight: bold;
 

@@ -7,6 +7,7 @@ import { useFavorites } from "../hooks/useFavorites";
 import Filter from "../components/Filter";
 import { useTrailSort } from "../hooks/useTrailSort";
 import { useTranslation } from "react-i18next";
+import ConfirmationDialog from "../components/ConfirmationDialog";
 
 const FavoriteTrails = () => {
   const navigate = useNavigate();
@@ -17,21 +18,25 @@ const FavoriteTrails = () => {
   >("name-asc");
   const { favorites, toggleFavorite } = useFavorites();
   const sortedTrails = useTrailSort(favoriteTrails, sortOption);
-  const handleToggleFavorite = async (trailId: string) => {
-    const confirmRemove = window.confirm(t("confirmRemoveFavorite"));
+  const [trailToRemove, setTrailToRemove] = useState<string | null>(null);
 
-    if (!confirmRemove) {
-      return;
-    }
+  const handleToggleFavorite = async (trailId: string) => {
+    setTrailToRemove(trailId);
+  };
+
+  const handleConfirmRemove = async () => {
+    if (!trailToRemove) return;
 
     try {
       setFavoriteTrails((prevTrails) =>
-        prevTrails.filter((trail) => trail._id !== trailId)
+        prevTrails.filter((trail) => trail._id !== trailToRemove)
       );
-      await toggleFavorite(trailId);
+      await toggleFavorite(trailToRemove);
     } catch (error) {
       console.error("Error toggling favorite:", error);
       fetchFavoriteTrails();
+    } finally {
+      setTrailToRemove(null);
     }
   };
 
@@ -118,6 +123,13 @@ const FavoriteTrails = () => {
           </div>
         ))}
       </div>
+
+      <ConfirmationDialog
+        isOpen={!!trailToRemove}
+        message={t("confirmRemoveFavorite")}
+        onConfirm={handleConfirmRemove}
+        onCancel={() => setTrailToRemove(null)}
+      />
     </div>
   );
 };

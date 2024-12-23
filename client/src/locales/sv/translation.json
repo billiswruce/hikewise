@@ -195,8 +195,9 @@
     "message": "Vi använder cookies för att förbättra din upplevelse. Genom att fortsätta använda denna webbplats godkänner du vår användning av cookies.",
     "accept": "Acceptera cookies"
   },
-  "confirmDeleteTrail": "Är du säker på att du vill radera denna vandringsled?",
+  "confirmDeleteTrail": "Är du säker på att du vill ta bort denna vandringsled?",
   "errorDeletingTrail": "Ett fel uppstod när vandringsleden skulle raderas",
+  "confirmDelete": "Är du säker på att du vill radera detta objekt?",
   "alerts": {
     "noPlaceDataFound": "Ingen platsdata hittades",
     "uploadImageError": "Kunde inte ladda upp bilden",
@@ -212,5 +213,6 @@
     "errorUpdatingTrail": "Fel vid uppdatering av vandringsled",
     "pleaseLogin": "Vänligen logga in för att fortsätta",
     "errorDeletingTrail": "Fel vid borttagning av vandringsled"
-  }
+  },
+  "confirm": "OK"
 }
