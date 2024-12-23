@@ -40,13 +40,62 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
-  background-color: var(--color-grey-light);
   border-radius: 8px;
 
   p {
     margin: 0;
     line-height: 1.5;
   }
+}
+
+.infoHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-grey-light);
+}
+
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.trailName {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.trailLocation,
+.trailDates,
+.trailLength,
+.trailDifficulty {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--color-grey-dark);
+}
+
+.trailLocation {
+  font-weight: 500;
+}
+
+.trailDates {
+  font-style: italic;
+}
+
+.trailLength,
+.trailDifficulty {
+  font-weight: 600;
+}
+
+.description {
+  margin-top: 1rem;
+  line-height: 1.6;
+  font-size: 1rem;
+  color: var(--color-black);
 }
 
 .weather {
@@ -61,10 +110,6 @@
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.description {
-  line-height: 1.6;
 }
 
 .map {
@@ -217,7 +262,6 @@
         margin-bottom: 8px;
         background-color: white;
         border-radius: 20px;
-        border: 1px solid var(--color-grey-dark);
         font-size: 14px;
 
         input[type="checkbox"] {
@@ -361,6 +405,7 @@
 .saveButton {
   background-color: var(--color-green);
   color: white;
+  border-radius: 25px;
 
   &:hover {
     background-color: var(--color-green-dark);
@@ -383,5 +428,58 @@
 
   .formGroup {
     flex: 1;
+  }
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+}
+
+.editButton {
+  background-color: var(--color-green);
+  color: var(--color-white);
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.deleteButton {
+  background-color: red;
+  color: var(--color-white);
+  font-weight: bold;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.trailStats {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.trailLength,
+.trailDifficulty {
+  font-size: 1rem;
+  margin: 0;
+  color: var(--color-grey-dark);
+  font-weight: 600;
+
+  // Optional: Add a separator between the stats
+  &:not(:last-child) {
+    padding-right: 1rem;
+    border-right: 1px solid var(--color-grey-light);
   }
 }

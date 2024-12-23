@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
@@ -14,6 +14,7 @@ import {
   faSmog,
   faBolt,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface PackingItem {
   _id?: string;
@@ -77,6 +78,8 @@ const SingleTrail = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Trail | null>(null);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth0();
 
   useEffect(() => {
     if (trail?.image) {
@@ -349,6 +352,60 @@ const SingleTrail = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!isAuthenticated) {
+      alert(t("pleaseLogIn"));
+      return;
+    }
+    if (!window.confirm(t("confirmDeleteTrail"))) return;
+
+    try {
+      const url = `${import.meta.env.VITE_API_URL}/api/trails/${id}`;
+      console.log("Delete request:", { url, id });
+
+      const sessionCheck = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/check-session`,
+        { credentials: "include" }
+      );
+      console.log("Session status:", await sessionCheck.json());
+
+      const response = await fetch(url, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+
+      console.log("Response status:", response.status);
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+        console.log("Parsed response:", data);
+      } catch (e) {
+        console.error("Failed to parse response:", e);
+        throw new Error("Invalid server response");
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to delete trail");
+      }
+
+      navigate("/trails");
+    } catch (error: unknown) {
+      console.error("Delete error:", error);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert(t("errorDeletingTrail"));
+      }
+    }
+  };
+
   useEffect(() => {
     fetchTrail();
   }, [fetchTrail]);
@@ -373,7 +430,7 @@ const SingleTrail = () => {
 
       {/* Container för all information */}
       <div className={styles.container}>
-        {/* Titel och v��der */}
+        {/* Titel och väder */}
         <div className={styles.titleWeatherContainer}>
           {isEditing ? (
             <input
@@ -398,7 +455,7 @@ const SingleTrail = () => {
         </div>
 
         {/* Grundläggande Information */}
-        <div className={styles.infoSection}>
+        <div className={styles.basicInfo}>
           {isEditing ? (
             <form onSubmit={handleEditSubmit} className={styles.editForm}>
               <div className={styles.formGroup}>
@@ -496,23 +553,36 @@ const SingleTrail = () => {
               </div>
             </form>
           ) : (
-            <div className={styles.basicInfo}>
-              <p>{trail.length} km</p>
-              <p>{t(trail.difficulty)}</p>
-              <p>
-                {t("location")}: {trail.location}
-              </p>
-              <p>
-                {t("dates")}: {new Date(trail.hikeDate).toLocaleDateString()} -{" "}
-                {new Date(trail.hikeEndDate).toLocaleDateString()}
-              </p>
+            <>
+              <div className={styles.infoHeader}>
+                <div className={styles.infoContent}>
+                  <p className={styles.trailLocation}>{trail.location}</p>
+                  <p className={styles.trailDates}>
+                    {new Date(trail.hikeDate).toLocaleDateString()} -{" "}
+                    {new Date(trail.hikeEndDate).toLocaleDateString()}
+                  </p>
+                  <div className={styles.trailStats}>
+                    <p className={styles.trailLength}>{trail.length} km</p>
+                    <p className={styles.trailDifficulty}>
+                      {t(trail.difficulty)}
+                    </p>
+                  </div>
+                </div>
+                <div className={styles.actionButtons}>
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className={styles.editButton}>
+                    {t("edit")}
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className={styles.deleteButton}>
+                    {t("delete")}
+                  </button>
+                </div>
+              </div>
               <p className={styles.description}>{trail.description}</p>
-              <button
-                onClick={() => setIsEditing(true)}
-                className={styles.editButton}>
-                {t("edit")}
-              </button>
-            </div>
+            </>
           )}
         </div>
 
@@ -638,15 +708,14 @@ const SingleTrail = () => {
                   // Redigeringsläge
                   <div className={styles.commentEdit}>
                     <textarea
-                      value={editedText} // Kopplar värdet till `editedText`
+                      value={editedText}
                       onChange={(e) => setEditedText(e.target.value)}
                       className={styles.commentInput}
                     />
                     <div className={styles.commentButtons}>
                       <button
                         onClick={() => editComment(comment._id, editedText)}
-                        disabled={isSaving} // Hindra flera klick under sparning
-                      >
+                        disabled={isSaving}>
                         {isSaving ? t("saving...") : t("save")}
                       </button>
                       <button
@@ -668,8 +737,8 @@ const SingleTrail = () => {
                     <div className={styles.commentButtons}>
                       <button
                         onClick={() => {
-                          setEditingComment(comment._id); // Aktivera redigering
-                          setEditedText(comment.text); // Fyll i nuvarande text
+                          setEditingComment(comment._id);
+                          setEditedText(comment.text);
                         }}>
                         {t("edit")}
                       </button>
@@ -694,8 +763,7 @@ const SingleTrail = () => {
             <button
               onClick={addComment}
               className={styles.addCommentButton}
-              disabled={isSaving} // Hindra flera klick under sparning
-            >
+              disabled={isSaving}>
               {isSaving ? t("adding...") : t("add")}
             </button>
           </div>

@@ -59,13 +59,20 @@ const Login = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Användare sparad på backend:", data);
+          console.log("Session established:", data);
+
+          const sessionCheck = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/auth/check-session`,
+            {
+              credentials: "include",
+            }
+          );
+          console.log("Session check:", await sessionCheck.json());
+
           setTimeout(() => setShowModal(true), 500);
-        } else {
-          console.error("Server error:", await response.text());
         }
       } catch (error) {
-        console.error("Fel vid inloggning på backend:", error);
+        console.error("Backend login error:", error);
       }
     };
 
