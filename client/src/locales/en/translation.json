@@ -197,5 +197,18 @@
     "accept": "Accept Cookies"
   },
   "confirmDeleteTrail": "Are you sure you want to delete this trail?",
-  "errorDeletingTrail": "Error deleting trail"
+  "errorDeletingTrail": "Error deleting trail",
+  "alerts": {
+    "error": "An error occurred: ",
+    "failedToCreateTrail": "Failed to create trail",
+    "nameRequired": "Name is required",
+    "invalidGearType": "Invalid gear type",
+    "errorAddingGear": "Error adding gear",
+    "errorDeletingItem": "Error deleting item",
+    "errorUpdatingItem": "Error updating item",
+    "trailUpdatedSuccess": "Trail updated successfully",
+    "errorUpdatingTrail": "Error updating trail",
+    "pleaseLogin": "Please login to continue",
+    "errorDeletingTrail": "Error deleting trail"
+  }
 }

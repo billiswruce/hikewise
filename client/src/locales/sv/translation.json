@@ -196,5 +196,21 @@
     "accept": "Acceptera cookies"
   },
   "confirmDeleteTrail": "Är du säker på att du vill radera denna vandringsled?",
-  "errorDeletingTrail": "Ett fel uppstod när vandringsleden skulle raderas"
+  "errorDeletingTrail": "Ett fel uppstod när vandringsleden skulle raderas",
+  "alerts": {
+    "noPlaceDataFound": "Ingen platsdata hittades",
+    "uploadImageError": "Kunde inte ladda upp bilden",
+    "fillRequiredFields": "Vänligen fyll i alla obligatoriska fält",
+    "error": "Ett fel uppstod: ",
+    "failedToCreateTrail": "Kunde inte skapa vandringsleden",
+    "nameRequired": "Namn krävs",
+    "invalidGearType": "Ogiltig utrustningstyp",
+    "errorAddingGear": "Fel vid tillägg av utrustning",
+    "errorDeletingItem": "Fel vid borttagning av objekt",
+    "errorUpdatingItem": "Fel vid uppdatering av objekt",
+    "trailUpdatedSuccess": "Vandringsled uppdaterad!",
+    "errorUpdatingTrail": "Fel vid uppdatering av vandringsled",
+    "pleaseLogin": "Vänligen logga in för att fortsätta",
+    "errorDeletingTrail": "Fel vid borttagning av vandringsled"
+  }
 }

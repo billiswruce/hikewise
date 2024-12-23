@@ -169,7 +169,7 @@
   },
   "packingList": "Liste d'équipement",
   "remove": "Supprimer",
-  "addItem": "Ajouter un élément",
+  "addItem": "Ajouter un él��ment",
   "adding...": "Ajout en cours...",
   "gearInfo": "Organisez votre équipement et voyez ce que vous avez et ce qui manque pour votre prochaine aventure.",
   "createTrailInfo": "Créez un sentier que vous avez parcouru ou que vous planifiez de parcourir. Ajoutez des détails comme la distance, la difficulté, la date et une description pour simplifier la planification. Vous pouvez modifier et supprimer les sentiers plus tard.", 
@@ -197,5 +197,21 @@
     "accept": "Accepter les cookies"
   },
   "confirmDeleteTrail": "Êtes-vous sûr de vouloir supprimer ce sentier ?",
-  "errorDeletingTrail": "Erreur lors de la suppression du sentier"
+  "errorDeletingTrail": "Erreur lors de la suppression du sentier",
+  "alerts": {
+    "noPlaceDataFound": "Aucune donnée de lieu trouvée",
+    "uploadImageError": "Impossible de télécharger l'image",
+    "fillRequiredFields": "Veuillez remplir tous les champs obligatoires",
+    "error": "Une erreur s'est produite : ",
+    "failedToCreateTrail": "Impossible de créer le sentier",
+    "nameRequired": "Le nom est requis",
+    "invalidGearType": "Type d'équipement invalide",
+    "errorAddingGear": "Erreur lors de l'ajout de l'équipement",
+    "errorDeletingItem": "Erreur lors de la suppression de l'élément",
+    "errorUpdatingItem": "Erreur lors de la mise à jour de l'élément",
+    "trailUpdatedSuccess": "Sentier mis à jour avec succès !",
+    "errorUpdatingTrail": "Erreur lors de la mise à jour du sentier",
+    "pleaseLogin": "Veuillez vous connecter pour continuer",
+    "errorDeletingTrail": "Erreur lors de la suppression du sentier"
+  }
 }

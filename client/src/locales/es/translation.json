@@ -196,5 +196,21 @@
     "accept": "Aceptar cookies"
   },
   "confirmDeleteTrail": "¿Estás seguro de que quieres eliminar este sendero?",
-  "errorDeletingTrail": "Error al eliminar el sendero"
+  "errorDeletingTrail": "Error al eliminar el sendero",
+  "alerts": {
+    "noPlaceDataFound": "No se encontraron datos del lugar",
+    "uploadImageError": "No se pudo subir la imagen",
+    "fillRequiredFields": "Por favor complete todos los campos requeridos",
+    "error": "Ocurrió un error: ",
+    "failedToCreateTrail": "No se pudo crear el sendero",
+    "nameRequired": "El nombre es requerido",
+    "invalidGearType": "Tipo de equipo inválido",
+    "errorAddingGear": "Error al agregar equipo",
+    "errorDeletingItem": "Error al eliminar el elemento",
+    "errorUpdatingItem": "Error al actualizar el elemento",
+    "trailUpdatedSuccess": "¡Sendero actualizado exitosamente!",
+    "errorUpdatingTrail": "Error al actualizar el sendero",
+    "pleaseLogin": "Por favor inicie sesión para continuar",
+    "errorDeletingTrail": "Error al eliminar el sendero"
+  }
 }
