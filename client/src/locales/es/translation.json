@@ -119,13 +119,17 @@
   "medium": "Medio",
   "hard": "Difícil",
   "epic": "Épico",
+  "name": "Nombre del sendero",
   "description": "Descripción",
-  "hikeDate": "Fecha de inicio",
-  "hikeEndDate": "Fecha de finalización",
+  "startDate": "Fecha de inicio",
+  "endDate": "Fecha de finalización",
+  "location": "Ubicación",
+  "cancel": "Cancelar",
   "searchLocation": "Buscar ubicación",
   "selectedLocation": "Ubicación seleccionada",
   "createTrailButton": "Crear sendero",
   "trailCreatedSuccessfully": "¡Sendero creado correctamente!",
+  "trailUpdatedSuccessfully": "¡Sendero actualizado correctamente!",
   "resetButton": "Restablecer",
   "loading": "Cargando...",
   "markerTooltip": "Haz clic en el mapa para seleccionar una ubicación",
@@ -190,5 +194,25 @@
   "cookieConsent": {
     "message": "Utilizamos cookies para mejorar tu experiencia. Al continuar usando este sitio, aceptas nuestro uso de cookies.",
     "accept": "Aceptar cookies"
-  }
+  },
+  "confirmDeleteTrail": "¿Estás seguro de que quieres eliminar este sendero?",
+  "errorDeletingTrail": "Error al eliminar el sendero",
+  "confirmDelete": "¿Estás seguro de que quieres eliminar este elemento?",
+  "alerts": {
+    "noPlaceDataFound": "No se encontraron datos del lugar",
+    "uploadImageError": "No se pudo subir la imagen",
+    "fillRequiredFields": "Por favor complete todos los campos requeridos",
+    "error": "Ocurrió un error: ",
+    "failedToCreateTrail": "No se pudo crear el sendero",
+    "nameRequired": "El nombre es requerido",
+    "invalidGearType": "Tipo de equipo inválido",
+    "errorAddingGear": "Error al agregar equipo",
+    "errorDeletingItem": "Error al eliminar el elemento",
+    "errorUpdatingItem": "Error al actualizar el elemento",
+    "trailUpdatedSuccess": "¡Sendero actualizado exitosamente!",
+    "errorUpdatingTrail": "Error al actualizar el sendero",
+    "pleaseLogin": "Por favor inicie sesión para continuar",
+    "errorDeletingTrail": "Error al eliminar el sendero"
+  },
+  "confirm": "OK"
 }

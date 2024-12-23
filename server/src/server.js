@@ -21,26 +21,29 @@ app.set("trust proxy", 1);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:3000",
+  "http://localhost:3001",
   "https://hikewise.vercel.app",
   "https://hikewise-backend.vercel.app",
 ];
 
 const sessionConfig = {
   secret: process.env.SESSION_SECRET,
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   proxy: true,
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
     collectionName: "sessions",
     ttl: 24 * 60 * 60,
+    autoRemove: "native",
+    touchAfter: 24 * 3600,
   }),
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 24 * 60 * 60 * 1000,
+    path: "/",
   },
   name: "connect.sid",
 };
@@ -49,30 +52,54 @@ app.use(session(sessionConfig));
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, origin);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept", "Cookie"],
-  exposedHeaders: ["Set-Cookie", "Authorization"],
+  exposedHeaders: ["Set-Cookie"],
 };
 
 app.use(cors(corsOptions));
-
-app.options("*", cors(corsOptions));
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  console.log("Session:", req.session);
-  console.log("Headers:", req.headers);
-  res.header("Access-Control-Allow-Credentials", "true");
+  console.log("=== Request Debug ===");
+  console.log("Session ID:", req.session?.id);
+  console.log("User ID:", req.session?.userId);
+  console.log("Cookies:", req.cookies);
+  console.log("Headers:", {
+    origin: req.headers.origin,
+    cookie: req.headers.cookie,
+  });
+  next();
+});
+
+app.use((req, res, next) => {
+  console.log("=== Request Start ===");
+  console.log("Method:", req.method);
+  console.log("Path:", req.path);
+  console.log("Origin:", req.headers.origin);
+  console.log("Session:", !!req.session);
+  next();
+});
+
+app.use((req, res, next) => {
+  console.log("Incoming request:", {
+    method: req.method,
+    path: req.path,
+    auth: !!req.session?.userId,
+  });
   next();
 });
 

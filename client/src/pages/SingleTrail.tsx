@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
@@ -14,6 +14,8 @@ import {
   faSmog,
   faBolt,
 } from "@fortawesome/free-solid-svg-icons";
+import { useAuth0 } from "@auth0/auth0-react";
+import ConfirmationDialog from "../components/ConfirmationDialog";
 
 interface PackingItem {
   _id?: string;
@@ -77,6 +79,9 @@ const SingleTrail = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Trail | null>(null);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth0();
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     if (trail?.image) {
@@ -342,10 +347,40 @@ const SingleTrail = () => {
       const updatedTrail = await response.json();
       setTrail(updatedTrail);
       setIsEditing(false);
-      alert(t("trailUpdatedSuccessfully"));
     } catch (error) {
       console.error("Error updating trail:", error);
       alert(t("errorUpdatingTrail"));
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!isAuthenticated) {
+      alert(t("pleaseLogIn"));
+      return;
+    }
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete trail");
+      }
+
+      navigate("/trails");
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert(t("errorDeletingTrail"));
+    } finally {
+      setShowDeleteConfirmation(false);
     }
   };
 
@@ -373,7 +408,7 @@ const SingleTrail = () => {
 
       {/* Container för all information */}
       <div className={styles.container}>
-        {/* Titel och v��der */}
+        {/* Titel och väder */}
         <div className={styles.titleWeatherContainer}>
           {isEditing ? (
             <input
@@ -398,7 +433,7 @@ const SingleTrail = () => {
         </div>
 
         {/* Grundläggande Information */}
-        <div className={styles.infoSection}>
+        <div className={styles.basicInfo}>
           {isEditing ? (
             <form onSubmit={handleEditSubmit} className={styles.editForm}>
               <div className={styles.formGroup}>
@@ -496,23 +531,36 @@ const SingleTrail = () => {
               </div>
             </form>
           ) : (
-            <div className={styles.basicInfo}>
-              <p>{trail.length} km</p>
-              <p>{t(trail.difficulty)}</p>
-              <p>
-                {t("location")}: {trail.location}
-              </p>
-              <p>
-                {t("dates")}: {new Date(trail.hikeDate).toLocaleDateString()} -{" "}
-                {new Date(trail.hikeEndDate).toLocaleDateString()}
-              </p>
+            <>
+              <div className={styles.infoHeader}>
+                <div className={styles.infoContent}>
+                  <p className={styles.trailLocation}>{trail.location}</p>
+                  <p className={styles.trailDates}>
+                    {new Date(trail.hikeDate).toLocaleDateString()} -{" "}
+                    {new Date(trail.hikeEndDate).toLocaleDateString()}
+                  </p>
+                  <div className={styles.trailStats}>
+                    <p className={styles.trailLength}>{trail.length} km</p>
+                    <p className={styles.trailDifficulty}>
+                      {t(trail.difficulty)}
+                    </p>
+                  </div>
+                </div>
+                <div className={styles.actionButtons}>
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className={styles.editButton}>
+                    {t("edit")}
+                  </button>
+                  <button
+                    onClick={handleDelete}
+                    className={styles.deleteButton}>
+                    {t("delete")}
+                  </button>
+                </div>
+              </div>
               <p className={styles.description}>{trail.description}</p>
-              <button
-                onClick={() => setIsEditing(true)}
-                className={styles.editButton}>
-                {t("edit")}
-              </button>
-            </div>
+            </>
           )}
         </div>
 
@@ -638,15 +686,14 @@ const SingleTrail = () => {
                   // Redigeringsläge
                   <div className={styles.commentEdit}>
                     <textarea
-                      value={editedText} // Kopplar värdet till `editedText`
+                      value={editedText}
                       onChange={(e) => setEditedText(e.target.value)}
                       className={styles.commentInput}
                     />
                     <div className={styles.commentButtons}>
                       <button
                         onClick={() => editComment(comment._id, editedText)}
-                        disabled={isSaving} // Hindra flera klick under sparning
-                      >
+                        disabled={isSaving}>
                         {isSaving ? t("saving...") : t("save")}
                       </button>
                       <button
@@ -668,8 +715,8 @@ const SingleTrail = () => {
                     <div className={styles.commentButtons}>
                       <button
                         onClick={() => {
-                          setEditingComment(comment._id); // Aktivera redigering
-                          setEditedText(comment.text); // Fyll i nuvarande text
+                          setEditingComment(comment._id);
+                          setEditedText(comment.text);
                         }}>
                         {t("edit")}
                       </button>
@@ -694,13 +741,19 @@ const SingleTrail = () => {
             <button
               onClick={addComment}
               className={styles.addCommentButton}
-              disabled={isSaving} // Hindra flera klick under sparning
-            >
+              disabled={isSaving}>
               {isSaving ? t("adding...") : t("add")}
             </button>
           </div>
         </div>
       </div>
+
+      <ConfirmationDialog
+        isOpen={showDeleteConfirmation}
+        message={t("confirmDeleteTrail")}
+        onConfirm={confirmDelete}
+        onCancel={() => setShowDeleteConfirmation(false)}
+      />
     </div>
   );
 };

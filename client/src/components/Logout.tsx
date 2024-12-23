@@ -4,7 +4,7 @@ import styles from "../styles/Buttons.module.scss";
 import { useEffect } from "react";
 
 const Logout = () => {
-  const { logout, isAuthenticated  } = useAuth0();
+  const { logout, isAuthenticated } = useAuth0();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const Logout = () => {
   };
 
   return (
-    <button onClick={handleLogout} className={styles.button}>
+    <button onClick={handleLogout} className={styles.profileButton}>
       {t("logout")}
     </button>
   );

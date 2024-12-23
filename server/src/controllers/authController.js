@@ -111,3 +111,17 @@ export const logout = (req, res) => {
     res.status(200).json({ message: "Logged out successfully" });
   });
 };
+
+export const refreshSession = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "No token provided" });
+    }
+
+    res.json({ message: "Session refreshed" });
+  } catch (error) {
+    console.error("Session refresh error:", error);
+    res.status(500).json({ message: "Failed to refresh session" });
+  }
+};

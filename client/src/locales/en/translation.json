@@ -121,12 +121,16 @@
   "hard": "Hard",
   "epic": "Epic",
   "description": "Description",
-  "hikeDate": "Hike Date",
-  "hikeEndDate": "Hike End Date",
+  "name": "Trail Name",
+  "location": "Location",
+  "cancel": "Cancel",
+  "startDate": "Hike Date",
+  "endDate": "Hike End Date",
   "searchLocation": "Search for location",
   "selectedLocation": "Selected Location",
   "createTrailButton": "Create Trail",
   "trailCreatedSuccessfully": "Trail created successfully!",
+  "trailUpdatedSuccessfully": "Trail updated successfully!",
   "resetButton": "Reset",
   "loading": "Loading...",
   "markerTooltip": "Click on the map to select a location",
@@ -191,5 +195,22 @@
   "cookieConsent": {
     "message": "We use cookies to enhance your experience. By continuing to use this site, you agree to our use of cookies.",
     "accept": "Accept Cookies"
-  }
+  },
+  "confirmDeleteTrail": "Are you sure you want to delete this trail?",
+  "errorDeletingTrail": "Error deleting trail",
+  "confirmDelete": "Are you sure you want to delete this item?",
+  "alerts": {
+    "error": "An error occurred: ",
+    "failedToCreateTrail": "Failed to create trail",
+    "nameRequired": "Name is required",
+    "invalidGearType": "Invalid gear type",
+    "errorAddingGear": "Error adding gear",
+    "errorDeletingItem": "Error deleting item",
+    "errorUpdatingItem": "Error updating item",
+    "trailUpdatedSuccess": "Trail updated successfully",
+    "errorUpdatingTrail": "Error updating trail",
+    "pleaseLogin": "Please login to continue",
+    "errorDeletingTrail": "Error deleting trail"
+  },
+  "confirm": "OK"
 }
