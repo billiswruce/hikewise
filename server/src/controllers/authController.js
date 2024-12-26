@@ -3,39 +3,21 @@ import User from "../models/User.js";
 export const login = async (req, res) => {
   const { auth0Id, email, name } = req.body;
 
-  console.log("Inkommande data från frontend:", { auth0Id, email, name });
-  console.log("Session före login:", req.session);
-
   try {
     if (!auth0Id) {
-      console.warn("auth0Id saknas i request body!");
       return res.status(400).json({ message: "auth0Id är obligatoriskt" });
     }
 
     let user = await User.findOne({ auth0Id });
+    let isNewUser = false;
 
     if (user) {
-      console.log("Befintlig användare hittad:", user);
+      // Existerande användare
       user.email = email || user.email;
       await user.save();
-
-      req.session.userId = user._id;
-      console.log("Session efter userId set:", req.session);
-
-      return req.session.save((err) => {
-        if (err) {
-          console.error("Fel vid session.save():", err);
-          return res.status(500).json({ message: "Failed to save session" });
-        }
-        console.log("Session sparad framgångsrikt:", req.session);
-        res.status(200).json({
-          message: "Användare inloggad!",
-          user,
-          sessionId: req.session.id,
-        });
-      });
     } else {
-      console.log("Ingen användare hittades, skapar ny användare...");
+      // Ny användare
+      isNewUser = true;
       const uniqueUsername = name || `user_${Date.now()}`;
       user = await User.create({
         auth0Id,
@@ -44,21 +26,24 @@ export const login = async (req, res) => {
         favoriteTrails: [],
         ownedGear: [],
       });
-
-      req.session.userId = user._id;
-      console.log("Ny användare skapad:", user);
-
-      return req.session.save((err) => {
-        if (err) {
-          console.error("Fel vid session.save():", err);
-          return res.status(500).json({ message: "Failed to save session" });
-        }
-        res.status(200).json({
-          message: "Ny användare skapad och inloggad!",
-          user,
-        });
-      });
     }
+
+    req.session.userId = user._id;
+
+    return req.session.save((err) => {
+      if (err) {
+        console.error("Fel vid session.save():", err);
+        return res.status(500).json({ message: "Failed to save session" });
+      }
+      res.status(200).json({
+        message: isNewUser
+          ? "Ny användare skapad och inloggad!"
+          : "Användare inloggad!",
+        user,
+        sessionId: req.session.id,
+        isNewUser,
+      });
+    });
   } catch (error) {
     console.error("Fel vid inloggning:", error.message);
     res.status(500).json({
@@ -119,7 +104,26 @@ export const refreshSession = async (req, res) => {
       return res.status(401).json({ message: "No token provided" });
     }
 
-    res.json({ message: "Session refreshed" });
+    if (req.session) {
+      req.session.touch();
+      req.session.cookie.maxAge = 24 * 60 * 60 * 1000;
+
+      await new Promise((resolve, reject) => {
+        req.session.save((err) => {
+          if (err) reject(err);
+          resolve();
+        });
+      });
+    }
+
+    res.json({
+      message: "Session refreshed",
+      currentPath: req.headers.referer || "/",
+      sessionStatus: {
+        active: true,
+        expiresIn: req.session?.cookie?.maxAge,
+      },
+    });
   } catch (error) {
     console.error("Session refresh error:", error);
     res.status(500).json({ message: "Failed to refresh session" });
