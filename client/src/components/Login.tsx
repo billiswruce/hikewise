@@ -65,7 +65,15 @@ const Login = () => {
     };
 
     loginToBackend();
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, navigate]);
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    const currentPath = window.location.pathname;
+    if (currentPath === "/") {
+      navigate("/my-profile");
+    }
+  };
 
   return (
     <div>
@@ -83,7 +91,7 @@ const Login = () => {
         </>
       )}
 
-      <LoginModal isOpen={showModal} onClose={() => navigate("/my-profile")} />
+      <LoginModal isOpen={showModal} onClose={handleModalClose} />
     </div>
   );
 };

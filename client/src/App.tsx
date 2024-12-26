@@ -7,7 +7,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+  const {
+    isAuthenticated,
+    getAccessTokenSilently,
+    isLoading: auth0Loading,
+  } = useAuth0();
 
   useEffect(() => {
     const checkSession = async () => {
@@ -51,6 +55,10 @@ export const App = () => {
       checkSession();
     }
   }, [isAuthenticated, getAccessTokenSilently]);
+
+  if (auth0Loading) {
+    return <LoadingScreen />;
+  }
 
   if (isLoading) {
     return <LoadingScreen />;
