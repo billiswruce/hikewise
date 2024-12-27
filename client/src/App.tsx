@@ -20,7 +20,16 @@ export const App = () => {
       console.log("Checking session...");
       if (!isAuthenticated || !user) {
         console.log(
-          "Not authenticated or no user data, skipping session check"
+          JSON.stringify(
+            {
+              message:
+                "Not authenticated or no user data, skipping session check",
+              isAuthenticated,
+              hasUser: !!user,
+            },
+            null,
+            2
+          )
         );
         setIsLoading(false);
         setSessionReady(false);
@@ -29,33 +38,6 @@ export const App = () => {
 
       try {
         const token = await getAccessTokenSilently();
-
-        // Först, försök att refresha sessionen
-        const refreshResponse = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/auth/refresh-session`,
-          {
-            method: "POST",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-              Origin: window.location.origin,
-            },
-            mode: "cors",
-          }
-        );
-
-        if (!refreshResponse.ok) {
-          throw new Error(`Refresh failed: ${await refreshResponse.text()}`);
-        }
-
-        const refreshData = await refreshResponse.json();
-        console.log("Session refresh complete:", refreshData);
-
-        // Vänta på att backend-sessionen etableras
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Försök att logga in på backend
         const loginResponse = await fetch(
           `${import.meta.env.VITE_API_URL}/api/auth/login`,
           {
@@ -73,16 +55,93 @@ export const App = () => {
           }
         );
 
-        if (loginResponse.ok) {
-          console.log("Backend login successful");
+        if (!loginResponse.ok) {
+          const errorText = await loginResponse.text();
+          console.log(
+            JSON.stringify(
+              {
+                message: "Backend login failed",
+                error: errorText,
+                status: loginResponse.status,
+              },
+              null,
+              2
+            )
+          );
+          setSessionReady(false);
+          return;
+        }
+
+        const loginData = await loginResponse.json();
+        console.log(
+          JSON.stringify(
+            {
+              message: "Backend login successful",
+              data: loginData,
+            },
+            null,
+            2
+          )
+        );
+
+        const sessionResponse = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/auth/check-session`,
+          {
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const sessionData = await sessionResponse.json();
+        console.log(
+          JSON.stringify(
+            {
+              message: "Session check response",
+              data: sessionData,
+            },
+            null,
+            2
+          )
+        );
+
+        if (sessionData.sessionActive) {
+          console.log(
+            JSON.stringify(
+              {
+                message: "Session verified as active",
+                sessionId: sessionData.sessionId,
+              },
+              null,
+              2
+            )
+          );
           setSessionReady(true);
         } else {
-          const errorText = await loginResponse.text();
-          console.log("Backend login failed:", errorText);
+          console.log(
+            JSON.stringify(
+              {
+                message: "Session verification failed",
+                data: sessionData,
+              },
+              null,
+              2
+            )
+          );
           setSessionReady(false);
         }
       } catch (error) {
-        console.error("Session check error:", error);
+        console.error(
+          JSON.stringify(
+            {
+              message: "Session check error",
+              error: error instanceof Error ? error.message : String(error),
+            },
+            null,
+            2
+          )
+        );
         setSessionReady(false);
       } finally {
         setIsLoading(false);
@@ -97,12 +156,32 @@ export const App = () => {
   }, [isAuthenticated, getAccessTokenSilently, auth0Loading, user]);
 
   if (auth0Loading || isLoading) {
-    console.log("Loading screen:", { auth0Loading, isLoading });
+    console.log(
+      JSON.stringify(
+        {
+          message: "Loading screen",
+          auth0Loading,
+          isLoading,
+        },
+        null,
+        2
+      )
+    );
     return <LoadingScreen />;
   }
 
   if (isAuthenticated && !sessionReady) {
-    console.log("Waiting for session to be ready");
+    console.log(
+      JSON.stringify(
+        {
+          message: "Waiting for session to be ready",
+          isAuthenticated,
+          sessionReady,
+        },
+        null,
+        2
+      )
+    );
     return <LoadingScreen />;
   }
 

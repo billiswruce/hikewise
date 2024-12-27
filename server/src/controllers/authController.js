@@ -29,28 +29,40 @@ export const login = async (req, res) => {
       });
     }
 
+    // Sätt användar-ID i session
     req.session.userId = user._id;
+    req.session.auth0Id = auth0Id;
 
-    return req.session.save((err) => {
-      if (err) {
-        console.error("Fel vid session.save():", err);
-        return res.status(500).json({ message: "Failed to save session" });
-      }
-      res.status(200).json({
-        message: isNewUser
-          ? "Ny användare skapad och inloggad!"
-          : "Användare inloggad!",
-        user,
-        sessionId: req.session.id,
-        isNewUser,
+    // Spara sessionen
+    await new Promise((resolve, reject) => {
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session save error:", err);
+          reject(err);
+          return;
+        }
+        console.log("Session saved:", {
+          id: req.session.id,
+          userId: req.session.userId,
+          auth0Id: req.session.auth0Id,
+        });
+        resolve();
       });
     });
-  } catch (error) {
-    console.error("Fel vid inloggning:", error.message);
-    res.status(500).json({
-      message: "Fel vid inloggning",
-      error: error.message,
+
+    res.json({
+      message: isNewUser
+        ? "Ny användare skapad och inloggad!"
+        : "Användare inloggad!",
+      user,
+      sessionId: req.session.id,
+      isNewUser,
     });
+  } catch (error) {
+    console.error("Login error:", error);
+    res
+      .status(500)
+      .json({ message: "Fel vid inloggning", error: error.message });
   }
 };
 
@@ -128,5 +140,42 @@ export const refreshSession = async (req, res) => {
   } catch (error) {
     console.error("Session refresh error:", error);
     res.status(500).json({ message: "Failed to refresh session" });
+  }
+};
+
+export const checkSession = async (req, res) => {
+  try {
+    console.log("Check session request:", {
+      sessionId: req.session?.id,
+      userId: req.session?.userId,
+      auth0Id: req.session?.auth0Id,
+    });
+
+    if (!req.session?.userId) {
+      return res.json({
+        sessionActive: false,
+        message: "No active session",
+      });
+    }
+
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.json({
+        sessionActive: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      sessionActive: true,
+      sessionId: req.session.id,
+      userId: req.session.userId,
+    });
+  } catch (error) {
+    console.error("Session check error:", error);
+    res.status(500).json({
+      sessionActive: false,
+      error: error.message,
+    });
   }
 };
