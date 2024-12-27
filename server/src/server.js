@@ -31,6 +31,7 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   proxy: true,
+  rolling: true,
   store: MongoStore.create({
     mongoUrl: process.env.MONGO_URI,
     collectionName: "sessions",
@@ -41,7 +42,7 @@ const sessionConfig = {
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
     path: "/",
   },
@@ -50,34 +51,42 @@ const sessionConfig = {
 
 app.use(session(sessionConfig));
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization", "Accept", "Cookie"],
-  exposedHeaders: ["Set-Cookie"],
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept", "Cookie"],
+    exposedHeaders: ["Set-Cookie"],
+    preflightContinue: true,
+  })
+);
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-  console.log("=== Request Debug ===");
-  console.log("Session ID:", req.session?.id);
-  console.log("User ID:", req.session?.userId);
-  console.log("Cookies:", req.cookies);
+  console.log("\n=== Detailed Request Debug ===");
+  console.log("Method & Path:", req.method, req.path);
   console.log("Headers:", {
     origin: req.headers.origin,
     cookie: req.headers.cookie,
+    "user-agent": req.headers["user-agent"],
   });
+  console.log("Session Details:", {
+    id: req.session?.id,
+    userId: req.session?.userId,
+    cookie: req.session?.cookie,
+    isNew: req.session?.isNew,
+  });
+  console.log("Cookies:", req.cookies);
+  console.log("=========================\n");
   next();
 });
 

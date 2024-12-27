@@ -3,7 +3,12 @@ import jwt from "jsonwebtoken";
 
 export const login = async (req, res) => {
   const { auth0Id, email, name } = req.body;
-  console.log("Login attempt:", { auth0Id, email, name });
+  console.log("\n=== Login Attempt ===");
+  console.log("User:", { auth0Id, email, name });
+  console.log("Session before:", {
+    id: req.session?.id,
+    isNew: req.session?.isNew,
+  });
 
   try {
     if (!auth0Id) {
@@ -29,22 +34,25 @@ export const login = async (req, res) => {
       });
     }
 
-    // Sätt användar-ID i session
+    // Sätt session data
     req.session.userId = user._id;
     req.session.auth0Id = auth0Id;
 
-    // Spara sessionen
+    // Spara session
     await new Promise((resolve, reject) => {
       req.session.save((err) => {
         if (err) {
-          console.error("Session save error:", err);
+          console.error("Session save failed:", err);
           reject(err);
           return;
         }
-        console.log("Session saved:", {
+        console.log("Session after login:", {
           id: req.session.id,
           userId: req.session.userId,
-          auth0Id: req.session.auth0Id,
+          cookie: {
+            maxAge: req.session.cookie.maxAge,
+            expires: req.session.cookie.expires,
+          },
         });
         resolve();
       });
@@ -144,27 +152,41 @@ export const refreshSession = async (req, res) => {
 };
 
 export const checkSession = async (req, res) => {
-  try {
-    console.log("Check session request:", {
-      sessionId: req.session?.id,
-      userId: req.session?.userId,
-      auth0Id: req.session?.auth0Id,
-    });
+  console.log("\n=== Check Session ===");
+  console.log("Current session:", {
+    id: req.session?.id,
+    userId: req.session?.userId,
+    cookie: req.session?.cookie,
+  });
 
+  try {
     if (!req.session?.userId) {
+      console.log("No active session found");
       return res.json({
         sessionActive: false,
         message: "No active session",
+        debug: { sessionId: req.session?.id },
       });
     }
 
     const user = await User.findById(req.session.userId);
     if (!user) {
+      console.log("User not found for session");
       return res.json({
         sessionActive: false,
         message: "User not found",
+        debug: { userId: req.session.userId },
       });
     }
+
+    // Touch session utan att ändra ID
+    req.session.touch();
+    await new Promise((resolve) => req.session.save(resolve));
+
+    console.log("Session verified:", {
+      id: req.session.id,
+      userId: req.session.userId,
+    });
 
     res.json({
       sessionActive: true,
@@ -176,6 +198,7 @@ export const checkSession = async (req, res) => {
     res.status(500).json({
       sessionActive: false,
       error: error.message,
+      debug: { sessionId: req.session?.id },
     });
   }
 };
