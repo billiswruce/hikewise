@@ -1,10 +1,13 @@
 import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
 export const login = async (req, res) => {
   const { auth0Id, email, name } = req.body;
+  console.log("Login attempt:", { auth0Id, email, name });
 
   try {
     if (!auth0Id) {
+      console.log("Missing auth0Id in request");
       return res.status(400).json({ message: "auth0Id är obligatoriskt" });
     }
 
@@ -102,9 +105,10 @@ export const refreshSession = async (req, res) => {
       return res.status(401).json({ message: "No token provided" });
     }
 
+    // Uppdatera session
     if (req.session) {
       req.session.touch();
-      req.session.cookie.maxAge = 24 * 60 * 60 * 1000;
+      req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 timmar
 
       await new Promise((resolve, reject) => {
         req.session.save((err) => {
@@ -116,7 +120,6 @@ export const refreshSession = async (req, res) => {
 
     res.json({
       message: "Session refreshed",
-      currentPath: req.headers.referer || "/",
       sessionStatus: {
         active: true,
         expiresIn: req.session?.cookie?.maxAge,
