@@ -22,6 +22,7 @@ export const FavoriteProvider = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const loadFavorites = useCallback(async () => {
+    console.log("loadFavorites");
     if (!isAuthenticated) {
       setFavorites(new Set());
       return;

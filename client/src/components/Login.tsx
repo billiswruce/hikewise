@@ -45,6 +45,7 @@ const Login = () => {
             credentials: "include",
             headers: {
               "Content-Type": "application/json",
+              Accept: "application/json",
             },
             body: JSON.stringify({
               auth0Id: user.sub,

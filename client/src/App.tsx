@@ -5,8 +5,12 @@ import { FavoriteProvider } from "./context/FavoriteContext";
 import LoadingScreen from "./components/LoadingScreen";
 import { useAuth0 } from "@auth0/auth0-react";
 
+// Gör ett anrop till vercel, för att se om vi är inloggade (inga parametrar som användarnamn eller lösenord, förlitar oss på cookien) /getme
+// när vi får svar, om svaret innehåller användardataså är användaren inloggad, annars går vi vidare med useAuth0,
+// när vi får svar från useAuth0, så anropa login på server med andändarnamn och lösenord
+
 export const App = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const {
     isAuthenticated,
     getAccessTokenSilently,
@@ -15,7 +19,11 @@ export const App = () => {
 
   useEffect(() => {
     const checkSession = async () => {
-      if (!isAuthenticated) return;
+      console.log("checkSession");
+      if (!isAuthenticated) {
+        setIsLoading(false);
+        return;
+      }
 
       setIsLoading(true);
       try {
@@ -25,7 +33,10 @@ export const App = () => {
             credentials: "include",
             headers: {
               Accept: "application/json",
+              "Content-Type": "application/json",
+              Origin: window.location.origin,
             },
+            mode: "cors",
           }
         );
 
@@ -40,7 +51,9 @@ export const App = () => {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
+                Origin: window.location.origin,
               },
+              mode: "cors",
             }
           );
         }
@@ -53,16 +66,22 @@ export const App = () => {
 
     if (isAuthenticated) {
       checkSession();
+    } else {
+      console.log("isAuthenticated is false");
+      setIsLoading(false);
     }
   }, [isAuthenticated, getAccessTokenSilently]);
 
   if (auth0Loading) {
+    console.log("auth0Loading");
     return <LoadingScreen />;
   }
 
   if (isLoading) {
+    console.log("isLoading");
     return <LoadingScreen />;
   }
+  console.log("FavoriteProvider");
 
   return (
     <FavoriteProvider>

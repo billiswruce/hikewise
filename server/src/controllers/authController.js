@@ -12,11 +12,9 @@ export const login = async (req, res) => {
     let isNewUser = false;
 
     if (user) {
-      // Existerande användare
       user.email = email || user.email;
       await user.save();
     } else {
-      // Ny användare
       isNewUser = true;
       const uniqueUsername = name || `user_${Date.now()}`;
       user = await User.create({

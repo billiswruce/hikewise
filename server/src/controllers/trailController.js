@@ -19,10 +19,7 @@ export const createTrail = async (req, res) => {
     packingList,
   } = req.body;
 
-  const placeholderImage =
-    process.env.NODE_ENV === "production"
-      ? `${process.env.FRONTEND_URL}/trailPlaceholder.webp`
-      : "http://localhost:5173/trailPlaceholder.webp";
+  const placeholderImage = `${process.env.FRONTEND_URL}/trailPlaceholder.webp`;
 
   try {
     const weatherResponse = await axios.get(
@@ -96,7 +93,6 @@ export const updateTrail = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
-    // Uppdatera väderdata om lat/long har ändrats
     if (updates.latitude && updates.longitude) {
       const weatherResponse = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather`,
@@ -300,13 +296,13 @@ export const deleteTrail = async (req, res) => {
       exactComparison: {
         length: {
           creator: trail.creatorId.length,
-          user: req.user?.auth0Id?.length
+          user: req.user?.auth0Id?.length,
         },
         type: {
           creator: typeof trail.creatorId,
-          user: typeof req.user?.auth0Id
-        }
-      }
+          user: typeof req.user?.auth0Id,
+        },
+      },
     });
 
     if (!req.user?.auth0Id) {
@@ -316,12 +312,14 @@ export const deleteTrail = async (req, res) => {
 
     if (trail.creatorId !== req.user.auth0Id) {
       console.log("Authorization mismatch");
-      return res.status(403).json({ message: "Not authorized to delete this trail" });
+      return res
+        .status(403)
+        .json({ message: "Not authorized to delete this trail" });
     }
 
     await Trail.findByIdAndDelete(id);
     console.log("Trail deleted successfully");
-    
+
     res.status(200).json({ message: "Trail deleted successfully" });
   } catch (error) {
     console.error("Delete trail error:", error);
