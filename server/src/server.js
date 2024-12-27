@@ -61,7 +61,7 @@ app.use(
       }
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept", "Cookie"],
     exposedHeaders: ["Set-Cookie"],
     preflightContinue: true,
@@ -76,14 +76,13 @@ app.use((req, res, next) => {
   console.log("Method & Path:", req.method, req.path);
   console.log("Headers:", {
     origin: req.headers.origin,
-    cookie: req.headers.cookie,
+    cookie: req.cookies,
     "user-agent": req.headers["user-agent"],
   });
   console.log("Session Details:", {
     id: req.session?.id,
     userId: req.session?.userId,
     cookie: req.session?.cookie,
-    isNew: req.session?.isNew,
   });
   console.log("Cookies:", req.cookies);
   console.log("=========================\n");

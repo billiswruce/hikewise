@@ -9,6 +9,7 @@ export const login = async (req, res) => {
     id: req.session?.id,
     isNew: req.session?.isNew,
   });
+  console.log("Connect sid:", req.cookies["connect.sid"]);
 
   try {
     if (!auth0Id) {
@@ -33,6 +34,7 @@ export const login = async (req, res) => {
         ownedGear: [],
       });
     }
+    console.log("isNewUser", isNewUser);
 
     // Sätt session data
     req.session.userId = user._id;
@@ -158,6 +160,8 @@ export const checkSession = async (req, res) => {
     userId: req.session?.userId,
     cookie: req.session?.cookie,
   });
+
+  console.log("Connect sid:", req.cookies["connect.sid"]);
 
   try {
     if (!req.session?.userId) {
