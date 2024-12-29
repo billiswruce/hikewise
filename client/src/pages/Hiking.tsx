@@ -45,7 +45,6 @@ const Hiking = () => {
       </div>
       <div className={styles.sections}>
         {sortedTrails.map((trail) => {
-          console.log("Trail image:", trail.image);
           return (
             <div
               key={trail._id}

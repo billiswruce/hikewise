@@ -8,6 +8,7 @@ import backgroundImage from "../assets/bg.webp";
 import TrailForm from "../components/trail/TrailForm";
 import ConfirmationModal from "../components/ConfirmationModal";
 import LoadingScreen from "../components/LoadingScreen";
+import { compressImage } from "../utils/imageCompression";
 
 const CreateTrail = () => {
   const { t, i18n } = useTranslation();
@@ -66,19 +67,19 @@ const CreateTrail = () => {
     });
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
+      try {
+        const compressedImage = await compressImage(file);
         setFormData((prevData) => ({
           ...prevData,
-          image: reader.result as string,
+          image: compressedImage,
         }));
-      };
-      reader.readAsDataURL(file);
-    } else {
-      alert(t("uploadImageError"));
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        alert(t("uploadImageError"));
+      }
     }
   };
 
