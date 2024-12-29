@@ -64,6 +64,17 @@ app.use(
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
+app.use(
+  express.static("public", {
+    maxAge: "1y",
+    setHeaders: (res, path) => {
+      if (path.endsWith(".webp")) {
+        res.setHeader("Cache-Control", "public, max-age=31536000");
+      }
+    },
+  })
+);
+
 app.use((req, res, next) => {
   console.log("\n=== Detailed Request Debug ===");
   console.log("Method & Path:", req.method, req.path);

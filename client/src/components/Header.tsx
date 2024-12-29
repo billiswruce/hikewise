@@ -15,7 +15,6 @@ const Header = () => {
   const isDesktop = width >= 768;
   const showBackButton = location.pathname !== "/";
 
-  // Hämta sparat språk när komponenten mountas
   useEffect(() => {
     const savedLanguage = localStorage.getItem("preferredLanguage");
     if (savedLanguage && i18n.language !== savedLanguage) {

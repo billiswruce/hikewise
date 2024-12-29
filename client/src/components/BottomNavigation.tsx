@@ -13,19 +13,34 @@ const BottomNavigation: React.FC = () => {
   return (
     <nav className={styles.nav}>
       <Link to="/trails" className={styles.navItem}>
-        <img src={mountainIcon} alt={t("trails")} className={styles.icon} />
+        <img
+          src={mountainIcon}
+          alt=""
+          className={styles.icon}
+          role="presentation"
+        />
         <span>{t("trails")}</span>
       </Link>
       <Link to="/create-trail" className={styles.navItem}>
-        <img src={mapIcon} alt={t("createTrail")} className={styles.icon} />
+        <img src={mapIcon} alt="" className={styles.icon} role="presentation" />
         <span>{t("createTrail")}</span>
       </Link>
       <Link to="gear" className={styles.navItem}>
-        <img src={gearIcon} alt={t("gear")} className={styles.icon} />
+        <img
+          src={gearIcon}
+          alt=""
+          className={styles.icon}
+          role="presentation"
+        />
         <span>{t("gear")}</span>
       </Link>
       <Link to="/my-profile" className={styles.navItem}>
-        <img src={accountIcon} alt={t("myProfile")} className={styles.icon} />
+        <img
+          src={accountIcon}
+          alt=""
+          className={styles.icon}
+          role="presentation"
+        />
         <span>{t("myProfile")}</span>
       </Link>
     </nav>

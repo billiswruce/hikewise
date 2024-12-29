@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import backgroundImage from "../assets/bg.webp";
 import Login from "../components/Login";
 import styles from "../styles/Home.module.scss";
 import logo from "../assets/Hikers1.png";
@@ -10,9 +9,17 @@ const Home = () => {
   return (
     <div
       className={styles.container}
-      style={{ backgroundImage: `url(${backgroundImage})` }}>
+      style={{
+        backgroundImage: `url('/assets/bg-CzexTIN5.webp')`,
+      }}>
       <div className={styles.card}>
-        <img src={logo} alt={t("logoAlt")} className={styles.logo} />
+        <img
+          src={logo}
+          alt={t("logoAlt")}
+          className={styles.logo}
+          loading="eager"
+          decoding="async"
+        />
         <div className={styles.content}>
           <h1 className={styles.title}>HikeWise</h1>
           <p className={styles.description}>{t("slogan")}</p>
