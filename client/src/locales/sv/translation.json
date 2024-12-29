@@ -89,7 +89,9 @@
       "invalidGearType": "Ogiltig utrustningstyp"
     },
     "all": "Alla",
-    "selectType": "Välj typ"
+    "type": "Typ",
+    "selectType": "Välj typ",
+    "typeRequired": "Vänligen välj en typ"
   },
   "food": "Mat",
   "journal": "Dagbok",

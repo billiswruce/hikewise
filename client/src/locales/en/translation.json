@@ -89,7 +89,9 @@
       "invalidGearType": "Invalid gear type"
     },
     "all": "All",
-    "selectType": "Select Type"
+    "type": "Type",
+    "selectType": "Select type",
+    "typeRequired": "Please select a type"
   },
   "food": "Food",
   "journal": "Journal",
@@ -218,5 +220,6 @@
   "imageTooBig": "Image is too large. Maximum size is {{size}}MB",
   "errorCompressingImage": "Error compressing image",
   "maxImageSize": "Maximum image size: {{size}}MB",
-  "endDateBeforeStart": "End date cannot be before start date"
+  "endDateBeforeStart": "End date cannot be before start date",
+  "checkConnection": "Please check your internet connection and try again."
 }

@@ -25,9 +25,6 @@ const Hiking = () => {
   >("name-asc");
   const sortedTrails = useTrailSort(upcomingTrails, sortOption);
   const navigate = useNavigate();
-
-  // console.log("Trail object:", upcomingTrails, JSON.stringify(upcomingTrails));
-
   const handleTrailClick = (trailId: string, event: React.MouseEvent) => {
     if ((event.target as HTMLElement).closest(`.${styles.favoriteButton}`)) {
       return;
@@ -63,7 +60,6 @@ const Hiking = () => {
                 <div className={styles.trailDetails}>
                   <h3>{trail.name}</h3>
                   <span>{trail.length} km</span>
-                  {/* <span>{t(trail.difficulty)}</span> */}
                   <span>{new Date(trail.hikeDate).toLocaleDateString()}</span>
                 </div>
               </div>

@@ -5,6 +5,7 @@ import useWindowSize from "../hooks/WindowSize";
 import BackButton from "./BackButton";
 import { useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -13,6 +14,20 @@ const Header = () => {
   const { isAuthenticated } = useAuth0();
   const isDesktop = width >= 768;
   const showBackButton = location.pathname !== "/";
+
+  // Hämta sparat språk när komponenten mountas
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("preferredLanguage");
+    if (savedLanguage && i18n.language !== savedLanguage) {
+      i18n.changeLanguage(savedLanguage);
+    }
+  }, [i18n]);
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLanguage = e.target.value;
+    i18n.changeLanguage(newLanguage);
+    localStorage.setItem("preferredLanguage", newLanguage);
+  };
 
   return (
     <header className={styles.header}>
@@ -29,7 +44,7 @@ const Header = () => {
               id="languageSelect"
               className={styles.languageSelect}
               value={i18n.language}
-              onChange={(e) => i18n.changeLanguage(e.target.value)}
+              onChange={handleLanguageChange}
               aria-label={t("selectLanguage")}>
               <option value="en">English</option>
               <option value="sv">Svenska</option>

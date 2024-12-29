@@ -70,7 +70,7 @@ export const Gear = () => {
     brand: "",
     color: "",
     categories: [] as string[],
-    type: "Clothing" as "Clothing" | "Equipment" | "Food",
+    type: type === "All" ? null : (type as "Clothing" | "Equipment" | "Food"),
   });
 
   const tabsRef = useRef<HTMLDivElement>(null);
@@ -160,9 +160,16 @@ export const Gear = () => {
       return;
     }
 
+    const itemType = type === "All" ? newItem.type : type;
+
+    if (!itemType) {
+      alert(t("typeRequired"));
+      return;
+    }
+
     const allowedTypes = ["Clothing", "Equipment", "Food"];
-    if (!allowedTypes.includes(newItem.type)) {
-      console.error("Invalid type:", newItem.type);
+    if (!allowedTypes.includes(itemType)) {
+      console.error("Invalid type:", itemType);
       alert(t("invalidGearType"));
       return;
     }
@@ -173,12 +180,12 @@ export const Gear = () => {
       condition: newItem.condition,
       brand: newItem.brand,
       color: newItem.color,
-      type: newItem.type,
-      categories: newItem.categories.length > 0 ? newItem.categories : [type],
+      type: itemType,
+      categories: newItem.categories.length > 0 ? newItem.categories : ["All"],
       packed: false,
     };
 
-    console.log("Item type:", newItem.type);
+    console.log("Item type:", itemType);
     console.log("Full item:", itemToSend);
 
     try {
@@ -206,21 +213,14 @@ export const Gear = () => {
         brand: "",
         color: "",
         categories: [],
-        type: "Clothing" as "Clothing" | "Equipment" | "Food",
+        type:
+          type === "All" ? null : (type as "Clothing" | "Equipment" | "Food"),
       });
     } catch (error) {
       console.error("Error adding gear:", error);
       alert(t("errorAddingGear"));
     }
   };
-
-  // Update type when it changes
-  useEffect(() => {
-    setNewItem((prev) => ({
-      ...prev,
-      type: type as "Clothing" | "Equipment" | "Food",
-    }));
-  }, [type]);
 
   const deleteGearItem = async (itemId: string, isFood: boolean) => {
     setItemToDelete({ id: itemId, isFood });
@@ -633,6 +633,32 @@ export const Gear = () => {
               <div className={styles.addGearForm}>
                 <h2>{t("myGear.addGear")}</h2>
 
+                {type === "All" && (
+                  <>
+                    <label htmlFor="gearType">{t("myGear.type")}</label>
+                    <select
+                      id="gearType"
+                      value={newItem.type || ""}
+                      onChange={(e) =>
+                        setNewItem({
+                          ...newItem,
+                          type: e.target.value as
+                            | "Clothing"
+                            | "Equipment"
+                            | "Food",
+                          categories: [], // Återställ kategorier när typen ändras
+                        })
+                      }
+                      required
+                      className={styles.required}>
+                      <option value="">{t("myGear.selectType")}</option>
+                      <option value="Clothing">{t("myGear.clothing")}</option>
+                      <option value="Equipment">{t("myGear.equipment")}</option>
+                      <option value="Food">{t("myGear.food")}</option>
+                    </select>
+                  </>
+                )}
+
                 <label htmlFor="gearName">{t("myGear.name")}</label>
                 <input
                   id="gearName"
@@ -725,13 +751,15 @@ export const Gear = () => {
                   className={`${styles.categorySelect} ${styles.required}`}
                   required>
                   <option value="">{t("myGear.selectCategory")}</option>
-                  {(type === "All"
+                  {(type === "All" && newItem.type
                     ? CATEGORIES[newItem.type]
-                    : CATEGORIES[type]) &&
+                    : type !== "All"
+                    ? CATEGORIES[type]
+                    : null) &&
                     Object.entries(
-                      type === "All"
+                      type === "All" && newItem.type
                         ? CATEGORIES[newItem.type]
-                        : CATEGORIES[type]
+                        : CATEGORIES[type as Exclude<typeof type, "All">]
                     ).map(([subcategory, items]) => (
                       <optgroup
                         key={subcategory}

@@ -18,8 +18,6 @@ const Hiked = () => {
   >("name-asc");
   const sortedTrails = useTrailSort(hikedTrails, sortOption);
 
-  // console.log("Trail object:", hikedTrails, JSON.stringify(hikedTrails));
-
   const handleTrailClick = (trailId: string, event: React.MouseEvent) => {
     if ((event.target as HTMLElement).closest(`.${styles.favoriteButton}`)) {
       return;
