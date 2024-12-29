@@ -224,5 +224,7 @@
   "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début",
   "uploadedTrailImage": "Image du sentier téléchargée",
   "chooseTrailImage": "Choisir l'image du sentier",
-  "selectLanguage": "Sélectionner la langue"
+  "selectLanguage": "Sélectionner la langue",
+  "noHikedTrails": "Vous n'avez pas encore terminé de sentiers",
+  "noUpcomingTrails": "Vous n'avez pas de sentiers prévus"
 }

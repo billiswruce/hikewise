@@ -76,11 +76,6 @@ const Hiking = () => {
         })}
         {sortedTrails.length === 0 && (
           <div className={styles.noTrails}>
-            <img
-              src={trailPlaceholder}
-              alt={t("noUpcomingTrails")}
-              className={styles.placeholderImage}
-            />
             <p>{t("noUpcomingTrails")}</p>
           </div>
         )}

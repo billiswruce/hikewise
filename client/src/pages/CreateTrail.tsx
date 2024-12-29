@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LoadScript, Libraries } from "@react-google-maps/api";
+import { LoadScript } from "@react-google-maps/api";
 import { useTranslation } from "react-i18next";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,7 @@ import TrailForm from "../components/trail/TrailForm";
 import ConfirmationModal from "../components/ConfirmationModal";
 import LoadingScreen from "../components/LoadingScreen";
 import { compressImage } from "../utils/imageCompression";
+import { libraries } from "../components/trail/TrailLocationPicker";
 
 const CreateTrail = () => {
   const { t, i18n } = useTranslation();
@@ -32,8 +33,6 @@ const CreateTrail = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const libraries: Libraries = ["places"];
 
   const handleChange = (
     e: React.ChangeEvent<

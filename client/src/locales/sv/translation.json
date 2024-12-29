@@ -225,5 +225,7 @@
   "endDateBeforeStart": "Slutdatum kan inte vara före startdatum",
   "uploadedTrailImage": "Uppladdad bild av vandringsleden",
   "chooseTrailImage": "Välj bild för vandringsleden",
-  "selectLanguage": "Välj språk"
+  "selectLanguage": "Välj språk",
+  "noHikedTrails": "Du har inte slutfört några vandringsleder än",
+  "noUpcomingTrails": "Du har inga planerade vandringsleder"
 }

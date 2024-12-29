@@ -221,5 +221,7 @@
   "errorCompressingImage": "Error compressing image",
   "maxImageSize": "Maximum image size: {{size}}MB",
   "endDateBeforeStart": "End date cannot be before start date",
-  "checkConnection": "Please check your internet connection and try again."
+  "checkConnection": "Please check your internet connection and try again.",
+  "noHikedTrails": "You haven't completed any trails yet",
+  "noUpcomingTrails": "You don't have any upcoming trails planned"
 }

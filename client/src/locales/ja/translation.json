@@ -222,5 +222,7 @@
   "endDateBeforeStart": "終了日は開始日より前に設定できません",
   "uploadedTrailImage": "アップロードされたトレイル画像",
   "chooseTrailImage": "トレイル画像を選択",
-  "selectLanguage": "言語を選択"
+  "selectLanguage": "言語を選択",
+  "noHikedTrails": "まだ完了したトレイルはありません",
+  "noUpcomingTrails": "予定されているトレイルはありません"
 }

@@ -1,6 +1,14 @@
-import { GoogleMap, Marker, Autocomplete } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  Marker,
+  Autocomplete,
+  Libraries,
+} from "@react-google-maps/api";
 import { useTranslation } from "react-i18next";
 import styles from "../../styles/SingleTrail.module.scss";
+
+// Add static libraries array and export it
+export const libraries: Libraries = ["places"];
 
 interface TrailLocationPickerProps {
   latitude: number;
