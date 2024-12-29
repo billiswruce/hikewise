@@ -20,11 +20,10 @@ const app = express();
 app.set("trust proxy", 1);
 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3001",
   "https://hikewise.vercel.app",
   "https://hikewise-backend.vercel.app",
-];
+  process.env.NODE_ENV === "development" ? "http://localhost:5173" : null,
+].filter(Boolean);
 
 const sessionConfig = {
   secret: process.env.SESSION_SECRET,
@@ -53,18 +52,12 @@ app.use(session(sessionConfig));
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept", "Cookie"],
     exposedHeaders: ["Set-Cookie"],
-    preflightContinue: true,
+    maxAge: 86400, // 24 timmar i sekunder
   })
 );
 

@@ -56,6 +56,7 @@
   "stayOnPage": "Permanecer en la página",
   "gear": "Equipamiento",
   "myGear": {
+    "all": "Todos",
     "title": "Mi equipamiento",
     "clothing": "Ropa",
     "equipment": "Equipo",
