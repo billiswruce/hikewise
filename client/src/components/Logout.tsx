@@ -13,12 +13,15 @@ const Logout = () => {
 
   const handleLogout = async () => {
     try {
-      console.log("Attempting to log out from backend...");
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/auth/logout`,
         {
           method: "POST",
           credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
         }
       );
 

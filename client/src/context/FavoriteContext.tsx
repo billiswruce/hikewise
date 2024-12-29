@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoadingScreen from "../components/LoadingScreen"; // Anpassa sökvägen för din loading-skärm
 
@@ -12,22 +18,33 @@ const FavoriteContext = createContext<{
   isLoading: false,
 });
 
-export const FavoriteProvider = ({
-  children,
-}: {
+interface FavoriteProviderProps {
   children: React.ReactNode;
+  isReady: boolean;
+}
+
+export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
+  children,
+  isReady,
 }) => {
   const { isAuthenticated } = useAuth0();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
+  const loadingRef = useRef(false);
 
   const loadFavorites = useCallback(async () => {
-    if (!isAuthenticated) {
-      setFavorites(new Set());
+    if (!isReady || !isAuthenticated || loadingRef.current) {
+      console.log("Skipping favorites load:", {
+        isReady,
+        isAuthenticated,
+        isLoading: loadingRef.current,
+      });
       return;
     }
 
+    loadingRef.current = true;
     setIsLoading(true);
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
@@ -42,6 +59,7 @@ export const FavoriteProvider = ({
       }
 
       const favoriteTrails = await response.json();
+      console.log("Favorites loaded successfully:", favoriteTrails);
       if (Array.isArray(favoriteTrails)) {
         setFavorites(new Set(favoriteTrails.map((trail) => trail._id)));
       }
@@ -49,12 +67,17 @@ export const FavoriteProvider = ({
       console.error("Error fetching favorites:", err);
     } finally {
       setIsLoading(false);
+      loadingRef.current = false;
     }
-  }, [isAuthenticated]);
+  }, [isReady, isAuthenticated]);
 
   useEffect(() => {
-    loadFavorites();
-  }, [loadFavorites]);
+    if (isReady && isAuthenticated) {
+      loadFavorites();
+    } else {
+      setFavorites(new Set());
+    }
+  }, [isReady, isAuthenticated, loadFavorites]);
 
   const toggleFavorite = async (trailId: string) => {
     if (!isAuthenticated) {
