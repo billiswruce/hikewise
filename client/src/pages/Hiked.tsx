@@ -44,10 +44,6 @@ const Hiked = () => {
               src={trail.image || hikedPlaceholder}
               alt={trail.name}
               className={styles.sectionImage}
-              onLoad={() => console.log("Hiked image:", trail.image)}
-              onError={() =>
-                console.log("Hiked placeholder:", hikedPlaceholder)
-              }
             />
             <div className={styles.trailInfo}>
               <div className={styles.trailDetails}>

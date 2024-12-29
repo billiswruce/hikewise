@@ -361,10 +361,13 @@ const SingleTrail = () => {
         ...formData,
         latitude: editLatitude,
         longitude: editLongitude,
-        weather: latestWeather || formData?.weather, // Använd det nya vädret eller behåll det gamla om hämtningen misslyckas
+        weather: latestWeather || formData?.weather,
       };
 
-      console.log("Sending update with data:", updatedFormData);
+      console.log("Updating trail:", {
+        ...updatedFormData,
+        image: updatedFormData.image ? "[Image data]" : "No image",
+      });
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
@@ -378,12 +381,14 @@ const SingleTrail = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Server error:", errorData);
         throw new Error(`Failed to update trail: ${errorData.message}`);
       }
 
       const updatedTrail = await response.json();
-      console.log("Server response:", updatedTrail);
+      console.log("Trail updated:", {
+        ...updatedTrail,
+        image: updatedTrail.image ? "[Image data]" : "No image",
+      });
 
       await fetchTrail();
       setIsEditing(false);
@@ -453,7 +458,6 @@ const SingleTrail = () => {
         const location =
           place.formatted_address || place.name || t("unknownLocation");
 
-        // Hämta väder för den nya platsen
         const weatherData = await fetchWeather(lat, lng);
 
         setEditLatitude(lat);
@@ -466,7 +470,6 @@ const SingleTrail = () => {
           weather: weatherData || prev!.weather, // Använd tidigare väder om hämtningen misslyckas
         }));
       } else {
-        console.error("No geometry found for place:", place);
         alert(t("noPlaceDataFound"));
       }
     }

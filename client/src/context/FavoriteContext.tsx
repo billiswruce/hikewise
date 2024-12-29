@@ -59,7 +59,6 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
       }
 
       const favoriteTrails = await response.json();
-      console.log("Favorites loaded successfully:", favoriteTrails);
       if (Array.isArray(favoriteTrails)) {
         setFavorites(new Set(favoriteTrails.map((trail) => trail._id)));
       }
