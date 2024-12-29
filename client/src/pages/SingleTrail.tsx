@@ -354,13 +354,17 @@ const SingleTrail = () => {
     e.preventDefault();
     setIsSaving(true);
     try {
+      // Hämta senaste vädret innan vi sparar
+      const latestWeather = await fetchWeather(editLatitude, editLongitude);
+
       const updatedFormData = {
         ...formData,
         latitude: editLatitude,
         longitude: editLongitude,
+        weather: latestWeather || formData?.weather, // Använd det nya vädret eller behåll det gamla om hämtningen misslyckas
       };
 
-      console.log("Sending update with data:", updatedFormData); // Debug log
+      console.log("Sending update with data:", updatedFormData);
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
@@ -374,12 +378,12 @@ const SingleTrail = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Server error:", errorData); // Debug log
+        console.error("Server error:", errorData);
         throw new Error(`Failed to update trail: ${errorData.message}`);
       }
 
       const updatedTrail = await response.json();
-      console.log("Server response:", updatedTrail); // Debug log
+      console.log("Server response:", updatedTrail);
 
       await fetchTrail();
       setIsEditing(false);
@@ -422,24 +426,26 @@ const SingleTrail = () => {
     }
   };
 
-  const handleMapClick = (e: google.maps.MapMouseEvent) => {
-    if (e.latLng) {
-      const lat = e.latLng.lat();
-      const lng = e.latLng.lng();
-      setEditLatitude(lat);
-      setEditLongitude(lng);
-      setFormData((prev) => ({
-        ...prev!,
-        latitude: lat,
-        longitude: lng,
-      }));
+  const fetchWeather = async (lat: number, lng: number) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/weather?lat=${lat}&lon=${lng}`,
+        {
+          credentials: "include",
+        }
+      );
+      if (!response.ok) throw new Error("Failed to fetch weather");
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching weather:", error);
+      return null;
     }
   };
 
-  const handlePlaceSelected = () => {
+  const handlePlaceSelected = async () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
-      console.log("Selected place:", place); // Debug log
+      console.log("Selected place:", place);
 
       if (place.geometry && place.geometry.location) {
         const lat = place.geometry.location.lat();
@@ -447,7 +453,8 @@ const SingleTrail = () => {
         const location =
           place.formatted_address || place.name || t("unknownLocation");
 
-        console.log("New coordinates:", { lat, lng, location }); // Debug log
+        // Hämta väder för den nya platsen
+        const weatherData = await fetchWeather(lat, lng);
 
         setEditLatitude(lat);
         setEditLongitude(lng);
@@ -456,13 +463,31 @@ const SingleTrail = () => {
           latitude: lat,
           longitude: lng,
           location: location,
+          weather: weatherData || prev!.weather, // Använd tidigare väder om hämtningen misslyckas
         }));
-
-        console.log("Updated formData:", formData); // Debug log
       } else {
-        console.error("No geometry found for place:", place); // Debug log
+        console.error("No geometry found for place:", place);
         alert(t("noPlaceDataFound"));
       }
+    }
+  };
+
+  const handleMapClick = async (e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      const lat = e.latLng.lat();
+      const lng = e.latLng.lng();
+
+      // Hämta väder för den nya platsen
+      const weatherData = await fetchWeather(lat, lng);
+
+      setEditLatitude(lat);
+      setEditLongitude(lng);
+      setFormData((prev) => ({
+        ...prev!,
+        latitude: lat,
+        longitude: lng,
+        weather: weatherData || prev!.weather,
+      }));
     }
   };
 
