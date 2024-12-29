@@ -427,6 +427,34 @@
     font-weight: bold;
     color: var(--color-black);
   }
+
+  // Uppdatera map-container och autocomplete-wrapper styling
+  .map-container {
+    width: 100%;
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .autocomplete-wrapper {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1000; // Säkerställ att sökfältet visas över kartan
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--color-grey-light-dark);
+      border-radius: 25px;
+      font-size: 1rem;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-grey-dark);
+      }
+    }
+  }
 }
 
 .editInput,
@@ -584,4 +612,38 @@
 .cancelButton,
 .deleteButton {
   font-weight: 600;
+}
+
+.mapContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.googleMapContainer {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.autocompleteWrapper {
+  width: 100%;
+  position: relative;
+  z-index: 1000;
+
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-grey-light-dark);
+    border-radius: 25px;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-grey-dark);
+    }
+  }
 }

@@ -1,8 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  Libraries,
+} from "@react-google-maps/api";
 import TrailPlaceholder from "../assets/trailPlaceholder.webp";
 import LoadingScreen from "../components/LoadingScreen";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,6 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import ConfirmationDialog from "../components/ConfirmationDialog";
+import TrailLocationPicker from "../components/trail/TrailLocationPicker";
 
 interface PackingItem {
   _id?: string;
@@ -63,6 +69,9 @@ enum Difficulty {
   Epic = "epic",
 }
 
+// Definiera libraries array
+const libraries: Libraries = ["places"];
+
 const SingleTrail = () => {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -82,6 +91,9 @@ const SingleTrail = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth0();
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [editLatitude, setEditLatitude] = useState<number>(0);
+  const [editLongitude, setEditLongitude] = useState<number>(0);
+  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   useEffect(() => {
     if (trail?.image) {
@@ -101,6 +113,13 @@ const SingleTrail = () => {
   useEffect(() => {
     if (trail) {
       setFormData(trail);
+    }
+  }, [trail]);
+
+  useEffect(() => {
+    if (trail) {
+      setEditLatitude(trail.latitude);
+      setEditLongitude(trail.longitude);
     }
   }, [trail]);
 
@@ -335,19 +354,35 @@ const SingleTrail = () => {
     e.preventDefault();
     setIsSaving(true);
     try {
+      const updatedFormData = {
+        ...formData,
+        latitude: editLatitude,
+        longitude: editLongitude,
+      };
+
+      console.log("Sending update with data:", updatedFormData); // Debug log
+
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(formData),
+          body: JSON.stringify(updatedFormData),
         }
       );
-      if (!response.ok) throw new Error("Failed to update trail");
 
-      await fetchTrail(); // Vänta på att datan är uppdaterad
-      setIsEditing(false); // Stäng redigeringsläget efter uppdateringen
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Server error:", errorData); // Debug log
+        throw new Error(`Failed to update trail: ${errorData.message}`);
+      }
+
+      const updatedTrail = await response.json();
+      console.log("Server response:", updatedTrail); // Debug log
+
+      await fetchTrail();
+      setIsEditing(false);
     } catch (error) {
       console.error("Error updating trail:", error);
       alert(t("alerts.errorUpdatingTrail"));
@@ -384,6 +419,50 @@ const SingleTrail = () => {
       alert(t("errorDeletingTrail"));
     } finally {
       setShowDeleteConfirmation(false);
+    }
+  };
+
+  const handleMapClick = (e: google.maps.MapMouseEvent) => {
+    if (e.latLng) {
+      const lat = e.latLng.lat();
+      const lng = e.latLng.lng();
+      setEditLatitude(lat);
+      setEditLongitude(lng);
+      setFormData((prev) => ({
+        ...prev!,
+        latitude: lat,
+        longitude: lng,
+      }));
+    }
+  };
+
+  const handlePlaceSelected = () => {
+    if (autocompleteRef.current) {
+      const place = autocompleteRef.current.getPlace();
+      console.log("Selected place:", place); // Debug log
+
+      if (place.geometry && place.geometry.location) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        const location =
+          place.formatted_address || place.name || t("unknownLocation");
+
+        console.log("New coordinates:", { lat, lng, location }); // Debug log
+
+        setEditLatitude(lat);
+        setEditLongitude(lng);
+        setFormData((prev) => ({
+          ...prev!,
+          latitude: lat,
+          longitude: lng,
+          location: location,
+        }));
+
+        console.log("Updated formData:", formData); // Debug log
+      } else {
+        console.error("No geometry found for place:", place); // Debug log
+        alert(t("noPlaceDataFound"));
+      }
     }
   };
 
@@ -491,12 +570,12 @@ const SingleTrail = () => {
 
                 <div className={styles.formGroup}>
                   <label>{t("location")}</label>
-                  <input
-                    type="text"
-                    name="location"
-                    value={formData?.location || ""}
-                    onChange={handleEditChange}
-                    className={styles.editInput}
+                  <TrailLocationPicker
+                    latitude={editLatitude}
+                    longitude={editLongitude}
+                    onMapClick={handleMapClick}
+                    onPlaceSelected={handlePlaceSelected}
+                    autocompleteRef={autocompleteRef}
                   />
                 </div>
 
@@ -674,7 +753,9 @@ const SingleTrail = () => {
         </div>
 
         {/* Karta */}
-        <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+        <LoadScript
+          googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+          libraries={libraries}>
           <GoogleMap
             mapContainerClassName={styles.map}
             center={{ lat: trail.latitude, lng: trail.longitude }}

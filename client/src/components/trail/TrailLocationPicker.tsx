@@ -1,6 +1,6 @@
 import { GoogleMap, Marker, Autocomplete } from "@react-google-maps/api";
 import { useTranslation } from "react-i18next";
-import styles from "../../styles/CreateTrail.module.scss";
+import styles from "../../styles/SingleTrail.module.scss";
 
 interface TrailLocationPickerProps {
   latitude: number;
