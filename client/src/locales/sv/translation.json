@@ -8,8 +8,8 @@
   "auth0Id": "Ditt Auth0 ID är",
   "createTrail": "Skapa vandringsled",
   "favoriteTrails": "Favoritleder",
-  "trail": "Vandringsled",
-  "trails": "Vandringsleder",
+  "trail": "Led",
+  "trails": "Leder",
   "gear": "Utrustning",
   "myGear": {
     "title": "Min utrustning",
