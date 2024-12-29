@@ -20,10 +20,13 @@ const TrailLocationPicker = ({
   const { t } = useTranslation();
 
   return (
-    <div className={styles.googleMapContainer}>
+    <div className={styles.mapContainer}>
       <div className={styles.autocompleteWrapper}>
         <Autocomplete
-          onLoad={(autocomplete) => (autocompleteRef.current = autocomplete)}
+          onLoad={(autocomplete) => {
+            autocompleteRef.current = autocomplete;
+            autocomplete.setFields(["geometry.location", "formatted_address"]);
+          }}
           onPlaceChanged={onPlaceSelected}>
           <input
             type="text"
@@ -43,6 +46,11 @@ const TrailLocationPicker = ({
           disableDefaultUI: false,
           gestureHandling: "greedy",
           keyboardShortcuts: true,
+          scrollwheel: true,
+          zoomControl: true,
+          fullscreenControl: true,
+          streetViewControl: false,
+          mapTypeControl: false,
         }}
         onClick={onMapClick}>
         <Marker

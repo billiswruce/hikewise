@@ -46,11 +46,10 @@ const Hiked = () => {
               src={trail.image || hikedPlaceholder}
               alt={trail.name}
               className={styles.sectionImage}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.onerror = null;
-                target.src = hikedPlaceholder;
-              }}
+              onLoad={() => console.log("Hiked image:", trail.image)}
+              onError={() =>
+                console.log("Hiked placeholder:", hikedPlaceholder)
+              }
             />
             <div className={styles.trailInfo}>
               <div className={styles.trailDetails}>
@@ -70,6 +69,16 @@ const Hiked = () => {
             </button>
           </div>
         ))}
+        {sortedTrails.length === 0 && (
+          <div className={styles.noTrails}>
+            <img
+              src={hikedPlaceholder}
+              alt={t("noHikedTrails")}
+              className={styles.placeholderImage}
+            />
+            <p>{t("noHikedTrails")}</p>
+          </div>
+        )}
       </div>
     </div>
   );

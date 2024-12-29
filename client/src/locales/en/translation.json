@@ -212,5 +212,11 @@
     "pleaseLogin": "Please login to continue",
     "errorDeletingTrail": "Error deleting trail"
   },
-  "confirm": "OK"
+  "confirm": "OK",
+  "noFavoriteTrails": "No favorite trails found",
+  "errorCreatingTrail": "Error creating trail",
+  "imageTooBig": "Image is too large. Maximum size is {{size}}MB",
+  "errorCompressingImage": "Error compressing image",
+  "maxImageSize": "Maximum image size: {{size}}MB",
+  "endDateBeforeStart": "End date cannot be before start date"
 }

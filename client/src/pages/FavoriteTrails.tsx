@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Trail } from "../models/Trail";
 import styles from "../styles/Hiking.module.scss";
-import favoritePlaceholder from "../assets/favoritesPlaceholder.webp";
+import favoritesPlaceholder from "../assets/favoritesPlaceholder.webp";
 import { useFavorites } from "../hooks/useFavorites";
 import Filter from "../components/Filter";
 import { useTrailSort } from "../hooks/useTrailSort";
 import { useTranslation } from "react-i18next";
 import ConfirmationDialog from "../components/ConfirmationDialog";
+import LoadingScreen from "../components/LoadingScreen";
 
 const FavoriteTrails = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const FavoriteTrails = () => {
   const { favorites, toggleFavorite } = useFavorites();
   const sortedTrails = useTrailSort(favoriteTrails, sortOption);
   const [trailToRemove, setTrailToRemove] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleToggleFavorite = async (trailId: string) => {
     setTrailToRemove(trailId);
@@ -50,6 +52,7 @@ const FavoriteTrails = () => {
   // Hämta favorit-trails vid inladdning
   const fetchFavoriteTrails = async () => {
     try {
+      setIsLoading(true);
       console.log("Fetching favorite trails");
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
@@ -66,6 +69,8 @@ const FavoriteTrails = () => {
       setFavoriteTrails(data);
     } catch (error) {
       console.error("Error fetching favorite trails:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -92,14 +97,9 @@ const FavoriteTrails = () => {
             className={styles.section}
             onClick={(e) => handleTrailClick(trail._id, e)}>
             <img
-              src={trail.image || favoritePlaceholder}
+              src={trail.image || favoritesPlaceholder}
               alt={trail.name}
               className={styles.sectionImage}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.onerror = null;
-                target.src = favoritePlaceholder;
-              }}
             />
             <div className={styles.trailInfo}>
               <div className={styles.trailDetails}>
@@ -123,6 +123,16 @@ const FavoriteTrails = () => {
           </div>
         ))}
       </div>
+
+      {isLoading ? (
+        <LoadingScreen />
+      ) : (
+        sortedTrails.length === 0 && (
+          <div className={styles.noTrails}>
+            <p>{t("noFavoriteTrails")}</p>
+          </div>
+        )
+      )}
 
       <ConfirmationDialog
         isOpen={!!trailToRemove}

@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import LoadingScreen from "../components/LoadingScreen"; // Anpassa sökvägen för din loading-skärm
+import LoadingScreen from "../components/LoadingScreen";
 
 const FavoriteContext = createContext<{
   favorites: Set<string>;

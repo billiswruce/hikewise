@@ -3,13 +3,13 @@
 .trailsContainer {
   max-width: 800px;
   margin: 0 auto;
+  margin-bottom: 3.5rem;
 }
 
 .tabNavigation {
   display: flex;
   border-bottom: 2px solid var(--color-border);
   margin-bottom: 20px;
-  //   gap: 2px;
 }
 
 .tab {

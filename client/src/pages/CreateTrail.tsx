@@ -7,6 +7,7 @@ import styles from "../styles/CreateTrail.module.scss";
 import backgroundImage from "../assets/bg.webp";
 import TrailForm from "../components/trail/TrailForm";
 import ConfirmationModal from "../components/ConfirmationModal";
+import LoadingScreen from "../components/LoadingScreen";
 
 const CreateTrail = () => {
   const { t, i18n } = useTranslation();
@@ -29,6 +30,7 @@ const CreateTrail = () => {
     },
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const libraries: Libraries = ["places"];
 
@@ -39,12 +41,22 @@ const CreateTrail = () => {
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => {
-      if (name === "hikeDate" && !prevData.hikeEndDate) {
+      if (name === "hikeDate") {
+        const endDate = prevData.hikeEndDate;
         return {
           ...prevData,
           [name]: value,
-          hikeEndDate: value,
+          hikeEndDate:
+            !endDate || new Date(endDate) < new Date(value) ? value : endDate,
         };
+      }
+      if (name === "hikeEndDate" && prevData.hikeDate) {
+        const startDate = new Date(prevData.hikeDate);
+        const newEndDate = new Date(value);
+        if (newEndDate < startDate) {
+          alert(t("endDateBeforeStart"));
+          return prevData;
+        }
       }
       return {
         ...prevData,
@@ -94,6 +106,8 @@ const CreateTrail = () => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails`,
@@ -124,6 +138,8 @@ const CreateTrail = () => {
     } catch (error) {
       console.error(t("errorSubmittingTrail"), error);
       alert(t("failedToCreateTrail"));
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -143,12 +159,16 @@ const CreateTrail = () => {
           />
 
           <div className={styles.formContainer}>
-            <TrailForm
-              formData={formData}
-              handleChange={handleChange}
-              handleImageUpload={handleImageUpload}
-              handleSubmit={handleSubmit}
-            />
+            {isLoading ? (
+              <LoadingScreen />
+            ) : (
+              <TrailForm
+                formData={formData}
+                handleChange={handleChange}
+                handleImageUpload={handleImageUpload}
+                handleSubmit={handleSubmit}
+              />
+            )}
             <ConfirmationModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}

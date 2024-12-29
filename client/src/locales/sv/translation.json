@@ -214,5 +214,11 @@
     "pleaseLogin": "Vänligen logga in för att fortsätta",
     "errorDeletingTrail": "Fel vid borttagning av vandringsled"
   },
-  "confirm": "OK"
+  "confirm": "OK",
+  "noFavoriteTrails": "Inga favoriter hittades",
+  "errorCreatingTrail": "Ett fel uppstod när vandringsleden skulle skapas",
+  "imageTooBig": "Bilden är för stor. Maximal storlek är {{size}}MB",
+  "errorCompressingImage": "Fel vid komprimering av bild",
+  "maxImageSize": "Maximal bildstorlek: {{size}}MB",
+  "endDateBeforeStart": "Slutdatum kan inte vara före startdatum"
 }

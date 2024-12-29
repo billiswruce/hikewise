@@ -214,5 +214,10 @@
     "pleaseLogin": "Por favor inicie sesión para continuar",
     "errorDeletingTrail": "Error al eliminar el sendero"
   },
-  "confirm": "OK"
+  "confirm": "OK",
+  "noFavoriteTrails": "No favoritos encontrados",
+  "errorCreatingTrail": "Error al crear el sendero",
+  "imageTooBig": "La imagen es demasiado grande. El tamaño máximo es {{size}}MB",
+  "errorCompressingImage": "Error al comprimir la imagen",
+  "maxImageSize": "Tamaño máximo de imagen: {{size}}MB"
 }
