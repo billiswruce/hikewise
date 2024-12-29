@@ -33,6 +33,76 @@
   background-color: var(--color-white);
   margin-top: -50px;
   margin-bottom: 6rem;
+
+  > label {
+    width: 100%;
+    text-align: left;
+    // margin-bottom: 0.5rem;
+    color: var(--color-grey-dark);
+    font-weight: 500;
+
+    &.required::after {
+      content: " *";
+      color: var(--color-red);
+    }
+  }
+
+  .dateInputContainer {
+    position: relative;
+    padding: 10px;
+    border: 1px solid var(--color-grey-light-dark);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: var(--color-grey-dark);
+
+    &:hover {
+      border-color: var(--color-grey-dark);
+    }
+
+    &:focus-within {
+      border-color: var(--color-grey-dark);
+    }
+
+    span {
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      background: var(--color-white);
+      font-size: 12px;
+      padding: 0 5px;
+      color: var(--color-grey-dark);
+      z-index: 1;
+
+      &.required::after {
+        content: " *";
+        color: var(--color-red);
+      }
+    }
+
+    input {
+      border: none;
+      outline: none;
+      font-size: 13px;
+      width: 100%;
+      padding: 5px 0;
+      background: transparent;
+      border-radius: 25px;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+
+      color: var(--color-grey-dark);
+
+      &:not([value=""]) {
+        color: var(--color-black);
+      }
+    }
+  }
 }
 
 .title {
@@ -100,6 +170,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  margin-bottom: 2rem;
 }
 
 .image {
@@ -192,6 +263,11 @@ label {
     padding: 0 5px;
     color: var(--color-grey-dark);
     z-index: 1;
+
+    &.required::after {
+      content: " *";
+      color: var(--color-red);
+    }
   }
 
   input {
@@ -347,7 +423,7 @@ input[type="date"] {
 
   .autocompleteWrapper {
     position: absolute;
-    top: 10px;
+    top: -40px;
     left: 10px;
     right: 10px;
     z-index: 1;
@@ -386,5 +462,19 @@ input[type="date"] {
         font-size: 16px; // Större text på mobil för bättre läsbarhet
       }
     }
+  }
+}
+
+.required::after {
+  content: " *";
+  color: var(--color-red);
+}
+
+.dateInputContainer span.required,
+.input.required::placeholder,
+.select.required {
+  &::after {
+    content: " *";
+    color: var(--color-red);
   }
 }

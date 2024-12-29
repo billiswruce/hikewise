@@ -40,16 +40,16 @@ const CreateTrail = () => {
     >
   ) => {
     const { name, value } = e.target;
+
     setFormData((prevData) => {
       if (name === "hikeDate") {
-        const endDate = prevData.hikeEndDate;
         return {
           ...prevData,
           [name]: value,
-          hikeEndDate:
-            !endDate || new Date(endDate) < new Date(value) ? value : endDate,
+          hikeEndDate: !prevData.hikeEndDate ? value : prevData.hikeEndDate,
         };
       }
+
       if (name === "hikeEndDate" && prevData.hikeDate) {
         const startDate = new Date(prevData.hikeDate);
         const newEndDate = new Date(value);
@@ -58,6 +58,7 @@ const CreateTrail = () => {
           return prevData;
         }
       }
+
       return {
         ...prevData,
         [name]: value,

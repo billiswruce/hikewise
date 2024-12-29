@@ -383,7 +383,6 @@ ul {
   }
 }
 
-// Add Gear Form
 .addGearForm {
   display: flex;
   flex-direction: column;
@@ -413,6 +412,21 @@ ul {
     width: auto;
     min-width: 200px;
     align-self: flex-start;
+  }
+
+  label {
+    display: block;
+    text-align: left;
+    color: var(--color-grey-dark);
+
+    &::after {
+      content: " *";
+      color: var(--color-red);
+    }
+  }
+
+  label[for="gearColor"]::after {
+    content: none;
   }
 }
 
@@ -472,6 +486,23 @@ ul {
         }
       }
     }
+  }
+
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    color: var(--color-grey-dark);
+
+    &::after {
+      content: " *";
+      color: var(--color-red);
+    }
+  }
+
+  // Label för färgväljaren ska inte ha asterisk
+  label[for="gearColor"]::after {
+    content: none;
   }
 }
 

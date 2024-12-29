@@ -219,5 +219,9 @@
   "errorCreatingTrail": "Error al crear el sendero",
   "imageTooBig": "La imagen es demasiado grande. El tamaño máximo es {{size}}MB",
   "errorCompressingImage": "Error al comprimir la imagen",
-  "maxImageSize": "Tamaño máximo de imagen: {{size}}MB"
+  "maxImageSize": "Tamaño máximo de imagen: {{size}}MB",
+  "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio",
+  "uploadedTrailImage": "Imagen del sendero cargada",
+  "chooseTrailImage": "Elegir imagen del sendero",
+  "selectLanguage": "Seleccionar idioma"
 }

@@ -12,6 +12,9 @@ interface TrailFormProps {
     length: string;
     difficulty: string;
     description: string;
+    latitude: number;
+    longitude: number;
+    location: string;
     hikeDate: string;
     hikeEndDate: string;
     image: string;
@@ -32,6 +35,7 @@ const TrailForm = ({
   handleSubmit,
 }: TrailFormProps) => {
   const { t } = useTranslation();
+  const today = new Date().toISOString().split("T")[0];
   const [latitude, setLatitude] = useState(57.7089);
   const [longitude, setLongitude] = useState(11.9746);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
@@ -104,61 +108,85 @@ const TrailForm = ({
         <h1 className={styles.title}>{t("createTrail")}</h1>
         <h4 className={styles.info}> {t("createTrailInfo")}</h4>
       </div>
+      <label htmlFor="trailName" className={styles.required}>
+        {t("trailName")}
+      </label>
       <input
+        id="trailName"
         className={styles.input}
         type="text"
         name="name"
         placeholder={t("trailName")}
         value={formData.name}
         onChange={handleChange}
+        required
       />
+      <label htmlFor="trailLength" className={styles.required}>
+        {t("length")}
+      </label>
       <input
+        id="trailLength"
         className={styles.input}
         type="number"
         name="length"
         placeholder={t("length")}
         value={formData.length}
         onChange={handleChange}
+        required
       />
+      <label htmlFor="trailDifficulty" className={styles.required}>
+        {t("difficulty")}
+      </label>
       <select
+        id="trailDifficulty"
         className={styles.select}
         name="difficulty"
         value={formData.difficulty}
-        onChange={handleChange}>
+        onChange={handleChange}
+        required>
         <option value="">{t("difficulty")}</option>
         <option value="easy">{t("easy")}</option>
         <option value="medium">{t("medium")}</option>
         <option value="hard">{t("hard")}</option>
         <option value="epic">{t("epic")}</option>
       </select>
+      <label htmlFor="trailDescription" className={styles.required}>
+        {t("description")}
+      </label>
       <textarea
+        id="trailDescription"
         className={styles.textarea}
         name="description"
         placeholder={t("description")}
         value={formData.description}
         onChange={handleChange}
+        required
       />
-      <label className={styles.dateInputContainer}>
+      <div className={styles.dateInputContainer}>
+        <span className={styles.required}>{t("startDate")}</span>
         <input
-          className={styles.dateInput}
+          id="hikeDate"
           type="date"
           name="hikeDate"
           value={formData.hikeDate}
           onChange={handleChange}
+          min={today}
+          required
         />
-        <span>{t("startDate")}</span>
-      </label>
+      </div>
 
-      <label className={styles.dateInputContainer}>
+      <div className={styles.dateInputContainer}>
+        <span className={styles.required}>{t("endDate")}</span>
         <input
-          className={styles.dateInput}
+          id="hikeEndDate"
           type="date"
-          name="endDate"
+          name="hikeEndDate"
           value={formData.hikeEndDate}
           onChange={handleChange}
+          min={formData.hikeDate || today}
+          required
         />
-        <span>{t("endDate")}</span>
-      </label>
+      </div>
 
       <div className={styles.fileInputWrapper}>
         <div className={styles.fileInputContainer}>

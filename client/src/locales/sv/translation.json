@@ -220,5 +220,8 @@
   "imageTooBig": "Bilden är för stor. Maximal storlek är {{size}}MB",
   "errorCompressingImage": "Fel vid komprimering av bild",
   "maxImageSize": "Maximal bildstorlek: {{size}}MB",
-  "endDateBeforeStart": "Slutdatum kan inte vara före startdatum"
+  "endDateBeforeStart": "Slutdatum kan inte vara före startdatum",
+  "uploadedTrailImage": "Uppladdad bild av vandringsleden",
+  "chooseTrailImage": "Välj bild för vandringsleden",
+  "selectLanguage": "Välj språk"
 }

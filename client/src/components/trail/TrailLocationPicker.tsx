@@ -32,6 +32,7 @@ const TrailLocationPicker = ({
             type="text"
             placeholder={t("searchLocation")}
             className={styles.input}
+            required
           />
         </Autocomplete>
       </div>

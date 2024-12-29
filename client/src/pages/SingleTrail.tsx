@@ -333,6 +333,7 @@ const SingleTrail = () => {
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
@@ -344,12 +345,14 @@ const SingleTrail = () => {
         }
       );
       if (!response.ok) throw new Error("Failed to update trail");
-      const updatedTrail = await response.json();
-      setTrail(updatedTrail);
-      setIsEditing(false);
+
+      await fetchTrail(); // Vänta på att datan är uppdaterad
+      setIsEditing(false); // Stäng redigeringsläget efter uppdateringen
     } catch (error) {
       console.error("Error updating trail:", error);
-      alert(t("errorUpdatingTrail"));
+      alert(t("alerts.errorUpdatingTrail"));
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -435,101 +438,105 @@ const SingleTrail = () => {
         {/* Grundläggande Information */}
         <div className={styles.basicInfo}>
           {isEditing ? (
-            <form onSubmit={handleEditSubmit} className={styles.editForm}>
-              <div className={styles.formGroup}>
-                <label>{t("name")}</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData?.name || ""}
-                  onChange={handleEditChange}
-                  className={styles.editInput}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>{t("length")}</label>
-                <input
-                  type="number"
-                  name="length"
-                  value={formData?.length || ""}
-                  onChange={handleEditChange}
-                  className={styles.editInput}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>{t("difficulty")}</label>
-                <select
-                  name="difficulty"
-                  value={formData?.difficulty || ""}
-                  onChange={handleEditChange}
-                  className={styles.editSelect}>
-                  {Object.values(Difficulty).map((diff) => (
-                    <option key={diff} value={diff}>
-                      {t(diff)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>{t("description")}</label>
-                <textarea
-                  name="description"
-                  value={formData?.description || ""}
-                  onChange={handleEditChange}
-                  className={styles.editTextarea}
-                />
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>{t("location")}</label>
-                <input
-                  type="text"
-                  name="location"
-                  value={formData?.location || ""}
-                  onChange={handleEditChange}
-                  className={styles.editInput}
-                />
-              </div>
-
-              <div className={styles.dateGroup}>
+            isSaving ? (
+              <LoadingScreen />
+            ) : (
+              <form onSubmit={handleEditSubmit} className={styles.editForm}>
                 <div className={styles.formGroup}>
-                  <label>{t("startDate")}</label>
+                  <label>{t("name")}</label>
                   <input
-                    type="date"
-                    name="hikeDate"
-                    value={formData?.hikeDate?.split("T")[0] || ""}
+                    type="text"
+                    name="name"
+                    value={formData?.name || ""}
                     onChange={handleEditChange}
                     className={styles.editInput}
                   />
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label>{t("endDate")}</label>
+                  <label>{t("length")}</label>
                   <input
-                    type="date"
-                    name="hikeEndDate"
-                    value={formData?.hikeEndDate?.split("T")[0] || ""}
+                    type="number"
+                    name="length"
+                    value={formData?.length || ""}
                     onChange={handleEditChange}
                     className={styles.editInput}
                   />
                 </div>
-              </div>
 
-              <div className={styles.editButtons}>
-                <button type="submit" className={styles.saveButton}>
-                  {t("save")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className={styles.cancelButton}>
-                  {t("cancel")}
-                </button>
-              </div>
-            </form>
+                <div className={styles.formGroup}>
+                  <label>{t("difficulty")}</label>
+                  <select
+                    name="difficulty"
+                    value={formData?.difficulty || ""}
+                    onChange={handleEditChange}
+                    className={styles.editSelect}>
+                    {Object.values(Difficulty).map((diff) => (
+                      <option key={diff} value={diff}>
+                        {t(diff)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>{t("description")}</label>
+                  <textarea
+                    name="description"
+                    value={formData?.description || ""}
+                    onChange={handleEditChange}
+                    className={styles.editTextarea}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>{t("location")}</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData?.location || ""}
+                    onChange={handleEditChange}
+                    className={styles.editInput}
+                  />
+                </div>
+
+                <div className={styles.dateGroup}>
+                  <div className={styles.formGroup}>
+                    <label>{t("startDate")}</label>
+                    <input
+                      type="date"
+                      name="hikeDate"
+                      value={formData?.hikeDate?.split("T")[0] || ""}
+                      onChange={handleEditChange}
+                      className={styles.editInput}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>{t("endDate")}</label>
+                    <input
+                      type="date"
+                      name="hikeEndDate"
+                      value={formData?.hikeEndDate?.split("T")[0] || ""}
+                      onChange={handleEditChange}
+                      className={styles.editInput}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.editButtons}>
+                  <button type="submit" className={styles.saveButton}>
+                    {t("save")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className={styles.cancelButton}>
+                    {t("cancel")}
+                  </button>
+                </div>
+              </form>
+            )
           ) : (
             <>
               <div className={styles.infoHeader}>

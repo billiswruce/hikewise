@@ -437,7 +437,9 @@ export const Gear = () => {
                   <li key={item._id} className={styles.gearItem}>
                     {editingItem?._id === item._id ? (
                       <div className={styles.editForm}>
+                        <label htmlFor="editName">{t("myGear.name")}</label>
                         <input
+                          id="editName"
                           type="text"
                           value={editingItem.name}
                           onChange={(e) =>
@@ -446,9 +448,11 @@ export const Gear = () => {
                               name: e.target.value,
                             })
                           }
-                          placeholder={t("myGear.name")}
+                          required
                         />
+                        <label htmlFor="editBrand">{t("myGear.brand")}</label>
                         <input
+                          id="editBrand"
                           type="text"
                           value={editingItem.brand || ""}
                           onChange={(e) =>
@@ -457,7 +461,7 @@ export const Gear = () => {
                               brand: e.target.value,
                             })
                           }
-                          placeholder={t("myGear.brand")}
+                          required
                         />
                         <div className={styles.colorPickerContainer}>
                           <label>{t("myGear.color")}</label>
@@ -506,7 +510,11 @@ export const Gear = () => {
                             </div>
                           </div>
                         </div>
+                        <label htmlFor="editQuantity">
+                          {t("myGear.quantity")}
+                        </label>
                         <input
+                          id="editQuantity"
                           type="number"
                           value={editingItem.quantity}
                           onChange={(e) =>
@@ -515,17 +523,22 @@ export const Gear = () => {
                               quantity: Number(e.target.value),
                             })
                           }
-                          placeholder={t("myGear.quantity")}
+                          required
                           min="1"
                         />
+                        <label htmlFor="editCondition">
+                          {t("myGear.condition.label")}
+                        </label>
                         <select
+                          id="editCondition"
                           value={editingItem.condition}
                           onChange={(e) =>
                             setEditingItem({
                               ...editingItem,
                               condition: e.target.value,
                             })
-                          }>
+                          }
+                          required>
                           <option value="New">
                             {t("myGear.condition.new")}
                           </option>
@@ -619,33 +632,45 @@ export const Gear = () => {
               {/* Add New Gear Form */}
               <div className={styles.addGearForm}>
                 <h2>{t("myGear.addGear")}</h2>
+
+                <label htmlFor="gearName">{t("myGear.name")}</label>
                 <input
+                  id="gearName"
                   type="text"
                   placeholder={t("myGear.name")}
                   value={newItem.name}
                   onChange={(e) =>
                     setNewItem({ ...newItem, name: e.target.value })
                   }
+                  required
                 />
+
+                <label htmlFor="gearBrand">{t("myGear.brand")}</label>
                 <input
+                  id="gearBrand"
                   type="text"
                   placeholder={t("myGear.brand")}
                   value={newItem.brand}
                   onChange={(e) =>
                     setNewItem({ ...newItem, brand: e.target.value })
                   }
+                  required
                 />
+
+                <label htmlFor="gearQuantity">{t("myGear.quantity")}</label>
                 <input
+                  id="gearQuantity"
                   type="number"
                   placeholder={t("myGear.quantity")}
                   value={newItem.quantity}
                   onChange={(e) =>
-                    setNewItem({
-                      ...newItem,
-                      quantity: Number(e.target.value),
-                    })
+                    setNewItem({ ...newItem, quantity: Number(e.target.value) })
                   }
+                  required
+                  min="1"
                 />
+
+                <label htmlFor="gearColor">{t("myGear.selectColor")}</label>
                 <div className={styles.colorPickerContainer}>
                   <div className={styles.colorAccordion}>
                     <div
@@ -687,35 +712,18 @@ export const Gear = () => {
                     </div>
                   </div>
                 </div>
-                {type === "All" && (
-                  <select
-                    value={newItem.type}
-                    onChange={(e) =>
-                      setNewItem({
-                        ...newItem,
-                        type: e.target.value as
-                          | "Clothing"
-                          | "Equipment"
-                          | "Food",
-                        categories: [],
-                      })
-                    }
-                    className={styles.categorySelect}>
-                    <option value="">{t("myGear.selectType")}</option>
-                    <option value="Clothing">{t("myGear.clothing")}</option>
-                    <option value="Equipment">{t("myGear.equipment")}</option>
-                    <option value="Food">{t("myGear.food")}</option>
-                  </select>
-                )}
+
+                <label htmlFor="gearCategory">
+                  {t("myGear.selectCategory")}
+                </label>
                 <select
+                  id="gearCategory"
                   value={newItem.categories[0] || ""}
                   onChange={(e) =>
-                    setNewItem({
-                      ...newItem,
-                      categories: [e.target.value],
-                    })
+                    setNewItem({ ...newItem, categories: [e.target.value] })
                   }
-                  className={styles.categorySelect}>
+                  className={`${styles.categorySelect} ${styles.required}`}
+                  required>
                   <option value="">{t("myGear.selectCategory")}</option>
                   {(type === "All"
                     ? CATEGORIES[newItem.type]
@@ -742,16 +750,25 @@ export const Gear = () => {
                       </optgroup>
                     ))}
                 </select>
+
+                <label htmlFor="gearCondition">
+                  {t("myGear.condition.label")}
+                </label>
                 <select
+                  id="gearCondition"
                   value={newItem.condition}
                   onChange={(e) =>
                     setNewItem({ ...newItem, condition: e.target.value })
-                  }>
+                  }
+                  required
+                  className={styles.required}>
+                  <option value="">{t("myGear.condition.label")}</option>
                   <option value="New">{t("myGear.condition.new")}</option>
                   <option value="Good">{t("myGear.condition.good")}</option>
                   <option value="Fair">{t("myGear.condition.fair")}</option>
                   <option value="Poor">{t("myGear.condition.poor")}</option>
                 </select>
+
                 <button
                   onClick={addGearItem}
                   className={buttonStyles.submitButton}>
