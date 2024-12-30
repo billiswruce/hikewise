@@ -5,7 +5,6 @@ import styles from "../styles/SingleTrail.module.scss";
 import { Libraries } from "@react-google-maps/api";
 import TrailPlaceholder from "../assets/trailPlaceholder.webp";
 import LoadingScreen from "../components/LoadingScreen";
-
 import { useAuth0 } from "@auth0/auth0-react";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import { SingleTrailData } from "../models/SingleTrail";
@@ -15,7 +14,6 @@ import { Comments } from "../components/singleTrail/Comments";
 import { TrailInfo } from "../components/singleTrail/TrailInfo";
 import { TrailMap } from "../components/singleTrail/TrailMap";
 
-// Definiera libraries array
 const libraries: Libraries = ["places"];
 
 const SingleTrail = () => {
@@ -103,7 +101,7 @@ const SingleTrail = () => {
     setIsAdding(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/trails/${id}/packingList`,
+        `${import.meta.env.VITE_API_URL}/api/trails/${id}/packing-list`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -135,7 +133,7 @@ const SingleTrail = () => {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }/api/trails/${id}/packingList/${itemId}`,
+        }/api/trails/${id}/packing-list/${itemId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -165,7 +163,7 @@ const SingleTrail = () => {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }/api/trails/${id}/packingList/${itemId}`,
+        }/api/trails/${id}/packing-list/${itemId}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

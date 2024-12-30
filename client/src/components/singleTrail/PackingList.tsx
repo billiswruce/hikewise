@@ -35,6 +35,11 @@ export const PackingList = ({
 }: PackingListProps) => {
   const { t } = useTranslation();
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    addPackingListItem();
+  };
+
   return (
     <div className={styles.packingListContainer}>
       <div className={styles.packingListSection}>
@@ -108,8 +113,8 @@ export const PackingList = ({
                 </div>
               </div>
 
-              {/* Add item */}
-              <div className={styles.addPackingItem}>
+              {/* Add item form */}
+              <form onSubmit={handleSubmit} className={styles.addPackingItem}>
                 <input
                   type="text"
                   value={newPackingListItem}
@@ -123,12 +128,12 @@ export const PackingList = ({
                   <option value="food">{t("food")}</option>
                 </select>
                 <button
+                  type="submit"
                   className={styles.addButton}
-                  onClick={addPackingListItem}
-                  disabled={isAdding}>
+                  disabled={isAdding || !newPackingListItem.trim()}>
                   {isAdding ? t("adding...") : t("add")}
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         )}

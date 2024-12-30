@@ -6,7 +6,7 @@ import styles from "../styles/MyProfile.module.scss";
 import gearPlaceholder from "../assets/gearPlaceholder.jpg";
 import trailPlaceholder from "../assets/trailPlaceholder.webp";
 import favoritesPlaceholder from "../assets/favoritesPlaceholder.jpg";
-import profilePlaceholder from "../assets/Hikers1.png";
+import profilePlaceholder from "../assets/Hikers3.png";
 import clsx from "clsx";
 
 const MyProfile = () => {
