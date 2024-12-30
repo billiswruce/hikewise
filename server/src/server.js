@@ -47,12 +47,19 @@ const sessionConfig = {
   name: "connect.sid",
 };
 
+app.use((req, res, next) => {
+  if (req.secure || req.headers["x-forwarded-proto"] === "https") {
+    sessionConfig.cookie.secure = true;
+    sessionConfig.cookie.sameSite = "none";
+  }
+  next();
+});
+
 app.use(session(sessionConfig));
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
@@ -76,9 +83,17 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  res.set("Access-Control-Allow-Credentials", "true");
+  if (req.headers.origin && allowedOrigins.includes(req.headers.origin)) {
+    res.set("Access-Control-Allow-Origin", req.headers.origin);
+  }
+  next();
+});
+
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
-app.options("*", cors()); // Hantera OPTIONS-förfrågningar globalt
+app.options("*", cors());
 
 app.use(
   express.static("public", {
