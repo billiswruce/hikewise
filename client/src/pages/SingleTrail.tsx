@@ -123,10 +123,6 @@ const SingleTrail = () => {
     }
   }, [trail]);
 
-  useEffect(() => {
-    console.log("Trail updated:", trail);
-  }, [trail]);
-
   const togglePackingList = () => setIsPackingListOpen((prev) => !prev);
 
   const getWeatherIcon = (description: string) => {
@@ -362,7 +358,6 @@ const SingleTrail = () => {
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    console.log("Trail before update:", trail);
     try {
       const updatedFormData = {
         ...formData,
@@ -387,7 +382,6 @@ const SingleTrail = () => {
 
       const updatedTrail = await response.json();
       setTrail(updatedTrail);
-      console.log("Trail after update:", updatedTrail);
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating trail:", error);

@@ -61,8 +61,6 @@ const FavoriteTrails = () => {
     fetchFavoriteTrails();
   }, []);
 
-  console.log("Favorite trails:", JSON.stringify(favoriteTrails));
-
   const handleConfirmRemove = async () => {
     if (!trailToRemove) return;
 
