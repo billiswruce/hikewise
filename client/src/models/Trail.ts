@@ -5,6 +5,8 @@ export interface Trail {
   difficulty: string;
   description: string;
   location: string;
+  latitude: number;
+  longitude: number;
   hikeDate: string;
   hikeEndDate: string;
   image?: string;
