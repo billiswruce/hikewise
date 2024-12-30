@@ -25,7 +25,21 @@ export const login = async (req, res) => {
       await user.save();
     } else {
       isNewUser = true;
-      const uniqueUsername = name || `user_${Date.now()}`;
+      let baseUsername = name || email.split("@")[0];
+      let uniqueUsername = baseUsername;
+
+      // Kontrollera om användarnamnet redan finns och lägg till ett slumpmässigt nummer om det behövs
+      let counter = 1;
+      while (await User.findOne({ username: uniqueUsername })) {
+        uniqueUsername = `${baseUsername}_${Math.floor(Math.random() * 1000)}`;
+        counter++;
+        if (counter > 10) {
+          // Fallback om vi inte hittar ett unikt namn efter 10 försök
+          uniqueUsername = `user_${Date.now()}`;
+          break;
+        }
+      }
+
       user = await User.create({
         auth0Id,
         email: email || "",
@@ -119,40 +133,6 @@ export const logout = (req, res) => {
     res.status(200).json({ message: "Logged out successfully" });
   });
 };
-
-// // Refresh session
-// export const refreshSession = async (req, res) => {
-//   try {
-//     const token = req.headers.authorization?.split(" ")[1];
-//     if (!token) {
-//       return res.status(401).json({ message: "No token provided" });
-//     }
-
-//     // Update session
-//     if (req.session) {
-//       req.session.touch();
-//       req.session.cookie.maxAge = 24 * 60 * 60 * 1000;
-
-//       await new Promise((resolve, reject) => {
-//         req.session.save((err) => {
-//           if (err) reject(err);
-//           resolve();
-//         });
-//       });
-//     }
-
-//     res.json({
-//       message: "Session refreshed",
-//       sessionStatus: {
-//         active: true,
-//         expiresIn: req.session?.cookie?.maxAge,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("Session refresh error:", error);
-//     res.status(500).json({ message: "Failed to refresh session" });
-//   }
-// };
 
 // Check if the user is logged in
 export const checkSession = async (req, res) => {

@@ -17,11 +17,11 @@ import {
 const router = express.Router();
 
 router.use((req, res, next) => {
-  console.log('Trail Route:', {
+  console.log("Trail Route:", {
     method: req.method,
     path: req.path,
     params: req.params,
-    auth: !!req.user
+    auth: !!req.user,
   });
   next();
 });
