@@ -32,8 +32,6 @@ const Hiking = () => {
     navigate(`/trail/${trailId}`);
   };
 
-  console.log("Trail placeholder:", trailPlaceholder);
-
   return (
     <div className={styles.hikingContainer}>
       <div className={styles.headerSection}>

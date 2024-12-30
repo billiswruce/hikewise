@@ -49,7 +49,6 @@ const FavoriteTrails = () => {
     navigate(`/trail/${trailId}`);
   };
 
-  // Hämta favorit-trails vid inladdning
   const fetchFavoriteTrails = async () => {
     try {
       setIsLoading(true);

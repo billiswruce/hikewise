@@ -15,7 +15,7 @@ export const compressImage = async (
         const canvas = document.createElement('canvas');
         const scaleSize = maxWidth / img.width;
         
-        // Om bilden är mindre än maxWidth, behåll originalstorleken
+        // if the image is smaller than maxWidth, keep the original size
         if (scaleSize > 1) {
           canvas.width = img.width;
           canvas.height = img.height;
@@ -27,7 +27,7 @@ export const compressImage = async (
         const ctx = canvas.getContext('2d');
         ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
         
-        // Konvertera till WebP med angiven kvalitet
+        // Convert to WebP with the specified quality
         const compressedImage = canvas.toDataURL('image/webp', quality);
         resolve(compressedImage);
       };

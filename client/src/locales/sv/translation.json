@@ -16,7 +16,7 @@
   "trailCreatedSuccessfully": "Vandringsled skapad!",
   "trailUpdatedSuccessfully": "Vandringsled uppdaterad!",
   "errorCreatingTrail": "Ett fel uppstod när vandringsleden skulle skapas",
-  "confirmDeleteTrail": "Är du säker på att du vill ta bort denna vandringsled?",
+  "confirmDeleteTrail": "Är du säker på att du vill radera denna vandringsled?",
   "errorDeletingTrail": "Fel vid borttagning av vandringsled",
   "failedToCreateTrail": "Kunde inte skapa vandringsled",
   "trailUpdatedSuccess": "Vandringsled uppdaterad!",
@@ -44,6 +44,7 @@
   "description": "Beskrivning",
   "name": "Namn på led",
   "location": "Plats",
+  "journal": "Journal",
   "startDate": "Startdatum",
   "endDate": "Slutdatum",
   "endDateBeforeStart": "Slutdatum kan inte vara före startdatum",
@@ -55,6 +56,7 @@
   "goToTrails": "Gå till vandringsleder",
   "stayOnPage": "Stanna på sidan",
   "gear": "Utrustning",
+  "food": "Mat",
   "myGear": {
     "all": "Alla",
     "title": "Min utrustning",
@@ -123,13 +125,13 @@
     },
     "actions": {
       "edit": "Redigera",
-      "delete": "Ta bort",
+      "delete": "Radera",
       "save": "Spara",
       "cancel": "Avbryt",
       "add": "Lägg till"
     },
     "messages": {
-      "confirmDelete": "Är du säker på att du vill ta bort denna utrustning?",
+      "confirmDelete": "Är du säker på att du vill radera denna utrustning?",
       "nameRequired": "Namn krävs",
       "errorAdding": "Fel vid tillägg av utrustning",
       "errorUpdating": "Fel vid uppdatering av utrustning",
@@ -240,7 +242,7 @@
     "accept": "Acceptera cookies"
   },
   "uploadImage": "Ladda upp bild",
-  "removeImage": "Ta bort bild",
+  "removeImage": "Radera bild",
   "uploadedImage": "Uppladdad bild",
   "placeholderImage": "Platshållarsbild",
   "chooseFile": "Välj fil",
@@ -254,7 +256,7 @@
   "map": "Karta",
   "myProfile": "Min profil",
   "edit": "Redigera",
-  "delete": "Ta bort",
+  "delete": "Radera",
   "save": "Spara",
   "cancel": "Avbryt",
   "back": "Tillbaka",

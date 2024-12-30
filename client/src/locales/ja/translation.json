@@ -43,6 +43,7 @@
   "epic": "壮大",
   "description": "説明",
   "name": "トレイル名",
+  "journal": "日記",
   "location": "場所",
   "startDate": "ハイキングの日付",
   "endDate": "終了日",
@@ -55,6 +56,7 @@
   "goToTrails": "トレイルに行く",
   "stayOnPage": "ページを続ける",
   "gear": "装備",
+  "food": "食べ物",
   "myGear": {
     "all": "すべて",
     "title": "装備",

@@ -36,11 +36,11 @@ export const login = async (req, res) => {
     }
     console.log("isNewUser", isNewUser);
 
-    // Sätt session data
+    // Set session data
     req.session.userId = user._id;
     req.session.auth0Id = auth0Id;
 
-    // Spara session
+    // Save session
     await new Promise((resolve, reject) => {
       req.session.save((err) => {
         if (err) {
@@ -120,39 +120,41 @@ export const logout = (req, res) => {
   });
 };
 
-export const refreshSession = async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({ message: "No token provided" });
-    }
+// // Refresh session
+// export const refreshSession = async (req, res) => {
+//   try {
+//     const token = req.headers.authorization?.split(" ")[1];
+//     if (!token) {
+//       return res.status(401).json({ message: "No token provided" });
+//     }
 
-    // Uppdatera session
-    if (req.session) {
-      req.session.touch();
-      req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 timmar
+//     // Update session
+//     if (req.session) {
+//       req.session.touch();
+//       req.session.cookie.maxAge = 24 * 60 * 60 * 1000;
 
-      await new Promise((resolve, reject) => {
-        req.session.save((err) => {
-          if (err) reject(err);
-          resolve();
-        });
-      });
-    }
+//       await new Promise((resolve, reject) => {
+//         req.session.save((err) => {
+//           if (err) reject(err);
+//           resolve();
+//         });
+//       });
+//     }
 
-    res.json({
-      message: "Session refreshed",
-      sessionStatus: {
-        active: true,
-        expiresIn: req.session?.cookie?.maxAge,
-      },
-    });
-  } catch (error) {
-    console.error("Session refresh error:", error);
-    res.status(500).json({ message: "Failed to refresh session" });
-  }
-};
+//     res.json({
+//       message: "Session refreshed",
+//       sessionStatus: {
+//         active: true,
+//         expiresIn: req.session?.cookie?.maxAge,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Session refresh error:", error);
+//     res.status(500).json({ message: "Failed to refresh session" });
+//   }
+// };
 
+// Check if the user is logged in
 export const checkSession = async (req, res) => {
   console.log("\n=== Check Session ===");
   console.log("Current session:", {
@@ -183,7 +185,7 @@ export const checkSession = async (req, res) => {
       });
     }
 
-    // Touch session utan att ändra ID
+    // Touch session without changing ID
     req.session.touch();
     await new Promise((resolve) => req.session.save(resolve));
 

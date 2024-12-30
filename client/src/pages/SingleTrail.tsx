@@ -354,20 +354,21 @@ const SingleTrail = () => {
     e.preventDefault();
     setIsSaving(true);
     try {
-      // Hämta senaste vädret innan vi sparar
-      const latestWeather = await fetchWeather(editLatitude, editLongitude);
+      let updatedFormData = { ...formData };
 
-      const updatedFormData = {
-        ...formData,
-        latitude: editLatitude,
-        longitude: editLongitude,
-        weather: latestWeather || formData?.weather,
-      };
-
-      console.log("Updating trail:", {
-        ...updatedFormData,
-        image: updatedFormData.image ? "[Image data]" : "No image",
-      });
+      // Only fetch weather if location has changed
+      if (
+        editLatitude !== trail?.latitude ||
+        editLongitude !== trail?.longitude
+      ) {
+        const latestWeather = await fetchWeather(editLatitude, editLongitude);
+        updatedFormData = {
+          ...updatedFormData,
+          latitude: editLatitude,
+          longitude: editLongitude,
+          weather: latestWeather || updatedFormData.weather,
+        };
+      }
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
@@ -384,13 +385,7 @@ const SingleTrail = () => {
         throw new Error(`Failed to update trail: ${errorData.message}`);
       }
 
-      const updatedTrail = await response.json();
-      console.log("Trail updated:", {
-        ...updatedTrail,
-        image: updatedTrail.image ? "[Image data]" : "No image",
-      });
-
-      await fetchTrail();
+      await fetchTrail(); // Refresh trail data after successful update
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating trail:", error);
@@ -614,7 +609,17 @@ const SingleTrail = () => {
                       type="date"
                       name="hikeDate"
                       value={formData?.hikeDate?.split("T")[0] || ""}
-                      onChange={handleEditChange}
+                      onChange={(e) => {
+                        handleEditChange(e);
+                        if (!formData?.hikeEndDate) {
+                          handleEditChange({
+                            target: {
+                              name: "hikeEndDate",
+                              value: e.target.value,
+                            },
+                          } as React.ChangeEvent<HTMLInputElement>);
+                        }
+                      }}
                       className={styles.editInput}
                     />
                   </div>
@@ -625,6 +630,7 @@ const SingleTrail = () => {
                       type="date"
                       name="hikeEndDate"
                       value={formData?.hikeEndDate?.split("T")[0] || ""}
+                      min={formData?.hikeDate?.split("T")[0]}
                       onChange={handleEditChange}
                       className={styles.editInput}
                     />

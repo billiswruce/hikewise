@@ -22,7 +22,6 @@ app.set("trust proxy", 1);
 const allowedOrigins = [
   "https://hikewise.vercel.app",
   "https://hikewise-backend.vercel.app",
-  process.env.NODE_ENV === "development" ? "http://localhost:5173" : null,
 ].filter(Boolean);
 
 const sessionConfig = {
@@ -41,7 +40,7 @@ const sessionConfig = {
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 24 * 60 * 60 * 1000,
     path: "/",
   },
@@ -52,12 +51,28 @@ app.use(session(sessionConfig));
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept", "Cookie"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Accept",
+      "X-Requested-With",
+    ],
     exposedHeaders: ["Set-Cookie"],
-    maxAge: 86400, // 24 timmar i sekunder
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    maxAge: 86400,
   })
 );
 

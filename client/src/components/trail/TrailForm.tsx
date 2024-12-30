@@ -35,7 +35,6 @@ const TrailForm = ({
   handleSubmit,
 }: TrailFormProps) => {
   const { t } = useTranslation();
-  const today = new Date().toISOString().split("T")[0];
   const [latitude, setLatitude] = useState(57.7089);
   const [longitude, setLongitude] = useState(11.9746);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
@@ -94,8 +93,6 @@ const TrailForm = ({
     };
 
     adjustAutocompleteDropdown();
-
-    // Observera ändringar i DOM
     const observer = new MutationObserver(adjustAutocompleteDropdown);
     observer.observe(document.body, { childList: true, subtree: true });
 
@@ -169,8 +166,14 @@ const TrailForm = ({
           type="date"
           name="hikeDate"
           value={formData.hikeDate}
-          onChange={handleChange}
-          min={today}
+          onChange={(e) => {
+            handleChange(e);
+            if (!formData.hikeEndDate) {
+              handleChange({
+                target: { name: "hikeEndDate", value: e.target.value },
+              } as React.ChangeEvent<HTMLInputElement>);
+            }
+          }}
           required
         />
       </div>
@@ -182,8 +185,8 @@ const TrailForm = ({
           type="date"
           name="hikeEndDate"
           value={formData.hikeEndDate}
+          min={formData.hikeDate}
           onChange={handleChange}
-          min={formData.hikeDate || today}
           required
         />
       </div>

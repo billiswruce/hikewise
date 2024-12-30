@@ -19,10 +19,10 @@ export const getWeather = async (req, res) => {
     res.status(200).json(response.data);
   } catch (error) {
     if (error.response) {
-      console.error("Fel vid hämtning av väderdata:", error.response.data);
+      console.error("Error fetching weather data:", error.response.data);
     } else {
-      console.error("Fel vid hämtning av väderdata:", error.message);
+      console.error("Error fetching weather data:", error.message);
     }
-    res.status(500).json({ message: "Kunde inte hämta väderdata" });
+    res.status(500).json({ message: "Could not fetch weather data" });
   }
 };

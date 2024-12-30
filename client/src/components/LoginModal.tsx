@@ -41,7 +41,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        {/* Vänsterpil */}
         <div
           className={`${styles.arrow} ${styles.arrowLeft} ${
             step === 1 ? styles.disabled : ""
@@ -50,12 +49,9 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           {"<"}
         </div>
 
-        {/* Innehåll */}
         <div className={styles.content}>
           <h2>{title}</h2>
           <img src={image} alt="Step Illustration" className={styles.image} />
-
-          {/* Prickar för steg 1–4 */}
           {step <= 4 && (
             <div className={styles.dots}>
               {[1, 2, 3, 4].map((num) => (
@@ -69,15 +65,12 @@ const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {/* Knapp för steg 5 */}
           {step === 5 && (
             <button className={styles.closeButton} onClick={onClose}>
               {t("modal.close")}
             </button>
           )}
         </div>
-
-        {/* Högerpil */}
         <div
           className={`${styles.arrow} ${styles.arrowRight} ${
             step === 5 ? styles.disabled : ""
