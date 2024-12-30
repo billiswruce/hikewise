@@ -123,6 +123,10 @@ const SingleTrail = () => {
     }
   }, [trail]);
 
+  useEffect(() => {
+    console.log("Trail updated:", trail);
+  }, [trail]);
+
   const togglePackingList = () => setIsPackingListOpen((prev) => !prev);
 
   const getWeatherIcon = (description: string) => {
@@ -358,26 +362,13 @@ const SingleTrail = () => {
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+    console.log("Trail before update:", trail);
     try {
-      let updatedFormData = { ...formData };
-
-      // Om platsen har ändrats, uppdatera väder separat
-      if (
-        editLatitude !== trail?.latitude ||
-        editLongitude !== trail?.longitude
-      ) {
-        updatedFormData = {
-          ...updatedFormData,
-          latitude: editLatitude,
-          longitude: editLongitude,
-        };
-
-        // Hämta väder separat
-        const weatherData = await fetchWeather(editLatitude, editLongitude);
-        if (weatherData) {
-          updatedFormData.weather = weatherData;
-        }
-      }
+      const updatedFormData = {
+        ...formData,
+        latitude: editLatitude,
+        longitude: editLongitude,
+      };
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}`,
@@ -394,7 +385,9 @@ const SingleTrail = () => {
         throw new Error(`Failed to update trail: ${errorData.message}`);
       }
 
-      await fetchTrail(); // Uppdatera trail data efter lyckad uppdatering
+      const updatedTrail = await response.json();
+      setTrail(updatedTrail);
+      console.log("Trail after update:", updatedTrail);
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating trail:", error);
@@ -432,26 +425,6 @@ const SingleTrail = () => {
       alert(t("errorDeletingTrail"));
     } finally {
       setShowDeleteConfirmation(false);
-    }
-  };
-
-  const fetchWeather = async (lat: number, lng: number) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/weather?lat=${lat}&lon=${lng}`,
-        {
-          credentials: "include",
-        }
-      );
-
-      if (!response.ok) {
-        console.log("Weather data not available");
-        return null;
-      }
-
-      return await response.json();
-    } catch {
-      return null;
     }
   };
 
