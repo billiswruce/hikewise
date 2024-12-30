@@ -5,17 +5,22 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/CreateTrail.module.scss";
 import backgroundImage from "../assets/bg.webp";
-import TrailForm from "../components/trail/TrailForm";
+import TrailForm from "../components/createTrail/TrailForm";
 import ConfirmationModal from "../components/ConfirmationModal";
 import LoadingScreen from "../components/LoadingScreen";
 import { compressImage } from "../utils/imageCompression";
-import { libraries } from "../components/trail/TrailLocationPicker";
+import { libraries } from "../components/createTrail/TrailLocationPicker";
+import { FormData } from "../models/FormData";
+
+type CustomChangeEvent = {
+  target: { name: string; value: string | number };
+};
 
 const CreateTrail = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth0();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     length: "",
     difficulty: "",
@@ -35,18 +40,29 @@ const CreateTrail = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e:
+      | React.ChangeEvent<
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+      | CustomChangeEvent
   ) => {
     const { name, value } = e.target;
 
     setFormData((prevData) => {
+      if (name === "latitude" || name === "longitude") {
+        return {
+          ...prevData,
+          [name]: Number(value),
+        };
+      }
+
       if (name === "hikeDate") {
         return {
           ...prevData,
-          [name]: value,
-          hikeEndDate: !prevData.hikeEndDate ? value : prevData.hikeEndDate,
+          hikeDate: String(value),
+          hikeEndDate: !prevData.hikeEndDate
+            ? String(value)
+            : prevData.hikeEndDate,
         };
       }
 
@@ -61,7 +77,7 @@ const CreateTrail = () => {
 
       return {
         ...prevData,
-        [name]: value,
+        [name]: String(value),
       };
     });
   };

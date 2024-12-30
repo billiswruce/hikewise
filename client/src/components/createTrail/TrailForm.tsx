@@ -5,6 +5,10 @@ import placeholderImage from "../../assets/trailPlaceholdersquare.webp";
 import TrailLocationPicker from "./TrailLocationPicker";
 import { useRef, useEffect } from "react";
 
+type CustomChangeEvent = {
+  target: { name: string; value: string | number };
+};
+
 interface TrailFormProps {
   formData: {
     name: string;
@@ -19,9 +23,11 @@ interface TrailFormProps {
     image: string;
   };
   handleChange: (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e:
+      | React.ChangeEvent<
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+      | CustomChangeEvent
   ) => void;
   handleImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -38,12 +44,16 @@ const TrailForm = ({
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
     if (e.latLng) {
+      const lat = e.latLng.lat();
+      const lng = e.latLng.lng();
+
       handleChange({
-        target: { name: "latitude", value: e.latLng.lat().toString() },
-      } as React.ChangeEvent<HTMLInputElement>);
+        target: { name: "latitude", value: lat },
+      } as CustomChangeEvent);
+
       handleChange({
-        target: { name: "longitude", value: e.latLng.lng().toString() },
-      } as React.ChangeEvent<HTMLInputElement>);
+        target: { name: "longitude", value: lng },
+      } as CustomChangeEvent);
     }
   };
 
@@ -57,14 +67,16 @@ const TrailForm = ({
           place.formatted_address || place.name || t("unknownLocation");
 
         handleChange({
-          target: { name: "latitude", value: lat.toString() },
-        } as React.ChangeEvent<HTMLInputElement>);
+          target: { name: "latitude", value: lat },
+        } as CustomChangeEvent);
+
         handleChange({
-          target: { name: "longitude", value: lng.toString() },
-        } as React.ChangeEvent<HTMLInputElement>);
+          target: { name: "longitude", value: lng },
+        } as CustomChangeEvent);
+
         handleChange({
           target: { name: "location", value: location },
-        } as React.ChangeEvent<HTMLInputElement>);
+        } as CustomChangeEvent);
       } else {
         alert(t("noPlaceDataFound"));
       }
@@ -169,7 +181,7 @@ const TrailForm = ({
             if (!formData.hikeEndDate) {
               handleChange({
                 target: { name: "hikeEndDate", value: e.target.value },
-              } as React.ChangeEvent<HTMLInputElement>);
+              } as CustomChangeEvent);
             }
           }}
           required
@@ -219,7 +231,7 @@ const TrailForm = ({
               onClick={() => {
                 const e = {
                   target: { name: "image", value: "" },
-                } as React.ChangeEvent<HTMLInputElement>;
+                } as CustomChangeEvent;
                 handleChange(e);
               }}>
               {t("removeImage")}

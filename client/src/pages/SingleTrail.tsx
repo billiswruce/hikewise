@@ -21,7 +21,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useAuth0 } from "@auth0/auth0-react";
 import ConfirmationDialog from "../components/ConfirmationDialog";
-import TrailLocationPicker from "../components/trail/TrailLocationPicker";
+import TrailLocationPicker from "../components/createTrail/TrailLocationPicker";
 
 interface PackingItem {
   _id?: string;
@@ -153,11 +153,16 @@ const SingleTrail = () => {
           credentials: "include",
         }
       );
-      if (!response.ok) throw new Error("Trail not found");
+
+      if (!response.ok) {
+        console.log("Trail data not available");
+        return;
+      }
+
       const data = await response.json();
       setTrail(data);
-    } catch (error) {
-      console.error("Error fetching trail:", error);
+    } catch {
+      // Tyst felhantering
     } finally {
       setLoading(false);
     }
@@ -356,18 +361,22 @@ const SingleTrail = () => {
     try {
       let updatedFormData = { ...formData };
 
-      // Only fetch weather if location has changed
+      // Om platsen har ändrats, uppdatera väder separat
       if (
         editLatitude !== trail?.latitude ||
         editLongitude !== trail?.longitude
       ) {
-        const latestWeather = await fetchWeather(editLatitude, editLongitude);
         updatedFormData = {
           ...updatedFormData,
           latitude: editLatitude,
           longitude: editLongitude,
-          weather: latestWeather || updatedFormData.weather,
         };
+
+        // Hämta väder separat
+        const weatherData = await fetchWeather(editLatitude, editLongitude);
+        if (weatherData) {
+          updatedFormData.weather = weatherData;
+        }
       }
 
       const response = await fetch(
@@ -385,7 +394,7 @@ const SingleTrail = () => {
         throw new Error(`Failed to update trail: ${errorData.message}`);
       }
 
-      await fetchTrail(); // Refresh trail data after successful update
+      await fetchTrail(); // Uppdatera trail data efter lyckad uppdatering
       setIsEditing(false);
     } catch (error) {
       console.error("Error updating trail:", error);
@@ -434,10 +443,14 @@ const SingleTrail = () => {
           credentials: "include",
         }
       );
-      if (!response.ok) throw new Error("Failed to fetch weather");
+
+      if (!response.ok) {
+        console.log("Weather data not available");
+        return null;
+      }
+
       return await response.json();
-    } catch (error) {
-      console.error("Error fetching weather:", error);
+    } catch {
       return null;
     }
   };
@@ -445,15 +458,12 @@ const SingleTrail = () => {
   const handlePlaceSelected = async () => {
     if (autocompleteRef.current) {
       const place = autocompleteRef.current.getPlace();
-      console.log("Selected place:", place);
 
       if (place.geometry && place.geometry.location) {
         const lat = place.geometry.location.lat();
         const lng = place.geometry.location.lng();
         const location =
           place.formatted_address || place.name || t("unknownLocation");
-
-        const weatherData = await fetchWeather(lat, lng);
 
         setEditLatitude(lat);
         setEditLongitude(lng);
@@ -462,7 +472,6 @@ const SingleTrail = () => {
           latitude: lat,
           longitude: lng,
           location: location,
-          weather: weatherData || prev!.weather, // Använd tidigare väder om hämtningen misslyckas
         }));
       } else {
         alert(t("noPlaceDataFound"));
@@ -475,16 +484,12 @@ const SingleTrail = () => {
       const lat = e.latLng.lat();
       const lng = e.latLng.lng();
 
-      // Hämta väder för den nya platsen
-      const weatherData = await fetchWeather(lat, lng);
-
       setEditLatitude(lat);
       setEditLongitude(lng);
       setFormData((prev) => ({
         ...prev!,
         latitude: lat,
         longitude: lng,
-        weather: weatherData || prev!.weather,
       }));
     }
   };
