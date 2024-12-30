@@ -156,32 +156,10 @@ export const App = () => {
   }, [isAuthenticated, getAccessTokenSilently, auth0Loading, user]);
 
   if (auth0Loading || isLoading) {
-    console.log(
-      JSON.stringify(
-        {
-          message: "Loading screen",
-          auth0Loading,
-          isLoading,
-        },
-        null,
-        2
-      )
-    );
     return <LoadingScreen />;
   }
 
   if (isAuthenticated && !sessionReady) {
-    console.log(
-      JSON.stringify(
-        {
-          message: "Waiting for session to be ready",
-          isAuthenticated,
-          sessionReady,
-        },
-        null,
-        2
-      )
-    );
     return <LoadingScreen />;
   }
 

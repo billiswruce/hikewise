@@ -27,14 +27,18 @@ router.use((req, res, next) => {
 });
 
 router.post("/", isAuthenticated, createTrail);
-router.get("/user/:userId", getUserTrails);
-router.get("/:id", getTrail);
-router.post("/:id/packing-list", addPackingListItem);
-router.delete("/:id/packing-list/:itemId", deletePackingListItem);
-router.put("/:id/packing-list/:itemId", updatePackingListItem);
-router.post("/:id/comments", addComment);
-router.patch("/:id/comments/:commentId", updateComment);
-router.delete("/:id/comments/:commentId", deleteComment);
+router.get("/user/:userId", isAuthenticated, getUserTrails);
+router.get("/:id", isAuthenticated, getTrail);
+router.post("/:id/packing-list", isAuthenticated, addPackingListItem);
+router.delete(
+  "/:id/packing-list/:itemId",
+  isAuthenticated,
+  deletePackingListItem
+);
+router.put("/:id/packing-list/:itemId", isAuthenticated, updatePackingListItem);
+router.post("/:id/comments", isAuthenticated, addComment);
+router.patch("/:id/comments/:commentId", isAuthenticated, updateComment);
+router.delete("/:id/comments/:commentId", isAuthenticated, deleteComment);
 router.put("/:id", isAuthenticated, updateTrail);
 router.delete("/:id", isAuthenticated, deleteTrail);
 export default router;
