@@ -5,14 +5,14 @@ import styles from "../../styles/Gear.module.scss";
 import buttonStyles from "../../styles/Buttons.module.scss";
 import { COLORS, RAINBOW_GRADIENT } from "../../models/constants";
 import { NewGearItem } from "../../models/gear";
+import { GearType, CATEGORIES } from "../../models/gearCategories";
 
 interface AddGearFormProps {
-  type: "All" | "Clothing" | "Equipment" | "Food";
-  categories: Record<string, Record<string, string[]>>;
+  type: GearType;
   onAdd: (newItem: NewGearItem) => Promise<boolean>;
 }
 
-export const AddGearForm = ({ type, categories, onAdd }: AddGearFormProps) => {
+export const AddGearForm = ({ type, onAdd }: AddGearFormProps) => {
   const { t } = useTranslation();
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [newItem, setNewItem] = useState<NewGearItem>({
@@ -64,7 +64,7 @@ export const AddGearForm = ({ type, categories, onAdd }: AddGearFormProps) => {
             onChange={(e) =>
               setNewItem({
                 ...newItem,
-                type: e.target.value as "Clothing" | "Equipment" | "Food",
+                type: e.target.value as Exclude<GearType, "All">,
                 categories: [],
               })
             }
@@ -161,19 +161,19 @@ export const AddGearForm = ({ type, categories, onAdd }: AddGearFormProps) => {
         required>
         <option value="">{t("myGear.selectCategory")}</option>
         {(type === "All" && newItem.type
-          ? categories[newItem.type]
+          ? CATEGORIES[newItem.type]
           : type !== "All"
-          ? categories[type]
+          ? CATEGORIES[type]
           : null) &&
           Object.entries(
             type === "All" && newItem.type
-              ? categories[newItem.type]
-              : categories[type as Exclude<typeof type, "All">]
+              ? CATEGORIES[newItem.type]
+              : CATEGORIES[type as Exclude<typeof type, "All">]
           ).map(([subcategory, items]) => (
             <optgroup
               key={subcategory}
               label={t(`myGear.categories.${subcategory.toLowerCase()}`)}>
-              {items.map((category) => (
+              {items.map((category: string) => (
                 <option key={category} value={category}>
                   {t(
                     `myGear.categories.${category

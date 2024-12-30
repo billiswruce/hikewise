@@ -8,35 +8,12 @@ import AddGearForm from "../components/gear/AddGearForm";
 import GearItem from "../components/gear/GearItem";
 import GearTabs from "../components/gear/GearTabs";
 import { GearItemType, NewGearItem } from "../models/gear";
-
-const CATEGORIES = {
-  Clothing: {
-    All: ["All"],
-    UpperBody: ["Jackets", "Base Layers"],
-    LowerBody: ["Pants", "Socks"],
-    Accessories: ["Rain Gear", "Gloves", "Hats", "Shoes"],
-  },
-  Equipment: {
-    All: ["All"],
-    Shelter: ["Tents", "Sleeping Bags", "Sleeping Pads"],
-    Tools: ["Backpacks", "Cooking Equipment", "Water Filtration"],
-    Navigation: ["Navigation", "Lighting", "Tools"],
-    Safety: ["First Aid", "Electronics"],
-  },
-  Food: {
-    All: ["All"],
-    Meals: ["Freeze-Dried Meals", "Canned Food", "Instant Noodles"],
-    Snacks: ["Trail Mix", "Energy Bars", "Dried Fruit"],
-    Drinks: ["Instant Coffee", "Powdered Drink Mix", "Tea"],
-  },
-};
+import { CATEGORIES, GearType } from "../models/gearCategories";
 
 export const Gear = () => {
   const { t } = useTranslation();
   const [gearItems, setGearItems] = useState<GearItemType[]>([]);
-  const [type, setType] = useState<"All" | "Clothing" | "Equipment" | "Food">(
-    "All"
-  );
+  const [type, setType] = useState<GearType>("All");
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -46,7 +23,6 @@ export const Gear = () => {
     isFood: boolean;
   } | null>(null);
 
-  // Hämta gear
   const fetchGear = useCallback(async () => {
     if (isFirstLoading) setIsLoading(true);
 
@@ -88,7 +64,6 @@ export const Gear = () => {
     fetchGear();
   }, [fetchGear]);
 
-  // Lägg till ny gear
   const addGearItem = async (newItem: NewGearItem): Promise<boolean> => {
     const itemType = type === "All" ? newItem.type : type;
 
@@ -171,10 +146,9 @@ export const Gear = () => {
     updatedItem: Partial<GearItemType>
   ) => {
     try {
-      // Ensure color is included in the update
       const itemToUpdate = {
         ...updatedItem,
-        color: updatedItem.color || null, // Make sure color is explicitly set, even if empty
+        color: updatedItem.color || null,
       };
 
       const response = await fetch(
@@ -228,7 +202,6 @@ export const Gear = () => {
 
   return (
     <>
-      {/* Banner */}
       <div
         className={styles.banner}
         style={{
@@ -237,19 +210,14 @@ export const Gear = () => {
           backgroundPosition: "center",
         }}
       />
-
-      {/* Första laddningsskärmen */}
       {isFirstLoading ? (
         <div className={styles.loading}>{LoadingScreen()}</div>
       ) : (
         <div className={styles.gearContainer}>
           <h1>{t("myGear.title")}</h1>
           <h4>{t("gearInfo")}</h4>
-
-          {/* Tabs */}
           <GearTabs type={type} onTypeChange={setType} />
 
-          {/* Filter Container */}
           <div className={styles.filterContainer}>
             {type !== "All" && (
               <label>
@@ -267,7 +235,7 @@ export const Gear = () => {
                         label={t(
                           `myGear.categories.${subcategory.toLowerCase()}`
                         )}>
-                        {items.map((category) => (
+                        {items.map((category: string) => (
                           <option key={category} value={category}>
                             {t(
                               `myGear.categories.${category
@@ -283,8 +251,6 @@ export const Gear = () => {
               </label>
             )}
           </div>
-
-          {/* Laddningsindikator under dataladdning */}
           {isLoading ? (
             <div className={styles.loading}>{LoadingScreen()}</div>
           ) : (
@@ -302,12 +268,7 @@ export const Gear = () => {
                 ))}
               </ul>
 
-              {/* Add New Gear Form */}
-              <AddGearForm
-                type={type}
-                categories={CATEGORIES}
-                onAdd={addGearItem}
-              />
+              <AddGearForm type={type} onAdd={addGearItem} />
             </>
           )}
         </div>

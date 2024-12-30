@@ -6,10 +6,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import styles from "../../styles/Gear.module.scss";
+import { GearType } from "../../models/gearCategories";
 
 interface GearTabsProps {
-  type: "All" | "Clothing" | "Equipment" | "Food";
-  onTypeChange: (type: "All" | "Clothing" | "Equipment" | "Food") => void;
+  type: GearType;
+  onTypeChange: (type: GearType) => void;
 }
 
 export const GearTabs = ({ type, onTypeChange }: GearTabsProps) => {
