@@ -16,6 +16,7 @@ interface TrailLocationPickerProps {
   onMapClick: (e: google.maps.MapMouseEvent) => void;
   onPlaceSelected: () => void;
   autocompleteRef: React.MutableRefObject<google.maps.places.Autocomplete | null>;
+  isOptional?: boolean;
 }
 
 const TrailLocationPicker = ({
@@ -24,6 +25,7 @@ const TrailLocationPicker = ({
   onMapClick,
   onPlaceSelected,
   autocompleteRef,
+  isOptional = false,
 }: TrailLocationPickerProps) => {
   const { t } = useTranslation();
 
@@ -40,7 +42,7 @@ const TrailLocationPicker = ({
             type="text"
             placeholder={t("searchLocation")}
             className={styles.input}
-            required
+            required={!isOptional}
           />
         </Autocomplete>
       </div>

@@ -78,6 +78,7 @@ app.use(
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+app.options("*", cors()); // Hantera OPTIONS-förfrågningar globalt
 
 app.use(
   express.static("public", {

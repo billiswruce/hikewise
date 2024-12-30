@@ -1,18 +1,15 @@
 @use "../styles/globals.scss";
 
-/* Base styles */
 * {
   box-sizing: border-box;
 }
 
-/* Hero banner section */
 .banner {
   height: 250px;
   background-size: cover;
   background-position: center;
 }
 
-/* Main form container */
 .formContainer {
   display: flex;
   justify-content: center;
@@ -23,7 +20,6 @@
   background-color: var(--color-white);
 }
 
-/* Form layout and styling */
 .form {
   display: flex;
   flex-direction: column;
@@ -38,24 +34,76 @@
   margin-top: -50px;
   margin-bottom: 6rem;
 
-  /* Form labels */
   > label {
     width: 100%;
     text-align: left;
     color: var(--color-grey-dark);
     font-weight: 500;
-    margin: 0;
-    padding: 0;
-    display: block;
 
     &.required::after {
       content: " *";
       color: var(--color-red);
     }
   }
+
+  .dateInputContainer {
+    position: relative;
+    padding: 10px;
+    border: 1px solid var(--color-grey-light-dark);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: var(--color-grey-dark);
+
+    &:hover {
+      border-color: var(--color-grey-dark);
+    }
+
+    &:focus-within {
+      border-color: var(--color-grey-dark);
+    }
+
+    span {
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      background: var(--color-white);
+      font-size: 12px;
+      padding: 0 5px;
+      color: var(--color-grey-dark);
+      z-index: 1;
+
+      &.required::after {
+        content: " *";
+        color: var(--color-red);
+      }
+    }
+
+    input {
+      border: none;
+      outline: none;
+      font-size: 13px;
+      width: 100%;
+      padding: 5px 0;
+      background: transparent;
+      border-radius: 25px;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+
+      color: var(--color-grey-dark);
+
+      &:not([value=""]) {
+        color: var(--color-black);
+      }
+    }
+  }
 }
 
-/* Form title */
 .title {
   color: var(--color-black);
   font-weight: bold;
@@ -63,7 +111,6 @@
   font-size: 36px;
 }
 
-/* Common input styles */
 .input,
 .select,
 .textarea,
@@ -95,7 +142,6 @@
   }
 }
 
-/* Select specific styles */
 .select {
   appearance: none;
   -webkit-appearance: none;
@@ -106,7 +152,6 @@
   color: var(--color-grey-dark);
 }
 
-/* Textarea specific styles */
 .textarea {
   height: 80px;
   font-size: 16px;
@@ -119,57 +164,6 @@
   }
 }
 
-/* Date input styling */
-.dateInputContainer {
-  position: relative;
-  padding: 10px;
-  border: 1px solid var(--color-grey-light-dark);
-  border-radius: 25px;
-  display: flex;
-  align-items: center;
-  box-sizing: border-box;
-  font-size: 14px;
-  color: var(--color-grey-dark);
-
-  &:hover,
-  &:focus-within {
-    border-color: var(--color-grey-dark);
-  }
-
-  span {
-    position: absolute;
-    top: -10px;
-    left: 10px;
-    background: var(--color-white);
-    font-size: 12px;
-    padding: 0 5px;
-    color: var(--color-grey-dark);
-    z-index: 1;
-
-    &.required::after {
-      content: " *";
-      color: var(--color-red);
-    }
-  }
-
-  input {
-    border: none;
-    outline: none;
-    font-size: 13px;
-    width: 100%;
-    padding: 5px 0;
-    background: transparent;
-    border-radius: 25px;
-    cursor: pointer;
-    color: var(--color-grey-dark);
-
-    &:not([value=""]) {
-      color: var(--color-black);
-    }
-  }
-}
-
-/* Image upload and preview section */
 .imageContainer {
   display: flex;
   flex-direction: column;
@@ -200,7 +194,174 @@
   }
 }
 
-/* File input styling */
+.fileInputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  label {
+    background: var(--color-white);
+    padding: 8px 15px;
+    border: 1px solid var(--color-grey-light);
+    border-radius: 25px;
+    cursor: pointer;
+  }
+
+  input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.fileInput {
+  &::file-selector-button {
+    visibility: hidden;
+    width: 0;
+    z-index: -1;
+  }
+}
+
+label {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.dateInputContainer {
+  position: relative;
+  padding: 10px;
+  border: 1px solid var(--color-grey-light-dark);
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: var(--color-grey-dark);
+
+  &:hover {
+    border-color: var(--color-grey-dark);
+  }
+
+  &:focus-within {
+    border-color: var(--color-grey-dark);
+  }
+
+  span {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: var(--color-white);
+    font-size: 12px;
+    padding: 0 5px;
+    color: var(--color-grey-dark);
+    z-index: 1;
+
+    &.required::after {
+      content: " *";
+      color: var(--color-red);
+    }
+  }
+
+  input {
+    border: none;
+    outline: none;
+    font-size: 13px;
+    width: 100%;
+    padding: 5px 0;
+    background: transparent;
+    border-radius: 25px;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+
+    color: var(--color-grey-dark);
+
+    &:not([value=""]) {
+      color: var(--color-black);
+    }
+  }
+}
+
+.googleMapContainer {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-top: 1rem;
+  margin-bottom: 4.5rem;
+}
+.createTrailContainer {
+  position: relative;
+  z-index: 1;
+
+  :global(.pac-container) {
+    z-index: 1000;
+    margin-top: 2px;
+    border-radius: 4px;
+    border: 1px solid var(--color-grey-light-dark);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+}
+
+.autocompleteWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 10px auto;
+  z-index: 1000;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid var(--color-grey-light-dark);
+  border-radius: 25px;
+}
+
+@media (min-width: globals.$md-screen) {
+  .form {
+    padding: 30px;
+    margin-top: -100px;
+    gap: 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    font-size: 16px;
+  }
+
+  .textarea {
+    height: 100px;
+  }
+
+  .submitButton {
+    font-size: 16px;
+  }
+
+  .image {
+    width: 150px;
+    height: 150px;
+  }
+
+  .removeButton {
+    font-size: 14px;
+  }
+}
+
 .fileInputWrapper {
   display: flex;
   align-items: center;
@@ -241,7 +402,16 @@
   }
 }
 
-/* Map container and autocomplete */
+input[type="date"] {
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+
+  &:not([value=""]) {
+    color: var(--color-black);
+  }
+}
+
 .mapContainer {
   position: relative;
   width: 100%;
@@ -250,83 +420,29 @@
 
   .autocompleteWrapper {
     position: absolute;
-    top: -40px;
-    left: 10px;
-    right: 10px;
-    z-index: 1;
-    max-width: 400px;
+    top: -50px;
+    left: 0;
+    right: 0;
+    width: 100%;
     margin: 0 auto;
 
     input {
       width: 100%;
-      padding: 8px 12px;
-      border: 1px solid var(--color-border);
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 10px;
+      border: 1px solid var(--color-grey-light-dark);
+      border-radius: 25px;
       font-size: 14px;
 
       &:focus {
         outline: none;
-        border-color: var(--color-primary);
       }
     }
   }
-}
 
-.googleMapContainer {
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-}
-
-/* Required field indicators */
-.required::after {
-  content: " *";
-  color: var(--color-red);
-}
-
-.dateInputContainer span.required,
-.input.required::placeholder,
-.select.required {
-  &::after {
-    content: " *";
-    color: var(--color-red);
-  }
-}
-
-/* Responsive styles */
-@media (min-width: globals.$md-screen) {
-  .form {
-    padding: 30px;
-    margin-top: -100px;
-    gap: 20px;
-  }
-
-  .title {
-    font-size: 24px;
-  }
-
-  .input,
-  .select,
-  .textarea {
-    font-size: 16px;
-  }
-
-  .textarea {
-    height: 100px;
-  }
-
-  .submitButton {
-    font-size: 16px;
-  }
-
-  .image {
-    width: 150px;
-    height: 150px;
-  }
-
-  .removeButton {
-    font-size: 14px;
+  .googleMapContainer {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
   }
 }
 
@@ -341,4 +457,35 @@
       }
     }
   }
+}
+
+.required::after {
+  content: " *";
+  color: var(--color-red);
+}
+
+.dateInputContainer span.required,
+.input.required::placeholder,
+.select.required {
+  &::after {
+    content: " *";
+    color: var(--color-red);
+  }
+}
+
+.formGroup {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    width: auto;
+  }
+}
+
+button[type="submit"] {
+  align-self: flex-start;
+  width: auto;
+  min-width: 120px;
 }

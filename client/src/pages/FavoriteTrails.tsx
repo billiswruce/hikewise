@@ -26,22 +26,6 @@ const FavoriteTrails = () => {
     setTrailToRemove(trailId);
   };
 
-  const handleConfirmRemove = async () => {
-    if (!trailToRemove) return;
-
-    try {
-      setFavoriteTrails((prevTrails) =>
-        prevTrails.filter((trail) => trail._id !== trailToRemove)
-      );
-      await toggleFavorite(trailToRemove);
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-      fetchFavoriteTrails();
-    } finally {
-      setTrailToRemove(null);
-    }
-  };
-
   const handleTrailClick = (trailId: string, event: React.MouseEvent) => {
     if ((event.target as HTMLElement).closest(`.${styles.favoriteButton}`)) {
       return;
@@ -78,6 +62,22 @@ const FavoriteTrails = () => {
   }, []);
 
   console.log("Favorite trails:", JSON.stringify(favoriteTrails));
+
+  const handleConfirmRemove = async () => {
+    if (!trailToRemove) return;
+
+    try {
+      setFavoriteTrails((prevTrails) =>
+        prevTrails.filter((trail) => trail._id !== trailToRemove)
+      );
+      await toggleFavorite(trailToRemove);
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+      fetchFavoriteTrails();
+    } finally {
+      setTrailToRemove(null);
+    }
+  };
 
   return (
     <div className={styles.hikingContainer}>

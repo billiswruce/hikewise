@@ -599,6 +599,7 @@ const SingleTrail = () => {
                     onMapClick={handleMapClick}
                     onPlaceSelected={handlePlaceSelected}
                     autocompleteRef={autocompleteRef}
+                    isOptional={true}
                   />
                 </div>
 

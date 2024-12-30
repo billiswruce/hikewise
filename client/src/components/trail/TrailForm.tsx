@@ -4,7 +4,6 @@ import stylesButton from "../../styles/Buttons.module.scss";
 import placeholderImage from "../../assets/trailPlaceholdersquare.webp";
 import TrailLocationPicker from "./TrailLocationPicker";
 import { useRef, useEffect } from "react";
-import { useState } from "react";
 
 interface TrailFormProps {
   formData: {
@@ -35,14 +34,16 @@ const TrailForm = ({
   handleSubmit,
 }: TrailFormProps) => {
   const { t } = useTranslation();
-  const [latitude, setLatitude] = useState(57.7089);
-  const [longitude, setLongitude] = useState(11.9746);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   const handleMapClick = (e: google.maps.MapMouseEvent) => {
     if (e.latLng) {
-      setLatitude(e.latLng.lat());
-      setLongitude(e.latLng.lng());
+      handleChange({
+        target: { name: "latitude", value: e.latLng.lat().toString() },
+      } as React.ChangeEvent<HTMLInputElement>);
+      handleChange({
+        target: { name: "longitude", value: e.latLng.lng().toString() },
+      } as React.ChangeEvent<HTMLInputElement>);
     }
   };
 
@@ -54,9 +55,6 @@ const TrailForm = ({
         const lng = place.geometry.location.lng();
         const location =
           place.formatted_address || place.name || t("unknownLocation");
-
-        setLatitude(lat);
-        setLongitude(lng);
 
         handleChange({
           target: { name: "latitude", value: lat.toString() },
@@ -235,13 +233,17 @@ const TrailForm = ({
           />
         )}
       </div>
-      <TrailLocationPicker
-        latitude={latitude}
-        longitude={longitude}
-        onMapClick={handleMapClick}
-        onPlaceSelected={handlePlaceSelected}
-        autocompleteRef={autocompleteRef}
-      />
+      <div className={styles.formGroup}>
+        <label>{t("location")}</label>
+        <TrailLocationPicker
+          latitude={formData.latitude}
+          longitude={formData.longitude}
+          onMapClick={handleMapClick}
+          onPlaceSelected={handlePlaceSelected}
+          autocompleteRef={autocompleteRef}
+          isOptional={false}
+        />
+      </div>
       <button type="submit" className={stylesButton.submitButton}>
         {t("createTrail")}
       </button>
