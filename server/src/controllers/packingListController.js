@@ -1,5 +1,6 @@
 import PackingList from "../models/PackingList.js";
 
+// Create packing list
 export const createPackingList = async (req, res) => {
   const { trailId, items } = req.body;
   try {
@@ -11,6 +12,7 @@ export const createPackingList = async (req, res) => {
   }
 };
 
+// Get packing list
 export const getPackingList = async (req, res) => {
   try {
     const packingList = await PackingList.findOne({

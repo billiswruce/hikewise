@@ -18,8 +18,6 @@ const Hiked = () => {
   >("name-asc");
   const sortedTrails = useTrailSort(hikedTrails, sortOption);
 
-  // console.log("Trail object:", hikedTrails, JSON.stringify(hikedTrails));
-
   const handleTrailClick = (trailId: string, event: React.MouseEvent) => {
     if ((event.target as HTMLElement).closest(`.${styles.favoriteButton}`)) {
       return;
@@ -46,11 +44,6 @@ const Hiked = () => {
               src={trail.image || hikedPlaceholder}
               alt={trail.name}
               className={styles.sectionImage}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.onerror = null;
-                target.src = hikedPlaceholder;
-              }}
             />
             <div className={styles.trailInfo}>
               <div className={styles.trailDetails}>
@@ -70,6 +63,11 @@ const Hiked = () => {
             </button>
           </div>
         ))}
+        {sortedTrails.length === 0 && (
+          <div className={styles.noTrails}>
+            <p>{t("noHikedTrails")}</p>
+          </div>
+        )}
       </div>
     </div>
   );

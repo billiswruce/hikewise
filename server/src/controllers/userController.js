@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 
+// Get user details
 export const getUserDetails = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
@@ -12,6 +13,7 @@ export const getUserDetails = async (req, res) => {
   }
 };
 
+// Get user favorites
 export const getUserFavorites = async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -26,40 +28,34 @@ export const getUserFavorites = async (req, res) => {
   }
 };
 
+// Toggle favorite trail
 export const toggleFavorite = async (req, res) => {
   try {
     const userId = req.session.userId;
 
-    // Kontrollera att användaren är inloggad
     if (!userId) {
       console.warn("Ingen session hittad: användaren är inte autentiserad");
       return res.status(401).json({ message: "Not authenticated" });
     }
     console.log("Session userId:", userId);
 
-    // Hämta användaren från databasen
     const user = await User.findById(userId);
     if (!user) {
       console.warn("Ingen användare hittades med id:", userId);
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Trail ID som ska läggas till eller tas bort
     const trailId = req.params.trailId;
     console.log("Trail ID som hanteras:", trailId);
 
     const favoriteIndex = user.favoriteTrails.indexOf(trailId);
-
-    // Kolla om trail redan finns i favorites
     if (favoriteIndex > -1) {
       console.log("Trail redan i favoriter, tar bort...");
-      user.favoriteTrails.splice(favoriteIndex, 1); // Ta bort trail
+      user.favoriteTrails.splice(favoriteIndex, 1);
     } else {
       console.log("Trail inte i favoriter, lägger till...");
-      user.favoriteTrails.push(trailId); // Lägg till trail
+      user.favoriteTrails.push(trailId);
     }
-
-    // Spara ändringar i användaren
     await user.save();
     console.log("Uppdaterad lista över favoriter:", user.favoriteTrails);
 
@@ -74,6 +70,7 @@ export const toggleFavorite = async (req, res) => {
   }
 };
 
+// Add gear
 export const addGear = async (req, res) => {
   const { name, quantity, condition, category } = req.body;
   try {

@@ -17,11 +17,11 @@ import {
 const router = express.Router();
 
 router.use((req, res, next) => {
-  console.log('Trail Route:', {
+  console.log("Trail Route:", {
     method: req.method,
     path: req.path,
     params: req.params,
-    auth: !!req.user
+    auth: !!req.user,
   });
   next();
 });
@@ -31,7 +31,7 @@ router.get("/user/:userId", getUserTrails);
 router.get("/:id", getTrail);
 router.post("/:id/packing-list", addPackingListItem);
 router.delete("/:id/packing-list/:itemId", deletePackingListItem);
-router.patch("/:id/packing-list/:itemId", updatePackingListItem);
+router.put("/:id/packing-list/:itemId", updatePackingListItem);
 router.post("/:id/comments", addComment);
 router.patch("/:id/comments/:commentId", updateComment);
 router.delete("/:id/comments/:commentId", deleteComment);

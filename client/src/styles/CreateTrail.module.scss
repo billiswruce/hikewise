@@ -32,6 +32,76 @@
   border-radius: 25px 25px 0 0;
   background-color: var(--color-white);
   margin-top: -50px;
+  margin-bottom: 6rem;
+
+  > label {
+    width: 100%;
+    text-align: left;
+    color: var(--color-grey-dark);
+    font-weight: 500;
+
+    &.required::after {
+      content: " *";
+      color: var(--color-red);
+    }
+  }
+
+  .dateInputContainer {
+    position: relative;
+    padding: 10px;
+    border: 1px solid var(--color-grey-light-dark);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: var(--color-grey-dark);
+
+    &:hover {
+      border-color: var(--color-grey-dark);
+    }
+
+    &:focus-within {
+      border-color: var(--color-grey-dark);
+    }
+
+    span {
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      background: var(--color-white);
+      font-size: 12px;
+      padding: 0 5px;
+      color: var(--color-grey-dark);
+      z-index: 1;
+
+      &.required::after {
+        content: " *";
+        color: var(--color-red);
+      }
+    }
+
+    input {
+      border: none;
+      outline: none;
+      font-size: 13px;
+      width: 100%;
+      padding: 5px 0;
+      background: transparent;
+      border-radius: 25px;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+
+      color: var(--color-grey-dark);
+
+      &:not([value=""]) {
+        color: var(--color-black);
+      }
+    }
+  }
 }
 
 .title {
@@ -60,9 +130,15 @@
   outline: none;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 
   &:focus {
     border-color: var(--color-grey-dark);
+    font-size: 16px;
   }
 }
 
@@ -93,6 +169,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  margin-bottom: 2rem;
 }
 
 .image {
@@ -122,7 +199,6 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  // color: var(--color-grey-dark);
 
   label {
     background: var(--color-white);
@@ -185,6 +261,11 @@ label {
     padding: 0 5px;
     color: var(--color-grey-dark);
     z-index: 1;
+
+    &.required::after {
+      content: " *";
+      color: var(--color-red);
+    }
   }
 
   input {
@@ -214,7 +295,7 @@ label {
   width: 100%;
   height: 400px;
   margin-top: 1rem;
-  margin-bottom: 6rem;
+  margin-bottom: 4.5rem;
 }
 .createTrailContainer {
   position: relative;
@@ -246,7 +327,6 @@ label {
   border-radius: 25px;
 }
 
-/* Större skärmar */
 @media (min-width: globals.$md-screen) {
   .form {
     padding: 30px;
@@ -330,4 +410,82 @@ input[type="date"] {
   &:not([value=""]) {
     color: var(--color-black);
   }
+}
+
+.mapContainer {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  margin-bottom: 1rem;
+
+  .autocompleteWrapper {
+    position: absolute;
+    top: -50px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0 auto;
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--color-grey-light-dark);
+      border-radius: 25px;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  .googleMapContainer {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mapContainer {
+    height: 300px;
+
+    .autocompleteWrapper {
+      max-width: calc(100% - 20px);
+      input {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.required::after {
+  content: " *";
+  color: var(--color-red);
+}
+
+.dateInputContainer span.required,
+.input.required::placeholder,
+.select.required {
+  &::after {
+    content: " *";
+    color: var(--color-red);
+  }
+}
+
+.formGroup {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    width: auto;
+  }
+}
+
+button[type="submit"] {
+  align-self: flex-start;
+  width: auto;
+  min-width: 120px;
 }

@@ -1,13 +1,17 @@
 .container {
-  background-color: var(--color-white);
-  border-radius: 25px 25px 0 0;
-  padding: 20px;
-  margin-top: -40px;
-  position: relative;
-  z-index: 1;
+  padding: 1rem;
+  width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  margin-top: -20px;
+  border-radius: 25px 25px 0 0;
+  background-color: var(--color-white);
+  margin-top: -50px;
+  margin-bottom: 2.5rem;
+  box-sizing: border-box;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
 }
 
 .heroImage {
@@ -116,7 +120,6 @@
   width: 100%;
   height: 200px;
   border-radius: 8px;
-  margin-bottom: 30px;
 }
 
 // Comment Section
@@ -336,13 +339,83 @@
 }
 
 .editForm {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
-  background-color: var(--color-grey-light);
-  border-radius: 8px;
+  background-color: var(--color-white);
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: var(--color-grey-dark);
+    border: 1px solid var(--color-grey-light-dark);
+    border-radius: 25px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+
+    &:hover,
+    &:focus {
+      outline: none;
+      border-color: var(--color-grey-dark);
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+    border-radius: 15px;
+  }
+
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    color: var(--color-grey-dark);
+  }
+
+  .editButtons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+
+    button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 150px;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+
+    .saveButton {
+      background-color: var(--color-green);
+      color: white;
+    }
+
+    .cancelButton {
+      background-color: var(--color-grey-light);
+      color: var(--color-black);
+
+      &:hover {
+        background-color: var(--color-grey-dark);
+        color: var(--color-white);
+      }
+    }
+  }
 }
 
 .formGroup {
@@ -353,6 +426,33 @@
   label {
     font-weight: bold;
     color: var(--color-black);
+  }
+
+  .map-container {
+    width: 100%;
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .autocomplete-wrapper {
+    width: 100%;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1000;
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--color-grey-light-dark);
+      border-radius: 25px;
+      font-size: 1rem;
+
+      &:focus {
+        outline: none;
+        border-color: var(--color-grey-dark);
+      }
+    }
   }
 }
 
@@ -380,17 +480,34 @@
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
-}
 
-.editButton,
-.saveButton,
-.cancelButton {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.2s;
+  .saveButton,
+  .cancelButton {
+    padding: 0.75rem 1.5rem;
+    flex: 1;
+    min-width: 150px;
+    border-radius: 25px;
+    font-size: 1rem;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  .saveButton {
+    background-color: var(--color-green);
+    color: white;
+  }
+
+  .cancelButton {
+    background-color: var(--color-grey-light);
+    color: var(--color-black);
+
+    &:hover {
+      background-color: var(--color-grey-dark);
+      color: var(--color-white);
+    }
+  }
 }
 
 .editButton {
@@ -453,7 +570,7 @@
 .deleteButton {
   background-color: rgb(150, 28, 28);
   color: var(--color-white);
-  font-weight: bold;
+  font-weight: 600;
 
   &:hover {
     transform: scale(1.05);
@@ -477,5 +594,53 @@
   &:not(:last-child) {
     padding-right: 1rem;
     border-right: 1px solid var(--color-grey-light);
+  }
+}
+
+.addCommentButton,
+.accordionButton,
+.addButton,
+.commentButtons button {
+  font-weight: 600;
+}
+
+.editButton,
+.saveButton,
+.cancelButton,
+.deleteButton {
+  font-weight: 600;
+}
+
+.mapContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.googleMapContainer {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.autocompleteWrapper {
+  width: 100%;
+  position: relative;
+  z-index: 1000;
+
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-grey-light-dark);
+    border-radius: 25px;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-grey-dark);
+    }
   }
 }

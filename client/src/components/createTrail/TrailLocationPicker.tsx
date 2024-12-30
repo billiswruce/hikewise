@@ -1,6 +1,14 @@
-import { GoogleMap, Marker, Autocomplete } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  Marker,
+  Autocomplete,
+  Libraries,
+} from "@react-google-maps/api";
 import { useTranslation } from "react-i18next";
-import styles from "../../styles/CreateTrail.module.scss";
+import styles from "../../styles/SingleTrail.module.scss";
+
+// Add static libraries array and export it
+export const libraries: Libraries = ["places"];
 
 interface TrailLocationPickerProps {
   latitude: number;
@@ -8,6 +16,7 @@ interface TrailLocationPickerProps {
   onMapClick: (e: google.maps.MapMouseEvent) => void;
   onPlaceSelected: () => void;
   autocompleteRef: React.MutableRefObject<google.maps.places.Autocomplete | null>;
+  isOptional?: boolean;
 }
 
 const TrailLocationPicker = ({
@@ -16,19 +25,24 @@ const TrailLocationPicker = ({
   onMapClick,
   onPlaceSelected,
   autocompleteRef,
+  isOptional = false,
 }: TrailLocationPickerProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className={styles.googleMapContainer}>
+    <div className={styles.mapContainer}>
       <div className={styles.autocompleteWrapper}>
         <Autocomplete
-          onLoad={(autocomplete) => (autocompleteRef.current = autocomplete)}
+          onLoad={(autocomplete) => {
+            autocompleteRef.current = autocomplete;
+            autocomplete.setFields(["geometry.location", "formatted_address"]);
+          }}
           onPlaceChanged={onPlaceSelected}>
           <input
             type="text"
             placeholder={t("searchLocation")}
             className={styles.input}
+            required={!isOptional}
           />
         </Autocomplete>
       </div>
@@ -43,6 +57,11 @@ const TrailLocationPicker = ({
           disableDefaultUI: false,
           gestureHandling: "greedy",
           keyboardShortcuts: true,
+          scrollwheel: true,
+          zoomControl: true,
+          fullscreenControl: true,
+          streetViewControl: false,
+          mapTypeControl: false,
         }}
         onClick={onMapClick}>
         <Marker

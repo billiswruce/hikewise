@@ -2,6 +2,7 @@ import Trail from "../models/Trail.js";
 import axios from "axios";
 import mongoose from "mongoose";
 
+// Create trail
 export const createTrail = async (req, res) => {
   const {
     name,
@@ -67,6 +68,7 @@ export const createTrail = async (req, res) => {
   }
 };
 
+// Get trails
 export const getUserTrails = async (req, res) => {
   try {
     const trails = await Trail.find({ creatorId: req.params.userId });
@@ -88,6 +90,7 @@ export const getTrail = async (req, res) => {
   }
 };
 
+// Update trail
 export const updateTrail = async (req, res) => {
   try {
     const { id } = req.params;
@@ -133,151 +136,7 @@ export const updateTrail = async (req, res) => {
   }
 };
 
-export const addPackingListItem = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name, isFood } = req.body;
-
-    const trail = await Trail.findById(id);
-    if (!trail) {
-      return res.status(404).json({ message: "Trail not found" });
-    }
-
-    const newItem = { name, isChecked: false };
-
-    if (isFood) {
-      trail.packingList.food.push(newItem);
-    } else {
-      trail.packingList.gear.push(newItem);
-    }
-
-    const updatedTrail = await trail.save();
-    res.json(updatedTrail);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const deletePackingListItem = async (req, res) => {
-  try {
-    const { id, itemId } = req.params;
-    const { isFood } = req.body;
-
-    const trail = await Trail.findById(id);
-    if (!trail) {
-      return res.status(404).json({ message: "Trail not found" });
-    }
-
-    const list = isFood ? trail.packingList.food : trail.packingList.gear;
-    const updatedList = list.filter((item) => item._id.toString() !== itemId);
-
-    if (isFood) {
-      trail.packingList.food = updatedList;
-    } else {
-      trail.packingList.gear = updatedList;
-    }
-
-    const updatedTrail = await trail.save();
-    res.status(200).json(updatedTrail);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const updatePackingListItem = async (req, res) => {
-  try {
-    const { id, itemId } = req.params;
-    const { isFood, isChecked } = req.body;
-
-    const trail = await Trail.findById(id);
-    if (!trail) return res.status(404).json({ message: "Trail not found" });
-
-    const list = isFood ? trail.packingList.food : trail.packingList.gear;
-    const item = list.find((item) => item._id.toString() === itemId);
-    if (!item) return res.status(404).json({ message: "Item not found" });
-
-    item.isChecked = isChecked;
-
-    const updatedTrail = await trail.save();
-    res.status(200).json(updatedTrail);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const addComment = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { text } = req.body;
-
-    if (!text || text.trim() === "") {
-      return res.status(400).json({ message: "Comment text is required" });
-    }
-
-    const trail = await Trail.findById(id);
-    if (!trail) {
-      return res.status(404).json({ message: "Trail not found" });
-    }
-    const newComment = { text, createdAt: new Date() };
-    trail.comments.push(newComment);
-
-    const updatedTrail = await trail.save();
-    res.status(201).json(updatedTrail);
-  } catch (error) {
-    console.error("Error in addComment:", error.message);
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const updateComment = async (req, res) => {
-  try {
-    const { id, commentId } = req.params;
-    const { text } = req.body;
-
-    if (!text || text.trim() === "") {
-      return res.status(400).json({ message: "Comment text is required" });
-    }
-
-    const trail = await Trail.findById(id);
-    if (!trail) {
-      return res.status(404).json({ message: "Trail not found" });
-    }
-
-    const comment = trail.comments.id(commentId);
-    if (!comment) {
-      return res.status(404).json({ message: "Comment not found" });
-    }
-
-    comment.text = text;
-    const updatedTrail = await trail.save();
-    res.status(200).json(updatedTrail);
-  } catch (error) {
-    console.error("Error in updateComment:", error.message);
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const deleteComment = async (req, res) => {
-  try {
-    const { id, commentId } = req.params;
-
-    const trail = await Trail.findById(id);
-    if (!trail) {
-      return res.status(404).json({ message: "Trail not found" });
-    }
-
-    trail.comments = trail.comments.filter(
-      (comment) => comment._id.toString() !== commentId
-    );
-
-    const updatedTrail = await trail.save();
-    res.status(200).json(updatedTrail);
-  } catch (error) {
-    console.error("Error in deleteComment:", error.message);
-    res.status(500).json({ message: error.message });
-  }
-};
-
+// Delete trail
 export const deleteTrail = async (req, res) => {
   try {
     console.log("=== Delete Trail Start ===");
@@ -324,5 +183,156 @@ export const deleteTrail = async (req, res) => {
   } catch (error) {
     console.error("Delete trail error:", error);
     res.status(500).json({ message: "Error deleting trail" });
+  }
+};
+
+// Add packing list item
+export const addPackingListItem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, isFood } = req.body;
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    const newItem = { name, isChecked: false };
+
+    if (isFood) {
+      trail.packingList.food.push(newItem);
+    } else {
+      trail.packingList.gear.push(newItem);
+    }
+
+    const updatedTrail = await trail.save();
+    res.json(updatedTrail);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete packing list item
+export const deletePackingListItem = async (req, res) => {
+  try {
+    const { id, itemId } = req.params;
+    const { isFood } = req.body;
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    const list = isFood ? trail.packingList.food : trail.packingList.gear;
+    const updatedList = list.filter((item) => item._id.toString() !== itemId);
+
+    if (isFood) {
+      trail.packingList.food = updatedList;
+    } else {
+      trail.packingList.gear = updatedList;
+    }
+
+    const updatedTrail = await trail.save();
+    res.status(200).json(updatedTrail);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update packing list item
+export const updatePackingListItem = async (req, res) => {
+  try {
+    const { id, itemId } = req.params;
+    const { isFood, isChecked } = req.body;
+
+    const trail = await Trail.findById(id);
+    if (!trail) return res.status(404).json({ message: "Trail not found" });
+
+    const list = isFood ? trail.packingList.food : trail.packingList.gear;
+    const item = list.find((item) => item._id.toString() === itemId);
+    if (!item) return res.status(404).json({ message: "Item not found" });
+
+    item.isChecked = isChecked;
+
+    const updatedTrail = await trail.save();
+    res.status(200).json(updatedTrail);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Add comment
+export const addComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { text } = req.body;
+
+    if (!text || text.trim() === "") {
+      return res.status(400).json({ message: "Comment text is required" });
+    }
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+    const newComment = { text, createdAt: new Date() };
+    trail.comments.push(newComment);
+
+    const updatedTrail = await trail.save();
+    res.status(201).json(updatedTrail);
+  } catch (error) {
+    console.error("Error in addComment:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update comment
+export const updateComment = async (req, res) => {
+  try {
+    const { id, commentId } = req.params;
+    const { text } = req.body;
+
+    if (!text || text.trim() === "") {
+      return res.status(400).json({ message: "Comment text is required" });
+    }
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    const comment = trail.comments.id(commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    comment.text = text;
+    const updatedTrail = await trail.save();
+    res.status(200).json(updatedTrail);
+  } catch (error) {
+    console.error("Error in updateComment:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Delete comment
+export const deleteComment = async (req, res) => {
+  try {
+    const { id, commentId } = req.params;
+
+    const trail = await Trail.findById(id);
+    if (!trail) {
+      return res.status(404).json({ message: "Trail not found" });
+    }
+
+    trail.comments = trail.comments.filter(
+      (comment) => comment._id.toString() !== commentId
+    );
+
+    const updatedTrail = await trail.save();
+    res.status(200).json(updatedTrail);
+  } catch (error) {
+    console.error("Error in deleteComment:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };

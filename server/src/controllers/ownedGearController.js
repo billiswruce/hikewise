@@ -1,6 +1,6 @@
 import OwnedGear from "../models/OwnedGear.js";
 
-// Hämta alla gear-items för en användare
+// Get all gear items for a user
 export const getOwnedGear = async (req, res) => {
   try {
     const userId = req.user?.id;
@@ -25,7 +25,7 @@ export const getOwnedGear = async (req, res) => {
   }
 };
 
-// Lägg till ett nytt gear-item
+// Add a new gear item
 export const addGearItem = async (req, res) => {
   try {
     const userId = req.user?.id;
@@ -70,7 +70,7 @@ export const addGearItem = async (req, res) => {
   }
 };
 
-// Uppdatera ett gear-item
+// Update a gear item
 export const updateGearItem = async (req, res) => {
   const { name, quantity, condition, packed, type, categories, brand, color } =
     req.body;
@@ -91,7 +91,6 @@ export const updateGearItem = async (req, res) => {
       return res.status(404).json({ message: "Gear item not found" });
     }
 
-    // Update only the provided fields
     const updatedItem = {
       ...ownedGear.items[itemIndex].toObject(),
       ...(name && { name }),
@@ -118,7 +117,7 @@ export const updateGearItem = async (req, res) => {
   }
 };
 
-// Ta bort ett gear-item
+// Delete a gear item
 export const deleteGearItem = async (req, res) => {
   const userId = req.user.id;
 
@@ -130,7 +129,6 @@ export const deleteGearItem = async (req, res) => {
         .json({ message: "No gear found for the specified user." });
     }
 
-    // Filter out the item to be deleted
     ownedGear.items = ownedGear.items.filter(
       (item) => item._id.toString() !== req.params.itemId
     );
@@ -145,7 +143,7 @@ export const deleteGearItem = async (req, res) => {
   }
 };
 
-// Hämta gear efter typ (Clothing, Equipment, Food)
+// Get gear by type (Clothing, Equipment, Food)
 export const getGearByType = async (req, res) => {
   try {
     const userId = req.user?.id;
@@ -170,6 +168,7 @@ export const getGearByType = async (req, res) => {
   }
 };
 
+// Get gear by category
 export const getGearByCategory = async (req, res) => {
   try {
     const userId = req.user?.id;

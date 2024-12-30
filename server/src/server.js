@@ -20,11 +20,9 @@ const app = express();
 app.set("trust proxy", 1);
 
 const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3001",
   "https://hikewise.vercel.app",
   "https://hikewise-backend.vercel.app",
-];
+].filter(Boolean);
 
 const sessionConfig = {
   secret: process.env.SESSION_SECRET,
@@ -42,34 +40,71 @@ const sessionConfig = {
   cookie: {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 24 * 60 * 60 * 1000,
     path: "/",
   },
   name: "connect.sid",
 };
 
+app.use((req, res, next) => {
+  if (req.secure || req.headers["x-forwarded-proto"] === "https") {
+    sessionConfig.cookie.secure = true;
+    sessionConfig.cookie.sameSite = "none";
+  }
+  next();
+});
+
 app.use(session(sessionConfig));
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, origin);
       } else {
         callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept", "Cookie"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Accept",
+      "X-Requested-With",
+    ],
     exposedHeaders: ["Set-Cookie"],
-    preflightContinue: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    maxAge: 86400,
   })
 );
 
+app.use((req, res, next) => {
+  res.set("Access-Control-Allow-Credentials", "true");
+  if (req.headers.origin && allowedOrigins.includes(req.headers.origin)) {
+    res.set("Access-Control-Allow-Origin", req.headers.origin);
+  }
+  next();
+});
+
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+app.options("*", cors());
+
+app.use(
+  express.static("public", {
+    maxAge: "1y",
+    setHeaders: (res, path) => {
+      if (path.endsWith(".webp")) {
+        res.setHeader("Cache-Control", "public, max-age=31536000");
+      }
+    },
+  })
+);
 
 app.use((req, res, next) => {
   console.log("\n=== Detailed Request Debug ===");

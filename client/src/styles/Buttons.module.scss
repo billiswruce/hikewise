@@ -13,6 +13,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   min-width: 200px;
   align-self: flex-start;
+  font-weight: 600;
 
   &:hover {
     transform: scale(1.05);
@@ -33,7 +34,6 @@
 // Submit button (for forms)
 .submitButton {
   @extend .button;
-  margin-bottom: 3rem;
   font-weight: semi-bold;
 }
 

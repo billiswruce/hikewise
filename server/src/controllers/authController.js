@@ -25,7 +25,21 @@ export const login = async (req, res) => {
       await user.save();
     } else {
       isNewUser = true;
-      const uniqueUsername = name || `user_${Date.now()}`;
+      let baseUsername = name || email.split("@")[0];
+      let uniqueUsername = baseUsername;
+
+      // Kontrollera om användarnamnet redan finns och lägg till ett slumpmässigt nummer om det behövs
+      let counter = 1;
+      while (await User.findOne({ username: uniqueUsername })) {
+        uniqueUsername = `${baseUsername}_${Math.floor(Math.random() * 1000)}`;
+        counter++;
+        if (counter > 10) {
+          // Fallback om vi inte hittar ett unikt namn efter 10 försök
+          uniqueUsername = `user_${Date.now()}`;
+          break;
+        }
+      }
+
       user = await User.create({
         auth0Id,
         email: email || "",
@@ -36,11 +50,11 @@ export const login = async (req, res) => {
     }
     console.log("isNewUser", isNewUser);
 
-    // Sätt session data
+    // Set session data
     req.session.userId = user._id;
     req.session.auth0Id = auth0Id;
 
-    // Spara session
+    // Save session
     await new Promise((resolve, reject) => {
       req.session.save((err) => {
         if (err) {
@@ -120,39 +134,7 @@ export const logout = (req, res) => {
   });
 };
 
-export const refreshSession = async (req, res) => {
-  try {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({ message: "No token provided" });
-    }
-
-    // Uppdatera session
-    if (req.session) {
-      req.session.touch();
-      req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 timmar
-
-      await new Promise((resolve, reject) => {
-        req.session.save((err) => {
-          if (err) reject(err);
-          resolve();
-        });
-      });
-    }
-
-    res.json({
-      message: "Session refreshed",
-      sessionStatus: {
-        active: true,
-        expiresIn: req.session?.cookie?.maxAge,
-      },
-    });
-  } catch (error) {
-    console.error("Session refresh error:", error);
-    res.status(500).json({ message: "Failed to refresh session" });
-  }
-};
-
+// Check if the user is logged in
 export const checkSession = async (req, res) => {
   console.log("\n=== Check Session ===");
   console.log("Current session:", {
@@ -183,7 +165,7 @@ export const checkSession = async (req, res) => {
       });
     }
 
-    // Touch session utan att ändra ID
+    // Touch session without changing ID
     req.session.touch();
     await new Promise((resolve) => req.session.save(resolve));
 

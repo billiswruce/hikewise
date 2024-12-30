@@ -4,106 +4,67 @@ export const RAINBOW_GRADIENT = {
 };
 
 export const COLORS = [
-  // Röda nyanser
-  "#ff0000", // Ren röd
-  "#ff4444", // Ljusröd
-  "#cc0000", // Mörkröd
-  "#ff6b6b", // Koralröd
-  "#8B0000", // Mörkröd
-  "#CD5C5C", // Indisk röd
-  "#B22222", // Tegelröd
+  // Red shades
+  "#FF0000", // Red (typical)
+  "#8B0000", // Dark red
+  "#B22222", // Firebrick
+  "#CD5C5C", // Indian red
 
-  // Rosa nyanser
-  "#ff69b4", // Hot pink
-  "#ffb6c1", // Ljusrosa
-  "#ff1493", // Deep pink
-  "#db7093", // Palevioletred
+  // Pink shades
+  "#FFC0CB", // Pink (typical)
+  "#DB7093", // Pale violet red
+  "#C71585", // Medium violet red
   "#FFE4E1", // Misty rose
-  "#FFA07A", // Light salmon
 
-  // Lila nyanser
-  "#800080", // Lila
-  "#9400d3", // Mörklila
-  "#9370db", // Medium purple
-  "#e6e6fa", // Lavender
+  // Purple shades
+  "#800080", // Purple (typical)
   "#4B0082", // Indigo
-  "#483D8B", // Mörk skifferblå
+  "#9370DB", // Medium purple
+  "#E6E6FA", // Lavender
 
-  // Blå nyanser
-  "#0000ff", // Ren blå
-  "#000080", // Marinblå
-  "#4169e1", // Royal blue
-  "#87ceeb", // Sky blue
-  "#00bfff", // Deep sky blue
-  "#1e90ff", // Dodger blue
-  "#5F9EA0", // Kadetblå
-  "#4682B4", // Stålblå
-  "#B0C4DE", // Ljus stålblå
+  // Blue shades
+  "#0000FF", // Blue (typical)
+  "#000080", // Navy blue
+  "#4169E1", // Royal blue
+  "#87CEEB", // Sky blue
 
-  // Turkosa nyanser
-  "#40e0d0", // Turkos
-  "#48d1cc", // Medium turquoise
-  "#00ced1", // Dark turquoise
-  "#20b2aa", // Light sea green
-  "#008B8B", // Mörk cyan
-  "#5F9EA0", // Kadetblå
+  // Turquoise shades
+  "#40E0D0", // Turquoise (typical)
+  "#20B2AA", // Light sea green
+  "#5F9EA0", // Cadet blue
+  "#48D1CC", // Medium turquoise
 
-  // Gröna nyanser
-  "#008000", // Ren grön
-  "#32cd32", // Lime green
-  "#90ee90", // Ljusgrön
-  "#006400", // Mörkgrön
-  "#228b22", // Forest green
-  "#98fb98", // Pale green
-  "#556B2F", // Mörk olivgrön
-  "#8FBC8F", // Mörk havsgrön
-  "#2E8B57", // Havsgrön
-  "#3CB371", // Medium havsgrön
-  "#698B22", // Olivdrab
-  "#6B8E23", // Olivdrab
-  "#808000", // Olivgrön
+  // Green shades
+  "#008000", // Green (typical)
+  "#556B2F", // Dark olive green
+  "#6B8E23", // Olive drab
+  "#32CD32", // Lime green
 
-  // Gula nyanser
-  "#ffff00", // Ren gul
-  "#ffd700", // Guld
-  "#DAA520", // Guldrod
-  "#B8860B", // Mörk guldrod
-  "#f0e68c", // Khaki
-  "#EEE8AA", // Blek guldrod
-  "#bdb76b", // Dark khaki
-  "#F5DEB3", // Vete
+  // Yellow shades
+  "#FFFF00", // Yellow (typical)
+  "#DAA520", // Goldenrod
+  "#F0E68C", // Khaki
+  "#BDB76B", // Dark khaki
 
-  // Orange nyanser
-  "#ffa500", // Orange
-  "#ff8c00", // Dark orange
-  "#ff7f50", // Coral
-  "#ffa07a", // Light salmon
-  "#D2691E", // Choklad
-  "#CD853F", // Peru
-  "#DEB887", // Burlywood
+  // Orange shades
+  "#FFA500", // Orange (typical)
+  "#FF8C00", // Dark orange
+  "#D2691E", // Chocolate
   "#F4A460", // Sandy brown
 
-  // Bruna nyanser
-  "#8b4513", // Saddle brown
-  "#a0522d", // Sienna
-  "#deb887", // Burlywood
-  "#d2691e", // Chocolate
-  "#6B4423", // Mörk brun
-  "#8B7355", // Ljus brun
-  "#796878", // Taupe
-  "#483C32", // Mörk taupe
-  "#3D2B1F", // Bistre
+  // Brown shades
+  "#A0522D", // Sienna (typical)
+  "#8B4513", // Saddle brown
+  "#6B4423", // Dark brown
+  "#DEB887", // Burlywood
 
-  // Grå nyanser
-  "#808080", // Grå
-  "#a9a9a9", // Dark gray
-  "#d3d3d3", // Light gray
-  "#696969", // Dim gray
-  "#778899", // Ljus skiffergrå
-  "#708090", // Skiffergrå
-  "#2F4F4F", // Mörk skiffergrå
+  // Gray shades
+  "#808080", // Gray (typical)
+  "#A9A9A9", // Dark gray
+  "#D3D3D3", // Light gray
+  "#708090", // Slate gray
 
-  // Basis färger
-  "#000000", // Svart
-  "#ffffff", // Vit
-]; 
+  // Base colors
+  "#000000", // Black (typical)
+  "#FFFFFF", // White (typical)
+];

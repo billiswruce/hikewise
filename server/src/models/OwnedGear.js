@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const categories = [
-  // Kläder
+  // Clothing
   "Jackets",
   "Pants",
   "Base Layers",
@@ -12,7 +12,7 @@ const categories = [
   "Shoes",
   "Other",
 
-  // Utrustning
+  // Equipment
   "Tents",
   "Sleeping Bags",
   "Sleeping Pads",
@@ -26,7 +26,7 @@ const categories = [
   "Electronics",
   "Other",
 
-  // Mat
+  // Food
   "Freeze-Dried Meals",
   "Canned Food",
   "Instant Noodles",
