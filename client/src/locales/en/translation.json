@@ -237,6 +237,7 @@
   "networkError": "Network error. Please check your connection.",
   "unexpectedError": "An unexpected error occurred. Please try again.",
   "closeModal": "Close modal",
+  "confirmDeleteComment": "Are you sure you want to delete this comment?",
   "menuButton": "Menu",
   "searchButton": "Search",
   "loadMore": "Load more",
