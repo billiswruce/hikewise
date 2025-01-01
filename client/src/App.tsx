@@ -17,20 +17,7 @@ export const App = () => {
 
   useEffect(() => {
     const checkSession = async () => {
-      console.log("Checking session...");
       if (!isAuthenticated || !user) {
-        console.log(
-          JSON.stringify(
-            {
-              message:
-                "Not authenticated or no user data, skipping session check",
-              isAuthenticated,
-              hasUser: !!user,
-            },
-            null,
-            2
-          )
-        );
         setIsLoading(false);
         setSessionReady(false);
         return;
@@ -57,32 +44,15 @@ export const App = () => {
 
         if (!loginResponse.ok) {
           const errorText = await loginResponse.text();
-          console.log(
-            JSON.stringify(
-              {
-                message: "Backend login failed",
-                error: errorText,
-                status: loginResponse.status,
-              },
-              null,
-              2
-            )
-          );
+          console.error("Backend login failed:", {
+            error: errorText,
+            status: loginResponse.status,
+          });
           setSessionReady(false);
           return;
         }
 
-        const loginData = await loginResponse.json();
-        console.log(
-          JSON.stringify(
-            {
-              message: "Backend login successful",
-              data: loginData,
-            },
-            null,
-            2
-          )
-        );
+        await loginResponse.json();
 
         const sessionResponse = await fetch(
           `${import.meta.env.VITE_API_URL}/api/auth/check-session`,
@@ -95,52 +65,16 @@ export const App = () => {
         );
 
         const sessionData = await sessionResponse.json();
-        console.log(
-          JSON.stringify(
-            {
-              message: "Session check response",
-              data: sessionData,
-            },
-            null,
-            2
-          )
-        );
 
         if (sessionData.sessionActive) {
-          console.log(
-            JSON.stringify(
-              {
-                message: "Session verified as active",
-                sessionId: sessionData.sessionId,
-              },
-              null,
-              2
-            )
-          );
           setSessionReady(true);
         } else {
-          console.log(
-            JSON.stringify(
-              {
-                message: "Session verification failed",
-                data: sessionData,
-              },
-              null,
-              2
-            )
-          );
           setSessionReady(false);
         }
       } catch (error) {
         console.error(
-          JSON.stringify(
-            {
-              message: "Session check error",
-              error: error instanceof Error ? error.message : String(error),
-            },
-            null,
-            2
-          )
+          "Session check error:",
+          error instanceof Error ? error.message : String(error)
         );
         setSessionReady(false);
       } finally {

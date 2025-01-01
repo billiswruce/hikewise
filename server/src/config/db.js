@@ -30,7 +30,6 @@ const connectDB = async () => {
 
   try {
     cachedConnection.conn = await cachedConnection.promise;
-
     console.log("✅ MongoDB connected");
     return cachedConnection.conn;
   } catch (error) {

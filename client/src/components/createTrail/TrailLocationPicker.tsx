@@ -39,40 +39,31 @@ const TrailLocationPicker = ({
       if (pacContainer && wrapperRef.current) {
         const rect = wrapperRef.current.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
-
-        // Beräkna om det finns plats under input
         const spaceBelow = viewportHeight - rect.bottom;
-        const containerHeight = Math.min(300, spaceBelow - 10); // Max 300px höjd
+        const containerHeight = Math.min(300, spaceBelow - 10);
 
-        // Grundläggande positionering
         pacContainer.style.position = "fixed";
         pacContainer.style.width = `${rect.width}px`;
         pacContainer.style.left = `${rect.left}px`;
         pacContainer.style.maxHeight = `${containerHeight}px`;
 
-        // Placera ovanför eller under beroende på utrymme
         if (spaceBelow < 200 && rect.top > 300) {
           pacContainer.style.top = `${rect.top - containerHeight - 5}px`;
         } else {
           pacContainer.style.top = `${rect.bottom + 5}px`;
         }
-
-        // Säkerställ att container är synlig
         pacContainer.style.visibility = "visible";
         pacContainer.style.opacity = "1";
         pacContainer.style.zIndex = "9999";
       }
     };
 
-    // Hantera resize och scroll
     const handleViewportChange = () => {
       requestAnimationFrame(adjustAutocompleteDropdown);
     };
 
     window.addEventListener("resize", handleViewportChange);
     window.addEventListener("scroll", handleViewportChange, true);
-
-    // Observer för att fånga när pac-container skapas/uppdateras
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.addedNodes.length || mutation.type === "attributes") {
@@ -88,16 +79,11 @@ const TrailLocationPicker = ({
       attributeFilter: ["style", "class"],
     });
 
-    // Initial justering
     adjustAutocompleteDropdown();
-
-    // Cleanup funktion
     return () => {
       observer.disconnect();
       window.removeEventListener("resize", handleViewportChange);
       window.removeEventListener("scroll", handleViewportChange, true);
-
-      // Ta bort alla pac-containers när komponenten unmountas
       const pacContainers = document.querySelectorAll(".pac-container");
       pacContainers.forEach((container) => {
         container.remove();

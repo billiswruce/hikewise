@@ -139,49 +139,27 @@ export const updateTrail = async (req, res) => {
 // Delete trail
 export const deleteTrail = async (req, res) => {
   try {
-    console.log("=== Delete Trail Start ===");
     const { id } = req.params;
 
     const trail = await Trail.findById(id);
     if (!trail) {
-      console.log("Trail not found:", id);
       return res.status(404).json({ message: "Trail not found" });
     }
 
-    console.log("Authorization Check:", {
-      trailCreatorId: trail.creatorId,
-      userAuth0Id: req.user?.auth0Id,
-      matches: trail.creatorId === req.user?.auth0Id,
-      exactComparison: {
-        length: {
-          creator: trail.creatorId.length,
-          user: req.user?.auth0Id?.length,
-        },
-        type: {
-          creator: typeof trail.creatorId,
-          user: typeof req.user?.auth0Id,
-        },
-      },
-    });
-
     if (!req.user?.auth0Id) {
-      console.log("No auth0Id in request");
       return res.status(401).json({ message: "Authentication required" });
     }
 
     if (trail.creatorId !== req.user.auth0Id) {
-      console.log("Authorization mismatch");
       return res
         .status(403)
         .json({ message: "Not authorized to delete this trail" });
     }
 
     await Trail.findByIdAndDelete(id);
-    console.log("Trail deleted successfully");
-
     res.status(200).json({ message: "Trail deleted successfully" });
   } catch (error) {
-    console.error("Delete trail error:", error);
+    console.error(`Error deleting trail ${req.params.id}:`, error);
     res.status(500).json({ message: "Error deleting trail" });
   }
 };
@@ -281,7 +259,7 @@ export const addComment = async (req, res) => {
     const updatedTrail = await trail.save();
     res.status(201).json(updatedTrail);
   } catch (error) {
-    console.error("Error in addComment:", error.message);
+    console.error(`Error adding comment to trail ${req.params.id}:`, error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -310,7 +288,10 @@ export const updateComment = async (req, res) => {
     const updatedTrail = await trail.save();
     res.status(200).json(updatedTrail);
   } catch (error) {
-    console.error("Error in updateComment:", error.message);
+    console.error(
+      `Error updating comment ${req.params.commentId} on trail ${req.params.id}:`,
+      error
+    );
     res.status(500).json({ message: error.message });
   }
 };
@@ -332,7 +313,10 @@ export const deleteComment = async (req, res) => {
     const updatedTrail = await trail.save();
     res.status(200).json(updatedTrail);
   } catch (error) {
-    console.error("Error in deleteComment:", error.message);
+    console.error(
+      `Error deleting comment ${req.params.commentId} from trail ${req.params.id}:`,
+      error
+    );
     res.status(500).json({ message: error.message });
   }
 };

@@ -92,7 +92,7 @@ const CreateTrail = () => {
           image: compressedImage,
         }));
       } catch (error) {
-        console.error("Error compressing image:", error);
+        console.error("Error compressing image for trail creation:", error);
         alert(t("uploadImageError"));
       }
     }
@@ -145,15 +145,14 @@ const CreateTrail = () => {
       );
 
       if (response.ok) {
-        const data = await response.json();
+        await response.json();
         setIsModalOpen(true);
-        console.log("Trail saved:", data);
       } else {
         const errorData = await response.json();
         alert(`${t("error")}: ${errorData.message}`);
       }
     } catch (error) {
-      console.error(t("errorSubmittingTrail"), error);
+      console.error("Error creating new trail:", error);
       alert(t("failedToCreateTrail"));
     } finally {
       setIsLoading(false);

@@ -16,16 +16,6 @@ import {
 
 const router = express.Router();
 
-router.use((req, res, next) => {
-  console.log("Trail Route:", {
-    method: req.method,
-    path: req.path,
-    params: req.params,
-    auth: !!req.user,
-  });
-  next();
-});
-
 router.post("/", isAuthenticated, createTrail);
 router.get("/user/:userId", isAuthenticated, getUserTrails);
 router.get("/:id", isAuthenticated, getTrail);
@@ -41,4 +31,5 @@ router.patch("/:id/comments/:commentId", isAuthenticated, updateComment);
 router.delete("/:id/comments/:commentId", isAuthenticated, deleteComment);
 router.put("/:id", isAuthenticated, updateTrail);
 router.delete("/:id", isAuthenticated, deleteTrail);
+
 export default router;

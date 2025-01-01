@@ -106,42 +106,6 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  console.log("\n=== Detailed Request Debug ===");
-  console.log("Method & Path:", req.method, req.path);
-  console.log("Headers:", {
-    origin: req.headers.origin,
-    cookie: req.cookies,
-    "user-agent": req.headers["user-agent"],
-  });
-  console.log("Session Details:", {
-    id: req.session?.id,
-    userId: req.session?.userId,
-    cookie: req.session?.cookie,
-  });
-  console.log("Cookies:", req.cookies);
-  console.log("=========================\n");
-  next();
-});
-
-app.use((req, res, next) => {
-  console.log("=== Request Start ===");
-  console.log("Method:", req.method);
-  console.log("Path:", req.path);
-  console.log("Origin:", req.headers.origin);
-  console.log("Session:", !!req.session);
-  next();
-});
-
-app.use((req, res, next) => {
-  console.log("Incoming request:", {
-    method: req.method,
-    path: req.path,
-    auth: !!req.session?.userId,
-  });
-  next();
-});
-
 app.get("/", (req, res) => {
   res.json({ message: "Välkommen till HikeWise API" });
 });
