@@ -670,7 +670,6 @@
   color: var(--color-grey-dark);
   font-weight: 600;
 
-  // Optional: Add a separator between the stats
   &:not(:last-child) {
     padding-right: 1rem;
     border-right: 1px solid var(--color-grey-light);
@@ -734,7 +733,7 @@
   body > .pac-container {
     z-index: 9999 !important;
     position: fixed !important;
-    background-color: white !important;
+    background-color: var(--color-white) !important;
     border: 1px solid var(--color-grey-light-dark) !important;
     border-radius: 12px !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
@@ -750,10 +749,10 @@
       cursor: pointer !important;
 
       &:hover {
-        background-color: #f5f5f5 !important;
+        background-color: var(--color-grey-light) !important;
       }
 
-      color: #333 !important;
+      color: var(--color-grey-dark) !important;
       font-size: 14px !important;
       line-height: 1.5 !important;
     }
@@ -777,4 +776,12 @@
 
 .autocompleteWrapper:focus-within ~ .mapContainer::after {
   opacity: 1;
+}
+
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.checkboxInput {
+  cursor: pointer;
 }
