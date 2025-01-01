@@ -617,6 +617,8 @@
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 1rem;
+  position: relative !important;
+  isolation: isolate;
 }
 
 .googleMapContainer {
@@ -628,8 +630,9 @@
 
 .autocompleteWrapper {
   width: 100%;
-  position: relative;
-  z-index: 1000;
+  position: relative !important;
+  z-index: 100 !important;
+  isolation: isolate;
 
   input {
     width: 100%;
@@ -637,10 +640,61 @@
     border: 1px solid var(--color-grey-light-dark);
     border-radius: 25px;
     font-size: 1rem;
+    position: relative !important;
+    z-index: 100 !important;
 
     &:focus {
       outline: none;
       border-color: var(--color-grey-dark);
     }
   }
+}
+
+:global {
+  body > .pac-container {
+    z-index: 9999 !important;
+    position: fixed !important;
+    background-color: white !important;
+    border: 1px solid var(--color-grey-light-dark) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+    font-family: inherit !important;
+    margin-top: 5px !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+
+    -webkit-overflow-scrolling: touch !important;
+
+    .pac-item {
+      padding: 8px 12px !important;
+      cursor: pointer !important;
+
+      &:hover {
+        background-color: #f5f5f5 !important;
+      }
+
+      color: #333 !important;
+      font-size: 14px !important;
+      line-height: 1.5 !important;
+    }
+
+    .pac-logo:after {
+      display: none !important;
+    }
+  }
+}
+
+.mapContainer::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.autocompleteWrapper:focus-within ~ .mapContainer::after {
+  opacity: 1;
 }
