@@ -7,8 +7,8 @@ interface TrailImageUploadProps {
 }
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-const MAX_IMAGE_DIMENSION = 1200; // Max bredd/höjd i pixlar
-const QUALITY = 0.7; // Komprimeringskvalitet (0-1)
+const MAX_IMAGE_DIMENSION = 1200;
+const QUALITY = 0.7;
 
 const TrailImageUpload = ({ image, onImageUpload }: TrailImageUploadProps) => {
   const { t } = useTranslation();
@@ -26,8 +26,6 @@ const TrailImageUpload = ({ image, onImageUpload }: TrailImageUploadProps) => {
           const canvas = document.createElement("canvas");
           let width = img.width;
           let height = img.height;
-
-          // Skala ner bilden om den är för stor
           if (width > MAX_IMAGE_DIMENSION || height > MAX_IMAGE_DIMENSION) {
             if (width > height) {
               height = (height / width) * MAX_IMAGE_DIMENSION;
@@ -42,8 +40,6 @@ const TrailImageUpload = ({ image, onImageUpload }: TrailImageUploadProps) => {
           canvas.height = height;
           const ctx = canvas.getContext("2d");
           ctx?.drawImage(img, 0, 0, width, height);
-
-          // Konvertera till WebP med komprimering
           const compressedImage = canvas.toDataURL("image/webp", QUALITY);
           resolve(compressedImage);
         };
@@ -59,7 +55,6 @@ const TrailImageUpload = ({ image, onImageUpload }: TrailImageUploadProps) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Kontrollera filstorlek
     if (file.size > MAX_FILE_SIZE) {
       alert(t("imageTooBig", { size: MAX_FILE_SIZE / (1024 * 1024) }));
       return;
@@ -67,7 +62,6 @@ const TrailImageUpload = ({ image, onImageUpload }: TrailImageUploadProps) => {
 
     try {
       const compressedImage = await compressImage(file);
-      // Simulera en event med den komprimerade bilden
       const event = {
         ...e,
         target: {

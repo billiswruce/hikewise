@@ -34,11 +34,6 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
 
   const loadFavorites = useCallback(async () => {
     if (!isReady || !isAuthenticated || loadingRef.current) {
-      console.log("Skipping favorites load:", {
-        isReady,
-        isAuthenticated,
-        isLoading: loadingRef.current,
-      });
       return;
     }
 
@@ -80,7 +75,6 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({
 
   const toggleFavorite = async (trailId: string) => {
     if (!isAuthenticated) {
-      console.log("User must be logged in to manage favorites");
       return;
     }
 

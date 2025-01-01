@@ -32,32 +32,24 @@ export const getUserFavorites = async (req, res) => {
 export const toggleFavorite = async (req, res) => {
   try {
     const userId = req.session.userId;
-
     if (!userId) {
-      console.warn("Ingen session hittad: användaren är inte autentiserad");
       return res.status(401).json({ message: "Not authenticated" });
     }
-    console.log("Session userId:", userId);
 
     const user = await User.findById(userId);
     if (!user) {
-      console.warn("Ingen användare hittades med id:", userId);
       return res.status(404).json({ message: "User not found" });
     }
 
     const trailId = req.params.trailId;
-    console.log("Trail ID som hanteras:", trailId);
-
     const favoriteIndex = user.favoriteTrails.indexOf(trailId);
+
     if (favoriteIndex > -1) {
-      console.log("Trail redan i favoriter, tar bort...");
       user.favoriteTrails.splice(favoriteIndex, 1);
     } else {
-      console.log("Trail inte i favoriter, lägger till...");
       user.favoriteTrails.push(trailId);
     }
     await user.save();
-    console.log("Uppdaterad lista över favoriter:", user.favoriteTrails);
 
     res.status(200).json({
       message:
@@ -65,7 +57,10 @@ export const toggleFavorite = async (req, res) => {
       favorites: user.favoriteTrails,
     });
   } catch (error) {
-    console.error("Fel vid toggle av favorit:", error.message);
+    console.error(
+      `Error in toggleFavorite - userId: ${req.session?.userId}, trailId: ${req.params.trailId}:`,
+      error
+    );
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

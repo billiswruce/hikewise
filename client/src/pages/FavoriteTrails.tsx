@@ -36,7 +36,6 @@ const FavoriteTrails = () => {
   const fetchFavoriteTrails = async () => {
     try {
       setIsLoading(true);
-      console.log("Fetching favorite trails");
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/users/me/favorites`,
         {

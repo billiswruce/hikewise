@@ -4,15 +4,12 @@ import OwnedGear from "../models/OwnedGear.js";
 export const getOwnedGear = async (req, res) => {
   try {
     const userId = req.user?.id;
-    console.log("Getting gear for userId:", userId);
 
     if (!userId) {
-      console.log("No userId found in request");
       return res.status(401).json({ message: "User not authenticated" });
     }
 
     const ownedGear = await OwnedGear.findOne({ userId });
-    console.log("Found gear:", ownedGear);
 
     if (!ownedGear) {
       return res.status(200).json([]);
@@ -20,7 +17,7 @@ export const getOwnedGear = async (req, res) => {
 
     res.status(200).json(ownedGear.items);
   } catch (error) {
-    console.error("Error fetching gear:", error);
+    console.error(`Error fetching gear for user ${req.user?.id}:`, error);
     res.status(500).json({ message: "Error fetching gear items" });
   }
 };
@@ -65,7 +62,7 @@ export const addGearItem = async (req, res) => {
       item: ownedGear.items[ownedGear.items.length - 1],
     });
   } catch (error) {
-    console.error("Error adding gear item:", error);
+    console.error(`Error adding gear item for user ${req.user?.id}:`, error);
     res.status(500).json({ message: "Error adding gear item" });
   }
 };
@@ -110,7 +107,10 @@ export const updateGearItem = async (req, res) => {
       .status(200)
       .json({ message: "Gear item updated successfully", item: updatedItem });
   } catch (error) {
-    console.error("Error updating gear item:", error);
+    console.error(
+      `Error updating gear item ${req.params.itemId} for user ${req.user?.id}:`,
+      error
+    );
     res
       .status(500)
       .json({ message: "Error updating gear item", error: error.message });
@@ -136,7 +136,10 @@ export const deleteGearItem = async (req, res) => {
     await ownedGear.save();
     res.status(200).json({ message: "Gear item removed successfully" });
   } catch (error) {
-    console.error("Error deleting gear item:", error);
+    console.error(
+      `Error deleting gear item ${req.params.itemId} for user ${req.user?.id}:`,
+      error
+    );
     res
       .status(500)
       .json({ message: "Error deleting gear item", error: error.message });
@@ -163,7 +166,10 @@ export const getGearByType = async (req, res) => {
     const filteredItems = ownedGear.items.filter((item) => item.type === type);
     res.status(200).json(filteredItems);
   } catch (error) {
-    console.error("Error fetching gear by type:", error);
+    console.error(
+      `Error fetching gear by type ${req.query.type} for user ${req.user?.id}:`,
+      error
+    );
     res.status(500).json({ message: "Error fetching filtered gear items" });
   }
 };
@@ -190,7 +196,10 @@ export const getGearByCategory = async (req, res) => {
 
     res.status(200).json(filteredItems);
   } catch (error) {
-    console.error("Error fetching gear by category:", error);
+    console.error(
+      `Error fetching gear by category ${req.query.category} for user ${req.user?.id}:`,
+      error
+    );
     res.status(500).json({ message: "Error fetching filtered gear items" });
   }
 };

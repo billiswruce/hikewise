@@ -80,7 +80,6 @@ const SingleTrail = () => {
       );
 
       if (!response.ok) {
-        console.log("Trail data not available");
         return;
       }
 
@@ -89,7 +88,7 @@ const SingleTrail = () => {
       setEditLatitude(data.latitude || 0);
       setEditLongitude(data.longitude || 0);
     } catch (error) {
-      console.error("Error fetching trail:", error);
+      console.error("Error fetching trail data:", error);
     } finally {
       setLoading(false);
     }
@@ -189,14 +188,10 @@ const SingleTrail = () => {
 
   const addComment = async () => {
     if (newComment.trim() === "" || !trail) {
-      console.error("Validation failed: Comment is empty or trail is null.");
       return;
     }
 
     try {
-      console.log("Sending comment:", { text: newComment });
-      console.log("Trail ID:", id);
-
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/trails/${id}/comments`,
         {
@@ -207,31 +202,26 @@ const SingleTrail = () => {
         }
       );
 
-      console.log("Response status:", response.status);
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Response error data:", errorData);
         throw new Error(`Failed to add comment: ${errorData.message}`);
       }
 
       const updatedTrail = await response.json();
-      console.log("Updated trail data received:", updatedTrail);
       setTrail(updatedTrail);
       setNewComment("");
     } catch (error) {
-      console.error("Error caught in addComment:");
-      console.error("Full error object:", error);
+      console.error("Error adding comment:", error);
     }
   };
 
   const editComment = async (commentId: string, newText: string) => {
     if (newText.trim() === "") {
-      console.error("Validation failed: Comment text is empty.");
       return;
     }
 
     try {
-      setIsSaving(true); // Starta sparande
+      setIsSaving(true);
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
@@ -246,17 +236,16 @@ const SingleTrail = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Response error data:", errorData);
         throw new Error(`Failed to update comment: ${errorData.message}`);
       }
 
       const updatedTrail = await response.json();
-      setTrail(updatedTrail); // Uppdatera trail-data
-      setEditingComment(null); // Stäng redigeringsläget
+      setTrail(updatedTrail);
+      setEditingComment(null);
     } catch (error) {
       console.error("Error updating comment:", error);
     } finally {
-      setIsSaving(false); // Slutför sparande
+      setIsSaving(false);
     }
   };
 
@@ -329,7 +318,7 @@ const SingleTrail = () => {
       setTrail(updatedTrail);
       setIsEditing(false);
     } catch (error) {
-      console.error("Error updating trail:", error);
+      console.error("Error updating trail data:", error);
       alert(t("alerts.errorUpdatingTrail"));
     } finally {
       setIsSaving(false);

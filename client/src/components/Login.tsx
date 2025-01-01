@@ -56,8 +56,7 @@ const Login = () => {
         );
 
         if (response.ok) {
-          const data = await response.json();
-          console.log("Session established:", data);
+          await response.json();
           setTimeout(() => setShowModal(true), 500);
         }
       } catch (error) {
