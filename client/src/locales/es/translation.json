@@ -238,6 +238,7 @@
   "networkError": "Error de red. Por favor verifica tu conexión.",
   "unexpectedError": "Ocurrió un error inesperado. Por favor intenta nuevamente.",
   "closeModal": "Cerrar modal",
+  "confirmDeleteComment": "¿Estás seguro de que quieres eliminar este comentario?",
   "menuButton": "Menú",
   "searchButton": "Buscar",
   "loadMore": "Cargar más",

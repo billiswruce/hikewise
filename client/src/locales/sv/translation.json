@@ -227,6 +227,7 @@
   "filterTrails": "Filtrera vandringsleder",
   "createNewTrail": "Skapa ny vandringsled",
   "viewDetails": "Visa detaljer",
+  "confirmDeleteComment": "Är du säker på att du vill radera denna kommentar?",
   "settings": "Inställningar",
   "backToHome": "Tillbaka till startsidan",
   "sessionExpired": "Din session har gått ut. Vänligen logga in igen.",

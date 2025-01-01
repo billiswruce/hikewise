@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import styles from "../../styles/SingleTrail.module.scss";
 import { SingleTrailData } from "../../models/SingleTrail";
+import ConfirmationDialog from "../ConfirmationDialog";
+import { useState } from "react";
 
 interface CommentsProps {
   trail: SingleTrailData;
@@ -30,6 +32,18 @@ export const Comments = ({
   isSaving,
 }: CommentsProps) => {
   const { t } = useTranslation();
+  const [commentToDelete, setCommentToDelete] = useState<string | null>(null);
+
+  const handleDeleteClick = (commentId: string) => {
+    setCommentToDelete(commentId);
+  };
+
+  const handleConfirmDelete = () => {
+    if (commentToDelete) {
+      deleteComment(commentToDelete);
+      setCommentToDelete(null);
+    }
+  };
 
   return (
     <div className={styles.commentsSection}>
@@ -42,20 +56,23 @@ export const Comments = ({
                 <textarea
                   value={editedText}
                   onChange={(e) => setEditedText(e.target.value)}
-                  className={styles.commentInput}
+                  className={styles.editCommentTextarea}
+                  placeholder={t("writeYourComment")}
                 />
-                <div className={styles.commentButtons}>
+                <div className={styles.editCommentButtons}>
                   <button
                     onClick={() => editComment(comment._id, editedText)}
-                    disabled={isSaving}>
+                    disabled={isSaving}
+                    className={styles.saveButton}>
                     {isSaving ? t("saving...") : t("save")}
                   </button>
                   <button
                     onClick={() => {
                       setEditingComment(null);
                       setEditedText("");
-                    }}>
-                    {t("back")}
+                    }}
+                    className={styles.cancelButton}>
+                    {t("cancel")}
                   </button>
                 </div>
               </div>
@@ -70,10 +87,13 @@ export const Comments = ({
                     onClick={() => {
                       setEditingComment(comment._id);
                       setEditedText(comment.text);
-                    }}>
+                    }}
+                    className={styles.editButton}>
                     {t("edit")}
                   </button>
-                  <button onClick={() => deleteComment(comment._id)}>
+                  <button
+                    onClick={() => handleDeleteClick(comment._id)}
+                    className={styles.deleteButton}>
                     {t("delete")}
                   </button>
                 </div>
@@ -97,6 +117,13 @@ export const Comments = ({
           {isSaving ? t("adding...") : t("add")}
         </button>
       </div>
+
+      <ConfirmationDialog
+        isOpen={commentToDelete !== null}
+        message={t("confirmDeleteComment")}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setCommentToDelete(null)}
+      />
     </div>
   );
 };

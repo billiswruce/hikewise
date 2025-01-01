@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "../styles/SingleTrail.module.scss";
-import { Libraries } from "@react-google-maps/api";
+import { Libraries, LoadScript } from "@react-google-maps/api";
 import TrailPlaceholder from "../assets/trailPlaceholder.webp";
 import LoadingScreen from "../components/LoadingScreen";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -425,64 +425,64 @@ const SingleTrail = () => {
         }}
       />
 
-      <div className={styles.container}>
-        <TrailHeader
-          trail={trail}
-          isEditing={isEditing}
-          formData={formData}
-          handleEditChange={handleEditChange}
-        />
+      <LoadScript
+        googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+        libraries={libraries}>
+        <div className={styles.container}>
+          <TrailHeader
+            trail={trail}
+            isEditing={isEditing}
+            formData={formData}
+            handleEditChange={handleEditChange}
+          />
 
-        <TrailInfo
-          trail={trail}
-          isEditing={isEditing}
-          isSaving={isSaving}
-          formData={formData}
-          handleEditChange={handleEditChange}
-          handleEditSubmit={handleEditSubmit}
-          setIsEditing={setIsEditing}
-          handleDelete={handleDelete}
-          editLatitude={editLatitude}
-          editLongitude={editLongitude}
-          handleMapClick={handleMapClick}
-          handlePlaceSelected={handlePlaceSelected}
-          autocompleteRef={autocompleteRef}
-        />
+          <TrailInfo
+            trail={trail}
+            isEditing={isEditing}
+            isSaving={isSaving}
+            formData={formData}
+            handleEditChange={handleEditChange}
+            handleEditSubmit={handleEditSubmit}
+            setIsEditing={setIsEditing}
+            handleDelete={handleDelete}
+            editLatitude={editLatitude}
+            editLongitude={editLongitude}
+            handleMapClick={handleMapClick}
+            handlePlaceSelected={handlePlaceSelected}
+            autocompleteRef={autocompleteRef}
+          />
 
-        <PackingList
-          trail={trail}
-          isPackingListOpen={isPackingListOpen}
-          togglePackingList={togglePackingList}
-          updatePackingListItem={updatePackingListItem}
-          removePackingListItem={removePackingListItem}
-          newPackingListItem={newPackingListItem}
-          setNewPackingListItem={setNewPackingListItem}
-          isFood={isFood}
-          setIsFood={setIsFood}
-          addPackingListItem={addPackingListItem}
-          isAdding={isAdding}
-        />
+          <PackingList
+            trail={trail}
+            isPackingListOpen={isPackingListOpen}
+            togglePackingList={togglePackingList}
+            updatePackingListItem={updatePackingListItem}
+            removePackingListItem={removePackingListItem}
+            newPackingListItem={newPackingListItem}
+            setNewPackingListItem={setNewPackingListItem}
+            isFood={isFood}
+            setIsFood={setIsFood}
+            addPackingListItem={addPackingListItem}
+            isAdding={isAdding}
+          />
 
-        <TrailMap
-          latitude={trail.latitude}
-          longitude={trail.longitude}
-          libraries={libraries}
-        />
+          <TrailMap latitude={trail.latitude} longitude={trail.longitude} />
 
-        <Comments
-          trail={trail}
-          editingComment={editingComment}
-          editedText={editedText}
-          setEditedText={setEditedText}
-          setEditingComment={setEditingComment}
-          editComment={editComment}
-          deleteComment={deleteComment}
-          newComment={newComment}
-          setNewComment={setNewComment}
-          addComment={addComment}
-          isSaving={isSaving}
-        />
-      </div>
+          <Comments
+            trail={trail}
+            editingComment={editingComment}
+            editedText={editedText}
+            setEditedText={setEditedText}
+            setEditingComment={setEditingComment}
+            editComment={editComment}
+            deleteComment={deleteComment}
+            newComment={newComment}
+            setNewComment={setNewComment}
+            addComment={addComment}
+            isSaving={isSaving}
+          />
+        </div>
+      </LoadScript>
 
       <ConfirmationDialog
         isOpen={showDeleteConfirmation}

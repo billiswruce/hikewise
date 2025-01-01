@@ -239,6 +239,7 @@
   "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
   "closeModal": "Fermer la fenêtre",
   "menuButton": "Menu",
+  "confirmDeleteComment": "Êtes-vous sûr de vouloir supprimer ce commentaire ?",
   "searchButton": "Rechercher",
   "loadMore": "Charger plus",
   "required": "Champ obligatoire",
