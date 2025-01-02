@@ -221,9 +221,6 @@ export const Gear = () => {
           <div className={styles.filterContainer}>
             {type !== "All" && (
               <>
-                {/* <label htmlFor="category-select">
-                  {t("myGear.selectCategory")}
-                </label> */}
                 <select
                   id="category-select"
                   value={selectedCategory}
