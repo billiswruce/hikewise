@@ -87,7 +87,7 @@ GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 OPENWEATHER_API_KEY=your_openweather_api_key
 FRONTEND_URL=http://localhost:5173
 SESSION_SECRET=your_session_secret
-PORT=5000
+PORT=3001
 ```
 
 ### Installation Steps
