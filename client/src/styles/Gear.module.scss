@@ -351,33 +351,18 @@ ul {
 }
 
 .filterContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-
-  @media (min-width: 768px) {
-    justify-content: flex-start;
-  }
-
-  label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--color-grey-light);
-  }
+  position: relative;
+  margin: 1rem 0;
 
   select {
-    padding: 0.6rem 2rem 0.6rem 1rem;
-    padding-right: 2rem !important;
-    font-size: 1rem;
-    color: var(--color-black);
+    width: 100%;
+    padding: 0.75rem;
     border: 1px solid var(--color-grey-light-dark);
-    border-radius: 20px;
-    background: var(--color-white);
-    transition: border-color 0.3s ease;
-    width: 260px;
+    border-radius: 25px;
+    background-color: var(--color-white);
+    font-size: 1rem;
+    cursor: pointer;
 
-    &:hover,
     &:focus {
       outline: none;
       border-color: var(--color-grey-dark);
@@ -530,14 +515,8 @@ ul {
   position: relative;
   margin: 0.5rem 0;
 
-  label {
-    font-weight: 600;
-    color: var(--color-grey-dark);
-    margin-bottom: 0.25rem;
-    display: block;
-  }
-
   .colorAccordion {
+    margin-top: 3px;
     border: 1px solid var(--color-grey-light-dark);
     border-radius: 25px;
     overflow: hidden;
@@ -621,5 +600,16 @@ ul {
       #4b0082,
       #8f00ff
     );
+  }
+}
+
+.colorLabel {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.25rem;
+  color: var(--color-grey-dark);
+
+  &::after {
+    content: none;
   }
 }

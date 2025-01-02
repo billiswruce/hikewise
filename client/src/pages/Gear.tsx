@@ -220,8 +220,12 @@ export const Gear = () => {
 
           <div className={styles.filterContainer}>
             {type !== "All" && (
-              <label>
+              <>
+                {/* <label htmlFor="category-select">
+                  {t("myGear.selectCategory")}
+                </label> */}
                 <select
+                  id="category-select"
                   value={selectedCategory}
                   onChange={(e) => {
                     setSelectedCategory(e.target.value);
@@ -248,7 +252,7 @@ export const Gear = () => {
                     )
                   )}
                 </select>
-              </label>
+              </>
             )}
           </div>
           {isLoading ? (

@@ -5,66 +5,66 @@ export const RAINBOW_GRADIENT = {
 
 export const COLORS = [
   // Red shades
-  "#FF0000", // Red (typical)
-  "#8B0000", // Dark red
-  "#B22222", // Firebrick
-  "#CD5C5C", // Indian red
+  "#ff0000", // red
+  "#8b0000", // darkred
+  "#b22222", // firebrick
+  "#cd5c5c", // coralred
 
   // Pink shades
-  "#FFC0CB", // Pink (typical)
-  "#DB7093", // Pale violet red
-  "#C71585", // Medium violet red
-  "#FFE4E1", // Misty rose
+  "#ffc0cb", // pink
+  "#db7093", // palevioletred
+  "#c71585", // mediumvioletred
+  "#ffe4e1", // mistyrose
 
   // Purple shades
-  "#800080", // Purple (typical)
-  "#4B0082", // Indigo
-  "#9370DB", // Medium purple
-  "#E6E6FA", // Lavender
+  "#800080", // purple
+  "#4b0082", // indigo
+  "#9370db", // mediumpurple
+  "#e6e6fa", // lavender
 
   // Blue shades
-  "#0000FF", // Blue (typical)
-  "#000080", // Navy blue
-  "#4169E1", // Royal blue
-  "#87CEEB", // Sky blue
+  "#0000ff", // blue
+  "#000080", // navyblue
+  "#4169e1", // royalblue
+  "#87ceeb", // skyblue
 
   // Turquoise shades
-  "#40E0D0", // Turquoise (typical)
-  "#20B2AA", // Light sea green
-  "#5F9EA0", // Cadet blue
-  "#48D1CC", // Medium turquoise
+  "#40e0d0", // turquoise
+  "#20b2aa", // lightseagreen
+  "#5f9ea0", // cadetblue
+  "#48d1cc", // mediumturquoise
 
   // Green shades
-  "#008000", // Green (typical)
-  "#556B2F", // Dark olive green
-  "#6B8E23", // Olive drab
-  "#32CD32", // Lime green
+  "#008000", // green
+  "#556b2f", // darkolivegreen
+  "#6b8e23", // olivedrab
+  "#32cd32", // limegreen
 
   // Yellow shades
-  "#FFFF00", // Yellow (typical)
-  "#DAA520", // Goldenrod
-  "#F0E68C", // Khaki
-  "#BDB76B", // Dark khaki
+  "#ffff00", // yellow
+  "#daa520", // goldenrod
+  "#f0e68c", // khaki
+  "#bdb76b", // darkkhaki
 
   // Orange shades
-  "#FFA500", // Orange (typical)
-  "#FF8C00", // Dark orange
-  "#D2691E", // Chocolate
-  "#F4A460", // Sandy brown
+  "#ffa500", // orange
+  "#ff8c00", // darkorange
+  "#d2691e", // chocolate
+  "#f4a460", // sandybrown
 
   // Brown shades
-  "#A0522D", // Sienna (typical)
-  "#8B4513", // Saddle brown
-  "#6B4423", // Dark brown
-  "#DEB887", // Burlywood
+  "#a0522d", // sienna
+  "#8b4513", // saddlebrown
+  "#6b4423", // darkbrown
+  "#deb887", // burlywood
 
   // Gray shades
-  "#808080", // Gray (typical)
-  "#A9A9A9", // Dark gray
-  "#D3D3D3", // Light gray
-  "#708090", // Slate gray
+  "#808080", // gray
+  "#a9a9a9", // darkgray
+  "#d3d3d3", // lightgray
+  "#708090", // slategray
 
   // Base colors
-  "#000000", // Black (typical)
-  "#FFFFFF", // White (typical)
+  "#000000", // black
+  "#ffffff", // white
 ];

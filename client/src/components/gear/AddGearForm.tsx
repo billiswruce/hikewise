@@ -6,6 +6,7 @@ import buttonStyles from "../../styles/Buttons.module.scss";
 import { COLORS, RAINBOW_GRADIENT } from "../../models/constants";
 import { NewGearItem } from "../../models/gear";
 import { GearType, CATEGORIES } from "../../models/gearCategories";
+import { getColorName } from "../../utils/colorUtils";
 
 interface AddGearFormProps {
   type: GearType;
@@ -111,8 +112,17 @@ export const AddGearForm = ({ type, onAdd }: AddGearFormProps) => {
         min="1"
       />
 
-      <label htmlFor="gearColor">{t("myGear.selectColor")}</label>
-      <div className={styles.colorPickerContainer}>
+      <span id="color-picker-label" className={styles.colorLabel}>
+        {t("myGear.selectColor")}
+      </span>
+      <div
+        className={styles.colorPickerContainer}
+        role="combobox"
+        aria-labelledby="color-picker-label"
+        aria-expanded={isColorPickerOpen}
+        aria-controls="color-picker-options"
+        aria-haspopup="listbox"
+        tabIndex={0}>
         <div className={styles.colorAccordion}>
           <div
             className={styles.selectedColor}
@@ -125,9 +135,19 @@ export const AddGearForm = ({ type, onAdd }: AddGearFormProps) => {
                   newItem.color !== "rainbow" ? newItem.color : undefined,
               }}
             />
-            <span>{t("myGear.selectColor")}</span>
+            <span>
+              {newItem.color
+                ? t(
+                    getColorName(newItem.color).startsWith("#")
+                      ? "myGear.selectColor"
+                      : `colors.${getColorName(newItem.color)}`
+                  )
+                : t("myGear.selectColor")}
+            </span>
           </div>
           <div
+            id="color-picker-options"
+            role="listbox"
             className={`${styles.colorOptions} ${
               isColorPickerOpen ? styles.open : ""
             }`}>

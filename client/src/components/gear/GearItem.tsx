@@ -7,6 +7,7 @@ import buttonStyles from "../../styles/Buttons.module.scss";
 import { CirclePicker, ColorResult } from "react-color";
 import { COLORS, RAINBOW_GRADIENT } from "../../models/constants";
 import { GearItemType } from "../../models/gear";
+import { getColorName } from "../../utils/colorUtils";
 
 interface GearItemProps {
   item: GearItemType;
@@ -78,7 +79,15 @@ export const GearItem = ({ item, onDelete, onUpdate }: GearItemProps) => {
                       : undefined,
                 }}
               />
-              <span>{t("myGear.selectColor")}</span>
+              <span>
+                {editingItem.color
+                  ? t(
+                      getColorName(editingItem.color).startsWith("#")
+                        ? "myGear.selectColor"
+                        : `colors.${getColorName(editingItem.color)}`
+                    )
+                  : t("myGear.selectColor")}
+              </span>
             </div>
             <div
               className={`${styles.colorOptions} ${
