@@ -160,8 +160,8 @@ The application uses MongoDB with the following main collections:
 - `gear`: User gear inventory
 - `favorites`: User's favorite trails
 
-
 # Enjoy Hiking! 
+
 
 
 
