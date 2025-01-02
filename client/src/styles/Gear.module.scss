@@ -364,7 +364,8 @@ ul {
     border-radius: 25px;
     font-size: 1rem;
     color: var(--color-grey-dark);
-    width: 100%;
+    width: 50%;
+    max-width: 300px;
     box-sizing: border-box;
     cursor: pointer;
     transition: border-color 0.3s ease;
