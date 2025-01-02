@@ -521,7 +521,6 @@ ul {
     }
   }
 
-  // Label för färgväljaren ska inte ha asterisk
   label[for="gearColor"]::after {
     content: none;
   }
