@@ -259,7 +259,13 @@
   "formValidation": {
     "required": "This field is required",
     "invalidDate": "Invalid date",
-    "invalidLength": "Invalid length"
+    "invalidLength": "Invalid length",
+    "nameRequired": "Name is required",
+    "categoryRequired": "Please select a category",
+    "typeRequired": "Please select a type",
+    "brandRequired": "Brand is required",
+    "quantityRequired": "Quantity is required",
+    "conditionRequired": "Condition is required"
   },
   "loadingStates": {
     "savingTrail": "Saving trail...",
@@ -310,5 +316,6 @@
     "black": "Black",
     "white": "White",
     "rainbow": "Rainbow"
-  }
+  },
+  "categoryRequired": "Please select a category"
 }

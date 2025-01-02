@@ -252,7 +252,13 @@
   "formValidation": {
     "required": "Detta fält är obligatoriskt",
     "invalidDate": "Ogiltigt datum",
-    "invalidLength": "Ogiltig längd"
+    "invalidLength": "Ogiltig längd",
+    "nameRequired": "Namn krävs",
+    "categoryRequired": "Välj en kategori",
+    "typeRequired": "Välj en typ",
+    "brandRequired": "Märke krävs",
+    "quantityRequired": "Antal krävs",
+    "conditionRequired": "Skick krävs"
   },
   "map": "Karta",
   "myProfile": "Min profil",

@@ -258,7 +258,13 @@
   "formValidation": {
     "required": "Este campo es obligatorio",
     "invalidDate": "Fecha inválida",
-    "invalidLength": "Longitud inválida"
+    "invalidLength": "Longitud inválida",
+    "nameRequired": "El nombre es obligatorio",
+    "categoryRequired": "Seleccione una categoría",
+    "typeRequired": "Seleccione un tipo",
+    "brandRequired": "La marca es obligatoria",
+    "quantityRequired": "La cantidad es obligatoria",
+    "conditionRequired": "El estado es obligatorio"
   },
   "loadingStates": {
     "savingTrail": "Guardando sendero...",

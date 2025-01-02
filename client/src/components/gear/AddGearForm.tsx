@@ -26,15 +26,12 @@ export const AddGearForm = ({ type, onAdd }: AddGearFormProps) => {
     type: type === "All" ? null : type,
   });
 
-  const handleSubmit = async () => {
-    if (!newItem.name) {
-      alert(t("nameRequired"));
-      return;
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
     const itemType = type === "All" ? newItem.type : type;
     if (!itemType) {
-      alert(t("typeRequired"));
+      alert(t("formValidation.typeRequired"));
       return;
     }
 
@@ -53,7 +50,7 @@ export const AddGearForm = ({ type, onAdd }: AddGearFormProps) => {
   };
 
   return (
-    <div className={styles.addGearForm}>
+    <form className={styles.addGearForm} onSubmit={handleSubmit}>
       <h2>{t("myGear.addGear")}</h2>
 
       {type === "All" && (
@@ -96,7 +93,6 @@ export const AddGearForm = ({ type, onAdd }: AddGearFormProps) => {
         placeholder={t("myGear.brand")}
         value={newItem.brand}
         onChange={(e) => setNewItem({ ...newItem, brand: e.target.value })}
-        required
       />
 
       <label htmlFor="gearQuantity">{t("myGear.quantity")}</label>
@@ -220,10 +216,10 @@ export const AddGearForm = ({ type, onAdd }: AddGearFormProps) => {
         <option value="Poor">{t("myGear.condition.poor")}</option>
       </select>
 
-      <button onClick={handleSubmit} className={buttonStyles.submitButton}>
+      <button type="submit" className={buttonStyles.submitButton}>
         {t("myGear.actions.add")}
       </button>
-    </div>
+    </form>
   );
 };
 

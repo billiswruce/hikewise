@@ -258,7 +258,13 @@
   "formValidation": {
     "required": "Ce champ est obligatoire",
     "invalidDate": "Date invalide",
-    "invalidLength": "Longueur invalide"
+    "invalidLength": "Longueur invalide",
+    "nameRequired": "Le nom est requis",
+    "categoryRequired": "Veuillez sélectionner une catégorie",
+    "typeRequired": "Veuillez sélectionner un type",
+    "brandRequired": "La marque est requise",
+    "quantityRequired": "La quantité est requise",
+    "conditionRequired": "L'état est requis"
   },
   "loadingStates": {
     "savingTrail": "Enregistrement du sentier...",

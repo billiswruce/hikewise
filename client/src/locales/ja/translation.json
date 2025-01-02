@@ -258,7 +258,13 @@
   "formValidation": {
     "required": "この項目は必須です",
     "invalidDate": "無効な日付",
-    "invalidLength": "無効な長さ"
+    "invalidLength": "無効な長さ",
+    "nameRequired": "名前は必須です",
+    "categoryRequired": "カテゴリーを選択してください",
+    "typeRequired": "タイプを選択してください",
+    "brandRequired": "ブランドは必須です",
+    "quantityRequired": "数量は必須です",
+    "conditionRequired": "状態は必須です"
   },
   "loadingStates": {
     "savingTrail": "トレイルを保存中...",

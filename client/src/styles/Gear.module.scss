@@ -427,6 +427,7 @@ ul {
     }
   }
 
+  label[for="gearBrand"]::after,
   label[for="gearColor"]::after {
     content: none;
   }
@@ -514,7 +515,8 @@ ul {
     }
   }
 
-  label[for="gearColor"]::after {
+  label[for="editBrand"]::after,
+  label[for="editColor"]::after {
     content: none;
   }
 }
