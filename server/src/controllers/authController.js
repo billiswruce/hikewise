@@ -69,6 +69,7 @@ export const login = async (req, res) => {
   }
 };
 
+// Get user details
 export const getMe = async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Ingen aktiv session" });

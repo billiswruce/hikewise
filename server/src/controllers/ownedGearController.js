@@ -1,6 +1,5 @@
 import OwnedGear from "../models/OwnedGear.js";
 
-// Get all gear items for a user
 export const getOwnedGear = async (req, res) => {
   try {
     const userId = req.user?.id;
@@ -22,7 +21,6 @@ export const getOwnedGear = async (req, res) => {
   }
 };
 
-// Add a new gear item
 export const addGearItem = async (req, res) => {
   try {
     const userId = req.user?.id;
@@ -67,7 +65,6 @@ export const addGearItem = async (req, res) => {
   }
 };
 
-// Update a gear item
 export const updateGearItem = async (req, res) => {
   const { name, quantity, condition, packed, type, categories, brand, color } =
     req.body;
@@ -117,7 +114,6 @@ export const updateGearItem = async (req, res) => {
   }
 };
 
-// Delete a gear item
 export const deleteGearItem = async (req, res) => {
   const userId = req.user.id;
 
@@ -146,7 +142,6 @@ export const deleteGearItem = async (req, res) => {
   }
 };
 
-// Get gear by type (Clothing, Equipment, Food)
 export const getGearByType = async (req, res) => {
   try {
     const userId = req.user?.id;
@@ -174,7 +169,6 @@ export const getGearByType = async (req, res) => {
   }
 };
 
-// Get gear by category
 export const getGearByCategory = async (req, res) => {
   try {
     const userId = req.user?.id;

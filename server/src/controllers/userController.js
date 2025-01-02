@@ -1,6 +1,5 @@
 import User from "../models/User.js";
 
-// Get user details
 export const getUserDetails = async (req, res) => {
   try {
     const user = await User.findById(req.params.userId)
@@ -13,7 +12,6 @@ export const getUserDetails = async (req, res) => {
   }
 };
 
-// Get user favorites
 export const getUserFavorites = async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -28,7 +26,6 @@ export const getUserFavorites = async (req, res) => {
   }
 };
 
-// Toggle favorite trail
 export const toggleFavorite = async (req, res) => {
   try {
     const userId = req.session.userId;
@@ -65,7 +62,6 @@ export const toggleFavorite = async (req, res) => {
   }
 };
 
-// Add gear
 export const addGear = async (req, res) => {
   const { name, quantity, condition, category } = req.body;
   try {

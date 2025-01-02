@@ -2,7 +2,6 @@ import Trail from "../models/Trail.js";
 import axios from "axios";
 import mongoose from "mongoose";
 
-// Create trail
 export const createTrail = async (req, res) => {
   const {
     name,
@@ -68,7 +67,6 @@ export const createTrail = async (req, res) => {
   }
 };
 
-// Get trails
 export const getUserTrails = async (req, res) => {
   try {
     const trails = await Trail.find({ creatorId: req.params.userId });
@@ -90,7 +88,6 @@ export const getTrail = async (req, res) => {
   }
 };
 
-// Update trail
 export const updateTrail = async (req, res) => {
   try {
     const { id } = req.params;
@@ -136,7 +133,6 @@ export const updateTrail = async (req, res) => {
   }
 };
 
-// Delete trail
 export const deleteTrail = async (req, res) => {
   try {
     const { id } = req.params;
@@ -164,7 +160,6 @@ export const deleteTrail = async (req, res) => {
   }
 };
 
-// Add packing list item
 export const addPackingListItem = async (req, res) => {
   try {
     const { id } = req.params;
@@ -190,7 +185,6 @@ export const addPackingListItem = async (req, res) => {
   }
 };
 
-// Delete packing list item
 export const deletePackingListItem = async (req, res) => {
   try {
     const { id, itemId } = req.params;
@@ -217,7 +211,6 @@ export const deletePackingListItem = async (req, res) => {
   }
 };
 
-// Update packing list item
 export const updatePackingListItem = async (req, res) => {
   try {
     const { id, itemId } = req.params;
@@ -239,7 +232,6 @@ export const updatePackingListItem = async (req, res) => {
   }
 };
 
-// Add comment
 export const addComment = async (req, res) => {
   try {
     const { id } = req.params;
@@ -264,7 +256,6 @@ export const addComment = async (req, res) => {
   }
 };
 
-// Update comment
 export const updateComment = async (req, res) => {
   try {
     const { id, commentId } = req.params;
@@ -296,7 +287,6 @@ export const updateComment = async (req, res) => {
   }
 };
 
-// Delete comment
 export const deleteComment = async (req, res) => {
   try {
     const { id, commentId } = req.params;
