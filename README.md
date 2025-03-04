@@ -9,19 +9,19 @@ To simplify hiking planning by bringing all necessary tools into one place – f
 <img width="1433" alt="Skärmavbild 2025-03-04 kl  19 13 25" src="https://github.com/user-attachments/assets/64eb0bb4-03d8-4980-a745-c2e51d7cbf8e" />
 
 ##
-<img width="300" alt="Skärmavbild 2025-03-04 kl  19 29 34" src="https://github.com/user-attachments/assets/f29e5ef2-e1c2-4511-9a89-dfa72636a688" />
-<img width="300" alt="Skärmavbild 2025-03-04 kl  19 14 49" src="https://github.com/user-attachments/assets/97607609-6f14-47d7-b7dc-59a0db0c1e5a" />
-<img width="300" alt="Skärmavbild 2025-03-04 kl  19 14 57" src="https://github.com/user-attachments/assets/98a34ab9-0722-4455-ab49-2826d9e73f9e" />
-<img width="300" alt="Skärmavbild 2025-03-04 kl  19 15 04" src="https://github.com/user-attachments/assets/95f7b2c9-22c1-4561-a603-ed9d4294eb5e" />
-<img width="300" alt="Skärmavbild 2025-03-04 kl  19 32 22" src="https://github.com/user-attachments/assets/cd8021d9-7113-4404-93f9-9b335ff73817" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 29 34" src="https://github.com/user-attachments/assets/f29e5ef2-e1c2-4511-9a89-dfa72636a688" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 14 49" src="https://github.com/user-attachments/assets/97607609-6f14-47d7-b7dc-59a0db0c1e5a" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 14 57" src="https://github.com/user-attachments/assets/98a34ab9-0722-4455-ab49-2826d9e73f9e" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 15 04" src="https://github.com/user-attachments/assets/95f7b2c9-22c1-4561-a603-ed9d4294eb5e" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 32 22" src="https://github.com/user-attachments/assets/cd8021d9-7113-4404-93f9-9b335ff73817" />
 
 ##
 
 
-<img width="225" alt="Skärmavbild 2025-03-04 kl  19 15 36" src="https://github.com/user-attachments/assets/5ff49c59-7352-4519-b1bd-8576ea3df7cd" />
-<img width="225" alt="Skärmavbild 2025-03-04 kl  19 16 15" src="https://github.com/user-attachments/assets/4c222a28-659a-41c0-ad70-a65236ad7b70" />
-<img width="225" alt="Skärmavbild 2025-03-04 kl  19 15 43" src="https://github.com/user-attachments/assets/2c4889b0-5999-4dff-ae6e-d79f985c62c2" />
-<img width="225" alt="Skärmavbild 2025-03-04 kl  19 16 32" src="https://github.com/user-attachments/assets/8681f22f-be5e-4650-9f5f-1652ca500e71" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 15 36" src="https://github.com/user-attachments/assets/5ff49c59-7352-4519-b1bd-8576ea3df7cd" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 16 15" src="https://github.com/user-attachments/assets/4c222a28-659a-41c0-ad70-a65236ad7b70" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 15 43" src="https://github.com/user-attachments/assets/2c4889b0-5999-4dff-ae6e-d79f985c62c2" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 16 32" src="https://github.com/user-attachments/assets/8681f22f-be5e-4650-9f5f-1652ca500e71" />
 ##
 
 ## ✨ Key Features
