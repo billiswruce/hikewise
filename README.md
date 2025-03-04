@@ -2,6 +2,10 @@
 
 HikeWise is a full-stack application designed to help hikers plan, organize, and track their hiking adventures. With a focus on user-friendliness and practical functionality, the app offers everything from weather integration to multilingual support.
 
+## 🎯 Vision
+
+To simplify hiking planning by bringing all necessary tools into one place – from route planning and gear lists to weather reports and map visualization.
+
 <img width="1433" alt="Skärmavbild 2025-03-04 kl  19 13 25" src="https://github.com/user-attachments/assets/64eb0bb4-03d8-4980-a745-c2e51d7cbf8e" />
 
 ##
@@ -18,10 +22,7 @@ HikeWise is a full-stack application designed to help hikers plan, organize, and
 <img width="225" alt="Skärmavbild 2025-03-04 kl  19 16 15" src="https://github.com/user-attachments/assets/4c222a28-659a-41c0-ad70-a65236ad7b70" />
 <img width="225" alt="Skärmavbild 2025-03-04 kl  19 15 43" src="https://github.com/user-attachments/assets/2c4889b0-5999-4dff-ae6e-d79f985c62c2" />
 <img width="225" alt="Skärmavbild 2025-03-04 kl  19 16 32" src="https://github.com/user-attachments/assets/8681f22f-be5e-4650-9f5f-1652ca500e71" />
-
-## 🎯 Vision
-
-To simplify hiking planning by bringing all necessary tools into one place – from route planning and gear lists to weather reports and map visualization.
+##
 
 ## ✨ Key Features
 
