@@ -17,11 +17,13 @@ To simplify hiking planning by bringing all necessary tools into one place – f
 
 ##
 
-
 <img width="250" alt="Skärmavbild 2025-03-04 kl  19 15 36" src="https://github.com/user-attachments/assets/5ff49c59-7352-4519-b1bd-8576ea3df7cd" />
 <img width="250" alt="Skärmavbild 2025-03-04 kl  19 16 15" src="https://github.com/user-attachments/assets/4c222a28-659a-41c0-ad70-a65236ad7b70" />
 <img width="250" alt="Skärmavbild 2025-03-04 kl  19 15 43" src="https://github.com/user-attachments/assets/2c4889b0-5999-4dff-ae6e-d79f985c62c2" />
 <img width="250" alt="Skärmavbild 2025-03-04 kl  19 16 32" src="https://github.com/user-attachments/assets/8681f22f-be5e-4650-9f5f-1652ca500e71" />
+<img width="250" alt="Skärmavbild 2025-03-04 kl  19 43 47" src="https://github.com/user-attachments/assets/ff3ec793-640a-4d71-acec-bca7b146ef8c" />
+
+
 ##
 
 ## ✨ Key Features
